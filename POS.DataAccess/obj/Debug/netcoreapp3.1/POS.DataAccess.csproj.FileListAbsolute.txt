@@ -1,0 +1,15 @@
+D:\POS\POS\POS.DataAccess\bin\Debug\netcoreapp3.1\POS.DataAccess.deps.json
+D:\POS\POS\POS.DataAccess\bin\Debug\netcoreapp3.1\POS.DataAccess.dll
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.csprojAssemblyReference.cache
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.AssemblyInfoInputs.cache
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.AssemblyInfo.cs
+D:\POS\POS\POS.DataAccess\bin\Debug\netcoreapp3.1\POS.DataAccess.pdb
+D:\POS\POS\POS.DataAccess\bin\Debug\netcoreapp3.1\POS.Models.dll
+D:\POS\POS\POS.DataAccess\bin\Debug\netcoreapp3.1\POS.Models.pdb
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.csproj.CopyComplete
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.dll
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.pdb
+D:\POS\POS\POS.DataAccess\bin\Debug\netcoreapp3.1\POS.DataAccess.runtimeconfig.json
+D:\POS\POS\POS.DataAccess\bin\Debug\netcoreapp3.1\POS.DataAccess.runtimeconfig.dev.json
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.genruntimeconfig.cache
+D:\POS\POS\POS.DataAccess\obj\Debug\netcoreapp3.1\POS.DataAccess.csproj.CoreCompileInputs.cache
