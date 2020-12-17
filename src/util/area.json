@@ -1,0 +1,994 @@
+﻿{
+  "success": true,
+  "message": [
+    {
+      "id": 1,
+      "name": "BARISAL",
+      "districts": [
+        {
+          "id": 1,
+          "name": "BARGUNA",
+          "thanas": [
+            "BARGUNA SADAR",
+            "BETAGI",
+            "PATHARGHATA",
+            "TALTALI",
+            "AMTALI",
+            "BAMNA"
+          ]
+        },
+        {
+          "id": 2,
+          "name": "BARISHAL",
+          "thanas": [
+            "AGAILJHARA",
+            "BABUGANJ",
+            "BAKERGANJ",
+            "BANARI PARA",
+            "GAURNADI",
+            "HIZLA",
+            "BARISAL SADAR (KOTWALI)",
+            "MEHENDIGANJ",
+            "MULADI",
+            "WAZIRPUR"
+          ]
+        },
+        {
+          "id": 3,
+          "name": "BHOLA",
+          "thanas": [
+            "BHOLA SADAR",
+            "BURHANUDDIN",
+            "CHAR FASSON",
+            "DAULAT KHAN",
+            "LALMOHAN",
+            "MANPURA",
+            "TAZUMUDDIN"
+          ]
+        },
+        {
+          "id": 4,
+          "name": "JHALOKATI",
+          "thanas": [
+            "JHALOKATI SADAR",
+            "KANTHALIA",
+            "NALCHITY",
+            "RAJAPUR"
+          ]
+        },
+        {
+          "id": 5,
+          "name": "PATUAKHALI",
+          "thanas": [
+            "BAUPHAL",
+            "DASHMINA",
+            "DUMKI",
+            "GALACHIPA",
+            "KALAPARA",
+            "MIRZAGANJ",
+            "PATUAKHALI SADAR",
+            "RANGABALI"
+          ]
+        },
+        {
+          "id": 6,
+          "name": "PIROJPUR",
+          "thanas": [
+            "BHANDARIA",
+            "KAWKHALI",
+            "MATHBARIA",
+            "NAZIRPUR",
+            "PIROJPUR SADAR",
+            "NESARABAD (SWARUPKATI)",
+            "ZIANAGAR"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "CHITTAGONG",
+      "districts": [
+        {
+          "id": 7,
+          "name": "BANDARBAN",
+          "thanas": [
+            "ALIKADAM",
+            "BANDARBAN SADAR",
+            "LAMA",
+            "NAIKHONGCHHARI",
+            "ROWANGCHHARI",
+            "RUMA",
+            "THANCHI"
+          ]
+        },
+        {
+          "id": 8,
+          "name": "BRAHMANBARIA",
+          "thanas": [
+            "AKHAURA",
+            "BANCHHARAMPUR",
+            "BIJOYNAGAR",
+            "BRAHMANBARIA SADAR",
+            "ASHUGANJ",
+            "KASBA",
+            "NABINAGAR",
+            "NASIRNAGAR",
+            "SARAIL"
+          ]
+        },
+        {
+          "id": 9,
+          "name": "CHANDPUR",
+          "thanas": [
+            "CHANDPUR SADAR",
+            "FARIDGANJ",
+            "HAIM CHAR",
+            "HAJIGANJ",
+            "KACHUA",
+            "MATLAB DAKSHIN",
+            "MATLAB UTTAR",
+            "SHAHRASTI"
+          ]
+        },
+        {
+          "id": 10,
+          "name": "CHATTOGRAM",
+          "thanas": [
+            "ANOWARA",
+            "BAYEJID BOSTAMI",
+            "BANSHKHALI",
+            "BAKALIA",
+            "BOALKHALI",
+            "CHANDANAISH",
+            "CHANDGAON",
+            "CHITTAGONG PORT",
+            "DOUBLE MOORING",
+            "KARNAFULI (POLICE STATION)",
+            "FATIKCHHARI",
+            "HALISHAHAR",
+            "HATHAZARI",
+            "KOTWALI",
+            "KHULSHI",
+            "LOHAGARA",
+            "MIRSHARAI",
+            "PAHARTALI",
+            "PANCHLAISH",
+            "PATIYA",
+            "PATENGA",
+            "RANGUNIA",
+            "RAOZAN",
+            "SANDWIP",
+            "SATKANIA",
+            "SITAKUNDA"
+          ]
+        },
+        {
+          "id": 11,
+          "name": "CUMILLA",
+          "thanas": [
+            "BARURA",
+            "BRAHMAN PARA",
+            "BURICHANG",
+            "CHANDINA",
+            "CHAUDDAGRAM",
+            "COMILLA SADAR DAKSHIN",
+            "DAUDKANDI",
+            "DEBIDWAR",
+            "HOMNA",
+            "COMILLA ADARSHA SADAR",
+            "LAKSAM",
+            "MANOHARGANJ",
+            "MEGHNA",
+            "MURADNAGAR",
+            "NANGALKOT",
+            "TITAS"
+          ]
+        },
+        {
+          "id": 12,
+          "name": "COX'S BAZAR",
+          "thanas": [
+            "CHAKARIA",
+            "COX'S BAZAR SADAR",
+            "KUTUBDIA",
+            "MAHESHKHALI",
+            "PEKUA",
+            "RAMU",
+            "TEKNAF",
+            "UKHIA"
+          ]
+        },
+        {
+          "id": 13,
+          "name": "FENI",
+          "thanas": [
+            "CHHAGALNAIYA",
+            "DAGANBHUIYAN",
+            "FENI SADAR",
+            "FULGAZI",
+            "PARSHURAM",
+            "SONAGAZI"
+          ]
+        },
+        {
+          "id": 14,
+          "name": "KHAGRACHHARI",
+          "thanas": [
+            "DIGHINALA",
+            "KHAGRACHHARI SADAR",
+            "LAKSHMICHHARI",
+            "MAHALCHHARI",
+            "MANIKCHHARI",
+            "MATIRANGA",
+            "PANCHHARI",
+            "RAMGARH"
+          ]
+        },
+        {
+          "id": 15,
+          "name": "LAKSHMIPUR",
+          "thanas": [
+            "KAMALNAGAR",
+            "LAKSHMIPUR SADAR",
+            "ROYPUR",
+            "RAMGANJ",
+            "RAMGATI"
+          ]
+        },
+        {
+          "id": 16,
+          "name": "NOAKHALI",
+          "thanas": [
+            "BEGUMGANJ",
+            "CHATKHIL",
+            "COMPANIGANJ",
+            "HATIYA",
+            "KABIRHAT",
+            "SENBAGH",
+            "SONAIMURI",
+            "SUBARNACHAR",
+            "NOAKHALI SADAR"
+          ]
+        },
+        {
+          "id": 17,
+          "name": "RANGAMATI",
+          "thanas": [
+            "BAGHAICHHARI",
+            "BARKAL UPAZILA",
+            "KAWKHALI (BETBUNIA)",
+            "BELAI CHHARI  UPAZI",
+            "KAPTAI  UPAZILA",
+            "JURAI CHHARI UPAZIL",
+            "LANGADU  UPAZILA",
+            "NANIARCHAR  UPAZILA",
+            "RAJASTHALI  UPAZILA",
+            "RANGAMATI SADAR  UP"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "DHAKA",
+      "districts": [
+        {
+          "id": 18,
+          "name": "DHAKA",
+          "thanas": [
+            "ADABOR",
+            "BADDA",
+            "BANGSHAL",
+            "BIMAN BANDAR",
+            "BANANI",
+            "CANTONMENT",
+            "CHAK BAZAR",
+            "DAKSHINKHAN",
+            "DARUS SALAM",
+            "DEMRA",
+            "DHANMONDI",
+            "HAZARIBAGH",
+            "DHAMRAI",
+            "DOHAR",
+            "BHASAN TEK",
+            "BHATARA",
+            "GENDARIA",
+            "GULSHAN",
+            "JATRABARI",
+            "KAFRUL",
+            "KADAMTALI",
+            "KALABAGAN",
+            "KAMRANGIR CHAR",
+            "KHILGAON",
+            "KHILKHET",
+            "KERANIGANJ",
+            "KOTWALI",
+            "LALBAGH",
+            "MOHAMMADPUR",
+            "RAMNA",
+            "MIRPUR",
+            "MOTIJHEEL",
+            "MUGDA PARA",
+            "NAWABGANJ",
+            "NEW MARKET",
+            "PALLABI",
+            "PALTAN",
+            "RAMPURA",
+            "SABUJBAGH",
+            "RUPNAGAR",
+            "SAVAR",
+            "SHAHJAHANPUR",
+            "SHAH ALI",
+            "SHAHBAGH",
+            "SHYAMPUR",
+            "SHER-E-BANGLA NAGAR",
+            "SUTRAPUR",
+            "TEJGAON",
+            "TEJGAON IND. AREA",
+            "TURAG",
+            "UTTARA  PASCHIM",
+            "UTTARA  PURBA",
+            "UTTAR KHAN",
+            "WARI"
+          ]
+        },
+        {
+          "id": 19,
+          "name": "FARIDPUR",
+          "thanas": [
+            "ALFADANGA",
+            "BHANGA",
+            "BOALMARI",
+            "CHAR BHADRASAN",
+            "FARIDPUR SADAR",
+            "MADHUKHALI",
+            "NAGARKANDA",
+            "SADARPUR",
+            "SALTHA"
+          ]
+        },
+        {
+          "id": 20,
+          "name": "GAZIPUR",
+          "thanas": [
+            "GAZIPUR SADAR",
+            "KALIAKAIR",
+            "KALIGANJ",
+            "KAPASIA",
+            "SREEPUR"
+          ]
+        },
+        {
+          "id": 21,
+          "name": "GOPALGANJ",
+          "thanas": [
+            "GOPALGANJ SADAR",
+            "KASHIANI",
+            "KOTALIPARA",
+            "MUKSUDPUR",
+            "TUNGIPARA"
+          ]
+        },
+        {
+          "id": 23,
+          "name": "KISHOREGONJ",
+          "thanas": [
+            "AUSTAGRAM",
+            "BAJITPUR",
+            "BHAIRAB",
+            "HOSSAINPUR",
+            "ITNA",
+            "KARIMGANJ",
+            "KATIADI",
+            "KISHOREGANJ SADAR",
+            "KULIAR CHAR",
+            "MITHAMAIN",
+            "NIKLI",
+            "PAKUNDIA",
+            "TARAIL"
+          ]
+        },
+        {
+          "id": 24,
+          "name": "MADARIPUR",
+          "thanas": [
+            "KALKINI",
+            "MADARIPUR SADAR",
+            "RAJOIR",
+            "SHIBCHAR"
+          ]
+        },
+        {
+          "id": 25,
+          "name": "MANIKGANJ",
+          "thanas": [
+            "DAULATPUR",
+            "GHIOR",
+            "HARIRAMPUR",
+            "MANIKGANJ SADAR",
+            "SATURIA",
+            "SHIBALAYA",
+            "SINGAIR"
+          ]
+        },
+        {
+          "id": 26,
+          "name": "MUNSHIGANJ",
+          "thanas": [
+            "GAZARIA",
+            "LOHAJANG",
+            "MUNSHIGANJ SADAR",
+            "SERAJDIKHAN",
+            "SREENAGAR",
+            "TONGIBARI"
+          ]
+        },
+        {
+          "id": 28,
+          "name": "NARAYANGANJ",
+          "thanas": [
+            "ARAIHAZAR",
+            "SONARGAON",
+            "BANDAR",
+            "NARAYANGANJ SADAR",
+            "RUPGANJ"
+          ]
+        },
+        {
+          "id": 29,
+          "name": "NARSINGDI",
+          "thanas": [
+            "BELABO",
+            "MANOHARDI",
+            "NARSINGDI SADAR",
+            "PALASH",
+            "ROYPURA",
+            "SHIBPUR"
+          ]
+        },
+        {
+          "id": 31,
+          "name": "RAJBARI",
+          "thanas": [
+            "BALIAKANDI",
+            "GOALANDA",
+            "KALUKHALI",
+            "PANGSHA",
+            "RAJBARI SADAR"
+          ]
+        },
+        {
+          "id": 32,
+          "name": "SHARIATPUR",
+          "thanas": [
+            "BHEDARGANJ",
+            "DAMUDYA",
+            "GOSAIRHAT",
+            "NARIA",
+            "SHARIATPUR SADAR",
+            "ZANJIRA"
+          ]
+        },
+        {
+          "id": 34,
+          "name": "TANGAIL",
+          "thanas": [
+            "BASAIL",
+            "BHUAPUR",
+            "DELDUAR",
+            "DHANBARI",
+            "GHATAIL",
+            "GOPALPUR",
+            "KALIHATI",
+            "MADHUPUR",
+            "MIRZAPUR",
+            "NAGARPUR",
+            "SAKHIPUR",
+            "TANGAIL SADAR"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "KHULNA",
+      "districts": [
+        {
+          "id": 35,
+          "name": "BAGERHAT",
+          "thanas": [
+            "BAGERHAT SADAR",
+            "CHITALMARI",
+            "FAKIRHAT",
+            "KACHUA",
+            "MOLLAHAT",
+            "MONGLA",
+            "MORRELGANJ",
+            "RAMPAL",
+            "SARANKHOLA"
+          ]
+        },
+        {
+          "id": 36,
+          "name": "CHUADANGA",
+          "thanas": [
+            "ALAMDANGA",
+            "CHUADANGA SADAR",
+            "DAMURHUDA",
+            "JIBAN NAGAR"
+          ]
+        },
+        {
+          "id": 37,
+          "name": "JASHORE",
+          "thanas": [
+            "ABHAYNAGAR",
+            "BAGHER PARA",
+            "CHAUGACHHA",
+            "JHIKARGACHHA",
+            "KESHABPUR",
+            "JESSORE SADAR",
+            "MANIRAMPUR",
+            "SHARSHA"
+          ]
+        },
+        {
+          "id": 38,
+          "name": "JHENAIDAH",
+          "thanas": [
+            "HARINAKUNDA",
+            "JHENAIDAH SADAR",
+            "KALIGANJ",
+            "KOTCHANDPUR",
+            "MAHESHPUR",
+            "SHAILKUPA"
+          ]
+        },
+        {
+          "id": 39,
+          "name": "KHULNA",
+          "thanas": [
+            "BATIAGHATA",
+            "DACOPE",
+            "DAULATPUR",
+            "DUMURIA",
+            "DIGHALIA",
+            "KHALISHPUR",
+            "KHAN JAHAN ALI",
+            "KHULNA SADAR",
+            "KOYRA",
+            "PAIKGACHHA",
+            "PHULTALA",
+            "RUPSA",
+            "SONADANGA",
+            "TEROKHADA"
+          ]
+        },
+        {
+          "id": 40,
+          "name": "KUSHTIA",
+          "thanas": [
+            "KUMARKHALI",
+            "KUSHTIA SADAR",
+            "MIRPUR",
+            "BHERAMARA",
+            "DAULATPUR",
+            "KHOKSA"
+          ]
+        },
+        {
+          "id": 41,
+          "name": "MAGURA",
+          "thanas": [
+            "MAGURA SADAR",
+            "MOHAMMADPUR",
+            "SHALIKHA",
+            "SREEPUR"
+          ]
+        },
+        {
+          "id": 42,
+          "name": "MEHERPUR",
+          "thanas": [
+            "GANGNI",
+            "MUJIB NAGAR",
+            "MEHERPUR SADAR"
+          ]
+        },
+        {
+          "id": 43,
+          "name": "NARAIL",
+          "thanas": [
+            "KALIA",
+            "LOHAGARA",
+            "NARAIL SADAR"
+          ]
+        },
+        {
+          "id": 44,
+          "name": "SATKHIRA",
+          "thanas": [
+            "ASSASUNI",
+            "DEBHATA",
+            "KALAROA",
+            "KALIGANJ",
+            "SATKHIRA SADAR",
+            "SHYAMNAGAR",
+            "TALA"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "RAJSHAHI",
+      "districts": [
+        {
+          "id": 45,
+          "name": "BOGURA",
+          "thanas": [
+            "ADAMDIGHI",
+            "BOGRA SADAR",
+            "DHUNAT",
+            "DHUPCHANCHIA",
+            "GABTALI",
+            "KAHALOO",
+            "NANDIGRAM",
+            "SARIAKANDI",
+            "SHAJAHANPUR",
+            "SHERPUR",
+            "SHIBGANJ",
+            "SONATOLA"
+          ]
+        },
+        {
+          "id": 46,
+          "name": "JOYPURHAT",
+          "thanas": [
+            "AKKELPUR",
+            "JOYPURHAT SADAR",
+            "KALAI",
+            "KHETLAL",
+            "PANCHBIBI"
+          ]
+        },
+        {
+          "id": 47,
+          "name": "NAOGAON",
+          "thanas": [
+            "ATRAI",
+            "BADALGACHHI",
+            "DHAMOIRHAT",
+            "MANDA",
+            "MAHADEBPUR",
+            "NAOGAON SADAR",
+            "NIAMATPUR",
+            "PATNITALA",
+            "PORSHA",
+            "RANINAGAR",
+            "SAPAHAR"
+          ]
+        },
+        {
+          "id": 48,
+          "name": "NATORE",
+          "thanas": [
+            "BAGATIPARA",
+            "BARAIGRAM",
+            "GURUDASPUR",
+            "LALPUR",
+            "NALDANGA",
+            "NATORE SADAR",
+            "SINGRA"
+          ]
+        },
+        {
+          "id": 49,
+          "name": "CHAPAI NABABGANJ",
+          "thanas": [
+            "BHOLAHAT",
+            "GOMASTAPUR",
+            "NACHOLE",
+            "CHAPAI NABABGANJ SADAR",
+            "SHIBGANJ"
+          ]
+        },
+        {
+          "id": 50,
+          "name": "PABNA",
+          "thanas": [
+            "ATGHARIA",
+            "BERA",
+            "BHANGURA",
+            "CHATMOHAR",
+            "FARIDPUR",
+            "ISHWARDI",
+            "PABNA SADAR",
+            "SANTHIA",
+            "SUJANAGAR"
+          ]
+        },
+        {
+          "id": 51,
+          "name": "RAJSHAHI",
+          "thanas": [
+            "BAGHA",
+            "BAGHMARA",
+            "BOALIA",
+            "CHARGHAT",
+            "DURGAPUR",
+            "GODAGARI",
+            "MATIHAR",
+            "MOHANPUR",
+            "PABA",
+            "PUTHIA",
+            "RAJPARA",
+            "SHAH MAKHDUM",
+            "TANORE"
+          ]
+        },
+        {
+          "id": 52,
+          "name": "SIRAJGANJ",
+          "thanas": [
+            "BELKUCHI",
+            "CHAUHALI",
+            "KAMARKHANDA",
+            "KAZIPUR",
+            "ROYGANJ",
+            "SHAHJADPUR",
+            "SIRAJGANJ SADAR",
+            "TARASH",
+            "ULLAH PARA"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "RANGPUR",
+      "districts": [
+        {
+          "id": 53,
+          "name": "DINAJPUR",
+          "thanas": [
+            "BIRAMPUR",
+            "BIRGANJ",
+            "BIRAL",
+            "BOCHAGANJ",
+            "CHIRIRBANDAR",
+            "FULBARI",
+            "GHORAGHAT",
+            "HAKIMPUR",
+            "KAHAROLE",
+            "KHANSAMA",
+            "DINAJPUR SADAR",
+            "NAWABGANJ",
+            "PARBATIPUR"
+          ]
+        },
+        {
+          "id": 54,
+          "name": "GAIBANDHA",
+          "thanas": [
+            "FULCHHARI",
+            "GAIBANDHA SADAR",
+            "GOBINDAGANJ",
+            "PALASHBARI",
+            "SADULLAPUR",
+            "SAGHATA",
+            "SUNDARGANJ"
+          ]
+        },
+        {
+          "id": 55,
+          "name": "KURIGRAM",
+          "thanas": [
+            "BHURUNGAMARI",
+            "CHAR RAJIBPUR",
+            "CHILMARI",
+            "PHULBARI",
+            "KURIGRAM SADAR",
+            "NAGESHWARI",
+            "RAJARHAT",
+            "RAUMARI",
+            "ULIPUR"
+          ]
+        },
+        {
+          "id": 56,
+          "name": "LALMONIRHAT",
+          "thanas": [
+            "ADITMARI",
+            "HATIBANDHA",
+            "KALIGANJ",
+            "LALMONIRHAT SADAR",
+            "PATGRAM"
+          ]
+        },
+        {
+          "id": 57,
+          "name": "NILPHAMARI",
+          "thanas": [
+            "DIMLA",
+            "DOMAR UPAZILA",
+            "JALDHAKA",
+            "KISHOREGANJ",
+            "NILPHAMARI SADAR",
+            "SAIDPUR UPAZILA"
+          ]
+        },
+        {
+          "id": 58,
+          "name": "PANCHAGARH",
+          "thanas": [
+            "ATWARI",
+            "BODA",
+            "DEBIGANJ",
+            "PANCHAGARH SADAR",
+            "TENTULIA"
+          ]
+        },
+        {
+          "id": 59,
+          "name": "RANGPUR",
+          "thanas": [
+            "BADARGANJ",
+            "GANGACHARA",
+            "KAUNIA",
+            "RANGPUR SADAR",
+            "MITHA PUKUR",
+            "PIRGACHHA",
+            "PIRGANJ",
+            "TARAGANJ"
+          ]
+        },
+        {
+          "id": 60,
+          "name": "THAKURGAON",
+          "thanas": [
+            "BALIADANGI",
+            "HARIPUR",
+            "PIRGANJ",
+            "RANISANKAIL",
+            "THAKURGAON SADAR"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "SYLHET",
+      "districts": [
+        {
+          "id": 61,
+          "name": "HABIGANJ",
+          "thanas": [
+            "AJMIRIGANJ",
+            "BAHUBAL",
+            "BANIACHONG",
+            "CHUNARUGHAT",
+            "HABIGANJ SADAR",
+            "LAKHAI",
+            "MADHABPUR",
+            "NABIGANJ"
+          ]
+        },
+        {
+          "id": 62,
+          "name": "MAULVIBAZAR",
+          "thanas": [
+            "BARLEKHA",
+            "JURI",
+            "KAMALGANJ",
+            "KULAURA",
+            "MAULVIBAZAR SADAR",
+            "RAJNAGAR",
+            "SREEMANGAL"
+          ]
+        },
+        {
+          "id": 63,
+          "name": "SUNAMGANJ",
+          "thanas": [
+            "BISHWAMBARPUR",
+            "CHHATAK",
+            "DAKSHIN SUNAMGANJ",
+            "DERAI",
+            "DHARAMPASHA",
+            "DOWARABAZAR",
+            "JAGANNATHPUR",
+            "JAMALGANJ",
+            "SULLA",
+            "SUNAMGANJ SADAR",
+            "TAHIRPUR"
+          ]
+        },
+        {
+          "id": 64,
+          "name": "SYLHET",
+          "thanas": [
+            "BALAGANJ",
+            "BEANI BAZAR",
+            "BISHWANATH",
+            "COMPANIGANJ",
+            "DAKSHIN SURMA",
+            "FENCHUGANJ",
+            "GOLAPGANJ",
+            "GOWAINGHAT",
+            "JAINTIAPUR",
+            "KANAIGHAT",
+            "SYLHET SADAR",
+            "ZAKIGANJ"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "MYMENSINGH",
+      "districts": [
+        {
+          "id": 22,
+          "name": "JAMALPUR",
+          "thanas": [
+            "BAKSHIGANJ",
+            "DEWANGANJ",
+            "ISLAMPUR",
+            "JAMALPUR SADAR",
+            "MADARGANJ",
+            "MELANDAHA",
+            "SARISHABARI UPAZILA"
+          ]
+        },
+        {
+          "id": 27,
+          "name": "MYMENSINGH",
+          "thanas": [
+            "BHALUKA",
+            "DHOBAURA",
+            "FULBARIA",
+            "GAFFARGAON",
+            "GAURIPUR",
+            "HALUAGHAT",
+            "ISHWARGANJ",
+            "MYMENSINGH SADAR",
+            "MUKTAGACHHA",
+            "NANDAIL",
+            "PHULPUR",
+            "TARAKANDA",
+            "TRISHAL"
+          ]
+        },
+        {
+          "id": 30,
+          "name": "NETRAKONA",
+          "thanas": [
+            "ATPARA",
+            "BARHATTA",
+            "DURGAPUR",
+            "KHALIAJURI",
+            "KALMAKANDA",
+            "KENDUA",
+            "MADAN",
+            "MOHANGANJ",
+            "NETROKONA SADAR",
+            "PURBADHALA"
+          ]
+        },
+        {
+          "id": 33,
+          "name": "SHERPUR",
+          "thanas": [
+            "JHENAIGATI",
+            "NAKLA",
+            "NALITABARI",
+            "SHERPUR SADAR",
+            "SREEBARDI"
+          ]
+        }
+      ]
+    }
+  ]
+}
