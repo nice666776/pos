@@ -1,55 +1,37 @@
 import React from "react";
-import { Grid, Paper, Typography, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Typography, Button } from "@material-ui/core";
 import classnames from "classnames";
-
-// styles
 import useStyles from "./styles";
+import logo from "./404.svg";
 
-// logo
-import logo from "./logo.svg";
-
-export default function Error() {
+export default function Error({history}) {
   var classes = useStyles();
 
   return (
-    <Grid container className={classes.container}>
-      <div className={classes.logotype}>
-        <img className={classes.logotypeIcon} src={logo} alt="logo" />
-        <Typography variant="h3" color="white" className={classes.logotypeText}>
-          POS Admin
-        </Typography>
+    <div className="">
+      <div className="d-flex justify-content-center mb-3">
+        <img width="40%" src={logo} alt="logo" />
       </div>
-      <Paper classes={{ root: classes.paperRoot }}>
-        <Typography
-          variant="h1"
-          color="primary"
-          className={classnames(classes.textRow, classes.errorCode)}
-        >
-          404
-        </Typography>
-        <Typography variant="h5" color="primary" className={classes.textRow}>
-          Oops. Looks like the page you're looking for no longer exists
-        </Typography>
-        <Typography
-          variant="h6"
-          color="text"
-          colorBrightness="secondary"
-          className={classnames(classes.textRow, classes.safetyText)}
-        >
-          But we're here to bring you back to safety
-        </Typography>
+      <Typography variant="h5" color="primary" className={classes.textRow}>
+        Oops. Looks like the page you're looking for no longer exists
+      </Typography>
+      <Typography
+        variant="h6"
+        color="text"
+        colorBrightness="secondary"
+        className={classnames(classes.textRow, classes.safetyText)}
+      >
+        But we're here to bring you back to safety
+      </Typography>
+      <div className="d-flex justify-content-center">
         <Button
-          variant="contained"
           color="primary"
-          component={Link}
-          to="/"
-          size="large"
-          className={classes.backButton}
+          variant="contained"
+          onClick={()=>history.goBack()}
         >
-          Back to Home
+          Go Back
         </Button>
-      </Paper>
-    </Grid>
+      </div>
+    </div>
   );
 }
