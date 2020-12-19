@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using POS.DataAccess.Repository.IRepository;
@@ -13,12 +14,13 @@ namespace POS.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IMapper _mapper;
 
-
-        public ManufacturerController(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment)
+        public ManufacturerController(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _hostEnvironment = hostEnvironment;
+            _mapper = mapper;
         }
 
 

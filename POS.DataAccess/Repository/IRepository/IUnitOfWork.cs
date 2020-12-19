@@ -10,6 +10,8 @@ namespace POS.DataAccess.Repository.IRepository
         ISupplierRepository Supplier { get; }
         IPOSLogRepository POSLog { get; }
         IManufacturerRepository Manufacturer { get; }
+        ICategoryRepository Category { get; }
+        IProductRepository Product { get; }
         void Save();
     }
 

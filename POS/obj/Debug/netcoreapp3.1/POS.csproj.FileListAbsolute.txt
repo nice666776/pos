@@ -44,9 +44,11 @@ D:\POS\POS\POS\bin\Debug\netcoreapp3.1\POS.DataAccess.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\POS.Models.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\POS.DataAccess.pdb
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\POS.Models.pdb
-D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.csproj.CoreCompileInputs.cache
-D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.MvcApplicationPartsAssemblyInfo.cache
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\AutoMapper.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.csproj.CoreCompileInputs.cache
+D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.MvcApplicationPartsAssemblyInfo.cache

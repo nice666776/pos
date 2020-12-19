@@ -64,6 +64,7 @@ namespace POS.DataAccess.Repository
                 aManufacturer.comments = manufacturer.comments;
                 aManufacturer.entry_date = manufacturer.entry_date;
                 aManufacturer.entry_by = manufacturer.entry_by;
+                aManufacturer.status = manufacturer.status;
             }
         }
     }

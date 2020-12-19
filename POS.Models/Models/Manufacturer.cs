@@ -21,7 +21,7 @@ namespace POS.Models.Models
         public string comments { get; set; }
         public DateTime entry_date { get; set; }
         public string entry_by { get; set; }
-
+        public bool status { get; set; }
 
     }
 }

@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using POS.DataAccess.Data;
 using POS.DataAccess.Repository;
 using POS.DataAccess.Repository.IRepository;
@@ -32,7 +31,7 @@ namespace POS
         {
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllers();
-           
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -60,7 +59,7 @@ namespace POS
             }
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors("AllowOrigin");
+            app.UseCors("AllowOrigin");//^ referenced in configuration cors
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
