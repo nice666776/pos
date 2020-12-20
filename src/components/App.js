@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Layout from "./Layout";
-import Error from "../pages/error";
 import Login from "../pages/login";
 import { useUserState } from "../context/UserContext";
 
@@ -59,7 +58,6 @@ const App = React.memo(()=>{
       <Switch>
         <PublicRoute path="/login" component={Login} />
         <PrivateRoute path="/" component={Layout} />
-        <Route component={Error} />
       </Switch>
     </BrowserRouter>
   );

@@ -8,17 +8,14 @@ import { kaReducer, Table } from 'ka-table';
 import { FilteringMode } from 'ka-table/enums';
 import { updateData, hideLoading, showLoading } from 'ka-table/actionCreators';
 import { ActionButton, AddButton } from '../../../components/table-component';
-import SupplierForm from '../../../components/forms/configuration/supplier-entry';
-import { supplierList } from '../server_action';
+import CategoryForm from '../../../components/forms/product-configuration/category-form';
+import { categoryList } from '../server_action';
 
 
 const row = {paddingTop: 2, paddingBottom: 2}
 const columns = [
-  { key: 'name', title: 'Name', isResizable: true, style:{...row}},
-  { key: 'company', title: 'Company', isResizable: true, style:{...row}},
-  { key: 'mobile', title: 'Mobile No.', isResizable: true, style:{...row}},
-  { key: 'email', title: 'Email', isResizable: true, style:{...row}},
-  { key: 'address', title: 'Address', isResizable: true, style:{...row}},
+  { key: 'name', title: 'Category Name', isResizable: true, style:{...row, width: 300}},
+  { key: 'description', title: 'Description', isResizable: true, style:{...row}},
   { key: 'action', style:{...row, width: 80}},
 ]
 
@@ -34,7 +31,7 @@ const tablePropsInit = {
   }
 }
 
-const AddOrUpdate = React.memo(({open, handleClose, updateList, update, supplier_info})=>{
+const AddOrUpdate = React.memo(({open, handleClose, updateList, update, category_info})=>{
   return(
     <Dialog
       open={open}
@@ -42,33 +39,33 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, supplier
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
       scroll="body"
+      disableBackdropClick={true}
     >
-      <DialogTitle className="text-center" id="dialog-title">{update?'Update Supplier':'Add Supplier'}</DialogTitle>
+      <DialogTitle className="text-center" id="dialog-title">{update?'Update Category':'Add Category'}</DialogTitle>
       <DialogContent>
-        <SupplierForm updateList={updateList} update={update} supplier_info={supplier_info} handleClose={handleClose}/>
+        <CategoryForm updateList={updateList} update={update} category_info={category_info} handleClose={handleClose}/>
       </DialogContent>
     </Dialog>
   )
 })
 
 
-
-const SupplierEntry = ()=>{
+const Categories = ()=>{
   // eslint-disable-next-line
-  const [supplier_list, setSupplierList] = React.useState([])
+  const [category_list, setCategoryList] = React.useState([])
   const [open, setOpen] = React.useState(false)
   const [tableProps, changeTableProps] = React.useState(tablePropsInit);
-  const [supplier_info, setSupplierInfo] = React.useState({})
+  const [category_info, setCategoryInfo] = React.useState({})
   const [update, setUpdate] = React.useState(false)
 
   const dispatch = React.useCallback((action) => {
     if(action.type === 'EDIT'){
       setOpen(true)
-      setSupplierInfo(action.rowData)
+      setCategoryInfo(action.rowData)
       setUpdate(true)
     } else if(action.type === 'ADD') {
       setOpen(true)
-      setSupplierInfo({})
+      setCategoryInfo({})
       setUpdate(false)
     }
     changeTableProps((prevState) => kaReducer(prevState, action));
@@ -76,11 +73,11 @@ const SupplierEntry = ()=>{
 
   React.useEffect(()=>{
     dispatch(showLoading('Getting Data ...'))
-    supplierList()
+    categoryList()
       .then(resp => {
         if(resp.success){
           dispatch(updateData(resp.message))
-          setSupplierList(resp.message)
+          setCategoryList(resp.message)
         }
       })
       .finally(()=>dispatch(hideLoading()))
@@ -97,15 +94,13 @@ const SupplierEntry = ()=>{
       new_list[index] = data
     }
     dispatch(updateData(new_list))
-    setSupplierList(new_list)
+    setCategoryList(new_list)
     handleClose()
-  }, [tableProps, dispatch, setSupplierList, handleClose])
-
-
+  }, [tableProps, dispatch, setCategoryList, handleClose])
 
   return(
     <React.Fragment>
-      <h5 className="text-center font-weight-bold">Suppliers</h5>
+      <h5 className="text-center font-weight-bold">Categories</h5>
       <div className="card overflow-hidden">
         <Table
           {...tableProps}
@@ -115,7 +110,7 @@ const SupplierEntry = ()=>{
               content: (props) => {
                 // eslint-disable-next-line
                 switch(props.column.key){
-                  case 'address': return <React.Fragment/>
+                  case 'description': return <React.Fragment/>
                   case 'action': return <React.Fragment/>
                 }
               }
@@ -123,7 +118,6 @@ const SupplierEntry = ()=>{
             cellText: {
               content: props => {
                 switch(props.column.key){
-                  case 'address': return <p className="text-truncate m-0">{`${props.rowData.address}, ${props.rowData.thana}, ${props.rowData.district}, ${props.rowData.division}`}</p>
                   case 'action': return <ActionButton {...props} />
                   default: return <p className="text-truncate m-0">{props.value}</p>
                 }
@@ -152,11 +146,11 @@ const SupplierEntry = ()=>{
         handleClose={handleClose}
         updateList={updateList}
         update={update}
-        supplier_info={supplier_info}
+        category_info={category_info}
       />
 
     </React.Fragment>
   )
 }
 
-export default SupplierEntry;
+export default Categories;

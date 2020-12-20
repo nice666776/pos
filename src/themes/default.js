@@ -75,7 +75,7 @@ export default {
     },
     background: {
       default: "#eaeaeac7",
-      light: "#F3F5FF",
+      light: "#26273a1a",
     },
   },
   customShadows: {
@@ -89,7 +89,7 @@ export default {
   overrides: {
     MuiBackdrop: {
       root: {
-        backgroundColor: "#4A4A4A1A",
+        backgroundColor: "#00000065",
       },
     },
     MuiMenu: {
@@ -106,15 +106,15 @@ export default {
     MuiListItem: {
       root: {
         "&$selected": {
-          backgroundColor: "#F3F5FF !important",
+          backgroundColor: "#26273a1a !important",
           "&:focus": {
-            backgroundColor: "#F3F5FF",
+            backgroundColor: "#26273a1a",
           },
         },
       },
       button: {
         "&:hover, &:focus": {
-          backgroundColor: "#F3F5FF",
+          backgroundColor: "#26273a1a",
         },
       },
     },

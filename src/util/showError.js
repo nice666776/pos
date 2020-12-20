@@ -43,6 +43,6 @@ export default (err) => {
     ? cogoToast.error(`${err.response.status} - ${error_msg[err.response.status]}`)
     : cogoToast.error(`${err.response.status} - ${error_msg[err.response.status]}`)
   } catch {
-    cogoToast.warn('Could not connect to backend server')
+    cogoToast.warn('Could not connect to the server.')
   }
 }

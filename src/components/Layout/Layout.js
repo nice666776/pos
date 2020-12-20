@@ -10,6 +10,7 @@ import useStyles from "./styles";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import Configuration from "../../pages/configuration";
+import ProductConfiguration from "../../pages/product-configuration";
 import { useLayoutState } from "../../context/LayoutContext";
 import asyncComponent from '../../util/asyncComponent';
 
@@ -33,7 +34,8 @@ function Layout(props) {
             <Redirect exact from={path} to="/dashboard" />
             <Route path="/dashboard" component={asyncComponent(() => import('../../pages/dashboard'))} />
             <Route path="/configuration" component={Configuration}/>
-            <Route path="/tables" component={asyncComponent(() => import('../../pages/tables'))} />
+            <Route path="/product-configuration" component={ProductConfiguration}/>
+            <Route component={asyncComponent(() => import('../../pages/error/Error'))} />
           </Switch>
         </div>
       </React.Fragment>

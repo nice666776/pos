@@ -1,4 +1,4 @@
-export const require_fields = {
+export const supplier_require = {
   'name': false,
   'company': false,
   'division': false,

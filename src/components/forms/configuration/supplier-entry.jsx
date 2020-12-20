@@ -8,7 +8,7 @@ import {
   Select
 } from '@material-ui/core';
 import cogoToast from 'cogo-toast';
-import {require_fields as rf} from './require';
+import {supplier_require} from './require';
 import checkValidation from '../../../util/checkValidation';
 import { DataSaving } from '../../loading/DataSaving';
 import { postSupplierInfo } from '../../../pages/configuration/server_action';
@@ -18,7 +18,7 @@ var address = require('../../../util/area.json');
 // eslint-disable-next-line
 export default React.memo(({updateList, update, supplier_info, handleClose})=>{
   const [form_inputs, setFormInputs] = React.useState(update?{...supplier_info}:{supplier_type: true})
-  const [requires, setRequireFields] = React.useState(rf)
+  const [requires, setRequireFields] = React.useState(supplier_require)
   const division_list = address.message
   const [district_list, setDistrictList] = React.useState([])
   const [thana_list, setThanaList] = React.useState([])
@@ -219,7 +219,7 @@ export default React.memo(({updateList, update, supplier_info, handleClose})=>{
         </div>
       </div>
 
-      <div className="text-center mt-2">
+      <div className="text-center mt-3">
         <Button className="text-capitalize mr-2" variant="outlined" color="primary" size="small" onClick={handleClose} disabled={saving}>
           Cancel
         </Button>

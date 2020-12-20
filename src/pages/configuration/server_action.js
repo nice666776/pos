@@ -13,7 +13,7 @@ export const postSupplierInfo = (form_data)=>{                  // Supplier add
   })
 }
 
-export const supplierList = ()=>{                      // Supplier list
+export const supplierList = ()=>{                             // Supplier list
   return new Promise((resolve, reject)=>{
     axios.get('/supplier')
     .then(resp => resolve(resp.data))

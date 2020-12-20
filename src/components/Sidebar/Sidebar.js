@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Drawer, IconButton, List } from "@material-ui/core";
 import {
   Home as HomeIcon,
-  BorderAll as TableIcon,
   ArrowBack as ArrowBackIcon,
   Settings
 } from "@material-ui/icons";
@@ -23,20 +22,33 @@ import {
   toggleSidebar,
 } from "../../context/LayoutContext";
 
+
+
+
 const structure = [
   { label: "Dashboard", link: "/dashboard", icon: <HomeIcon />},
-  { 
+  {
+    label: "Product Configuration",
+    link: "/product-configuration",
+    icon: <Settings />,
+    children: [
+      { label: "Manufacturers", link: "/product-configuration/manufacturers" },
+      { label: "Categories", link: "/product-configuration/categories" },
+    ],
+  },
+  {
     label: "Configuration",
     link: "/configuration",
     icon: <Settings />,
     children: [
-      { label: "Supplier Entry", link: "/configuration/supplier-entry"},
-      { label: "Manufacture", link: "/configuration/manufacture" },
+      { label: "Suppliers", link: "/configuration/supplier-entry"},
       { label: "Util Info", link: "/configuration/util-info" },
     ],
   },
-  { label: "Tables", link: "/tables", icon: <TableIcon /> },
 ];
+
+
+
 
 const Sidebar = ({ location })=>{
   var classes = useStyles();

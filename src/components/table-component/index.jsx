@@ -6,13 +6,18 @@ import {
 import {
   deleteRow,
 } from 'ka-table/actionCreators';
-
+import DataRowContent from "ka-table/Components/DataRowContent/DataRowContent";
 import {
   EditTwoTone,
   DeleteTwoTone,
   AddRounded
 } from '@material-ui/icons';
 
+
+export const DataRow = React.memo(
+  props => <DataRowContent {...props} />,
+  () => true
+);
 
 export const ActionButton = React.memo((props) => {
   const { dispatch, rowKeyValue, rowData, del } = props
