@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using POS.Models.Models;
 
 namespace POS
 {

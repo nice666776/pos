@@ -6,7 +6,6 @@ namespace POS.Models.Models
 {
     public class Product
     {
-
         public int id { get; set; }
         public string product_code { get; set; }
         public string product_name { get; set; }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
@@ -17,7 +14,12 @@ namespace POS.Controllers
             _unitOfWork = unitOfWork;
 
         }
-
+        [Route("~/Units/")]
+        public JsonResult getAllUnit()
+        {
+            IEnumerable<Unit> list = _unitOfWork.Unit.GetAll();
+            return Json(new { success = true, message = list });
+        }
         public JsonResult getAll()
         {
             IEnumerable<Product> list = _unitOfWork.Product.GetAll();
