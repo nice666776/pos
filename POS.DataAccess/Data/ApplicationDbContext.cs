@@ -27,5 +27,6 @@ namespace POS.DataAccess.Data
         public DbSet<POSLog> Pos_log { get; set; }
         public DbSet<Category> Category_info { get; set; }
         public DbSet<Product> Product_info { get; set; }
+        public DbSet<Unit> Unit_info { get; set; }
     }
 }

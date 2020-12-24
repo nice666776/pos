@@ -12,6 +12,7 @@ namespace POS.DataAccess.Repository.IRepository
         IManufacturerRepository Manufacturer { get; }
         ICategoryRepository Category { get; }
         IProductRepository Product { get; }
+        IUnitRepository Unit { get; }
         void Save();
     }
 

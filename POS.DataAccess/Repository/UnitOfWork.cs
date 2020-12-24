@@ -15,7 +15,7 @@ namespace POS.DataAccess.Repository
             Manufacturer = new ManufacturerRepository(_db);
             Category = new CategoryRepository(_db);
             Product = new ProductRepository(_db);
-
+            Unit = new UnitRepository(_db);
         }
  
         public ISupplierRepository Supplier { get; private set; }
@@ -23,6 +23,7 @@ namespace POS.DataAccess.Repository
         public IManufacturerRepository Manufacturer { get; private set; }
         public ICategoryRepository Category { get; private set; }
         public IProductRepository Product { get; private set; }
+        public IUnitRepository Unit { get; private set; }
         public void Dispose()
         {
             _db.Dispose();
