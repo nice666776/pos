@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
@@ -55,7 +56,6 @@ namespace POS.Controllers
 
                     _unitOfWork.Product.Update(product);
                 }
-
 
 
                 _unitOfWork.Save();

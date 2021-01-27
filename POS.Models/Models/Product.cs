@@ -23,5 +23,7 @@ namespace POS.Models.Models
         public bool status { get; set; }
         public string manufacturer { get; set; }
         public string batch { get; set; }
+        public string entry_by { get; set; }
+        public string client_code { get; set; }
     }
 }

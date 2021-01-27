@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace POS.DataAccess.Repository
 {
-   public class CategoryRepository: Repository<Category>, ICategoryRepository
+   public class CategoryRepository: RepositoryAsync<Category>, ICategoryRepository
     {
         private readonly ApplicationDbContext _db;
 
@@ -33,7 +33,7 @@ namespace POS.DataAccess.Repository
 
             else
             {
-                
+
                 int code_no = Convert.ToInt32(pOSLog.category_code);
                 code_no++;
                 string s = code_no.ToString("0000");
@@ -44,14 +44,14 @@ namespace POS.DataAccess.Repository
         }
         public void Update(Category category)
         {
-            Category ACategory = _db.Category_info.FirstOrDefault(c => c.id == category.id);
-            if(ACategory!= null)
-            {
-                ACategory.name = category.name;
-                ACategory.description = category.description;
-            }
+            //Category ACategory = _db.Category_info.FirstOrDefault(c => c.id == category.id);
+            //if(ACategory!= null)
+            //{
+            //    ACategory.name = category.name;
+            //    ACategory.description = category.description;
+            //}
 
-
+            _db.Category_info.Update(category);
 
         }
 

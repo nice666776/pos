@@ -21,21 +21,22 @@ namespace POS.Controllers
            
         }
 
-        public JsonResult getAll()
+        public async Task<JsonResult> getAll()
         {
-            IEnumerable<Category> list = _unitOfWork.Category.GetAll();
+            IEnumerable<Category> list = await _unitOfWork.Category.GetAllAsync();
             return Json(new { success = true, message = list });
         }
 
         [Route("~/Category/")]
         [Route("~/Category/index")]
-        public IActionResult category_Index()
+        public async Task<IActionResult> category_Index()
         {
-            return getAll();
+            IEnumerable<Category> list = await _unitOfWork.Category.GetAllAsync();
+            return Json(new { success = true, message = list });
         }
         [HttpPost]
         [Route("~/Category/add")]
-        public IActionResult Upsert([FromBody] Category category)
+        public async Task<IActionResult> Upsert([FromBody] Category category)
         {
 
             if (ModelState.IsValid)
@@ -45,7 +46,7 @@ namespace POS.Controllers
                     string c_code = _unitOfWork.Category.getCategoryCode();
                     category.code = c_code;
                     category.name = category.name.ToUpper();
-                   _unitOfWork.Category.Add(category);
+                  await _unitOfWork.Category.AddAsync(category);
                     POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault();
                     pOSLog.category_code = c_code;
                     _unitOfWork.POSLog.Update(pOSLog);
@@ -56,8 +57,6 @@ namespace POS.Controllers
                 
                     _unitOfWork.Category.Update(category);
                 }
-
-
 
                 _unitOfWork.Save();
                 return Ok(category);
@@ -72,12 +71,12 @@ namespace POS.Controllers
         [Route("Category/delete/{id}")]
         public IActionResult Delete(int id)
         {
-            var objFromDb = _unitOfWork.Category.Get(id);
+            var objFromDb = _unitOfWork.Category.GetAsync(id);
             if (objFromDb == null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
-            _unitOfWork.Category.Remove(objFromDb);
+           _unitOfWork.Category.RemoveAsync(id);
             _unitOfWork.Save();
             return Json(new { success = true, message = "Delete Successful" });
 

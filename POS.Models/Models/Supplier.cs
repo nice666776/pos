@@ -22,5 +22,6 @@ namespace POS.Models.Models
         [DataType(DataType.Date)]
         public DateTime entry_date { get; set; }
         public string entry_by { get; set; }
+        public string client_code { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace POS.DataAccess.Repository.IRepository
 {
-    public interface ICategoryRepository: IRepository<Category>
+    public interface ICategoryRepository: IRepositoryAsync<Category>
     {
         public void Update(Category category);
         public string getCategoryCode();
