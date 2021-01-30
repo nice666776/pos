@@ -15,7 +15,7 @@ import { categoryList } from '../server_action';
 const row = {paddingTop: 2, paddingBottom: 2}
 const columns = [
   { key: 'name', title: 'Category Name', isResizable: true, style:{...row, width: 300}},
-  { key: 'description', title: 'Description', isResizable: true, style:{...row}},
+  { key: 'description', title: 'Description', style:{...row}},
   { key: 'action', style:{...row, width: 80}},
 ]
 
@@ -127,7 +127,7 @@ const Categories = ()=>{
               content: props => {
                 switch(props.column.key){
                   case 'action': return <AddButton {...props} />
-                  default: return <div className="pt-2 text-primary">{props.column.title}</div>
+                  default: return <div className="text-primary">{props.column.title}</div>
                 }
               },
             },

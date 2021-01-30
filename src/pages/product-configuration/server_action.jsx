@@ -44,3 +44,36 @@ export const postCategoryInfo = (form_data)=>{                  // Category add
     })
   })
 }
+
+export const productData = ()=>{                              // product data
+  return new Promise((resolve, reject)=>{
+    axios.get('/Product/DropDown')
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
+
+export const addProduct = (form_data)=>{                    // add product
+  return new Promise((resolve, reject)=>{
+    axios.post('/product/add', form_data)
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+			reject()
+    })
+  })
+}
+
+export const productList = ()=>{                              // product list
+  return new Promise((resolve, reject)=>{
+    axios.get('/Product')
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}

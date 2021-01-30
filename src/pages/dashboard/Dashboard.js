@@ -48,7 +48,7 @@ export default function Dashboard(props) {
   var [mainChartState, setMainChartState] = useState("monthly");
 
   return (
-    <>
+    <div className="app-wrapper">
       <Grid container spacing={4}>
         <Grid item lg={3} md={4} sm={6} xs={12}>
           <Widget
@@ -414,7 +414,7 @@ export default function Dashboard(props) {
           </Widget>
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 }
 

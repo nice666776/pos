@@ -1,46 +1,12 @@
 import React from "react";
 import {
   withStyles,
-  Badge as BadgeBase,
   Typography as TypographyBase,
   Button as ButtonBase,
 } from "@material-ui/core";
-import { useTheme, makeStyles } from "@material-ui/styles";
+import { useTheme } from "@material-ui/styles";
 import classnames from "classnames";
 
-// styles
-var useStyles = makeStyles(theme => ({
-  badge: {
-    fontWeight: 600,
-    height: 16,
-    minWidth: 16,
-  },
-}));
-
-function Badge({ children, colorBrightness, color, ...props }) {
-  var classes = useStyles();
-  var theme = useTheme();
-  var Styled = createStyled({
-    badge: {
-      backgroundColor: getColor(color, theme, colorBrightness),
-    },
-  });
-
-  return (
-    <Styled>
-      {styledProps => (
-        <BadgeBase
-          classes={{
-            badge: classnames(classes.badge, styledProps.classes.badge),
-          }}
-          {...props}
-        >
-          {children}
-        </BadgeBase>
-      )}
-    </Styled>
-  );
-}
 
 function Typography({
   children,
@@ -119,7 +85,7 @@ function Button({ children, color, className, ...props }) {
   );
 }
 
-export { Badge, Typography, Button };
+export { Typography, Button };
 
 // ########################################################################
 

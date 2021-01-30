@@ -8,18 +8,18 @@ import { kaReducer, Table } from 'ka-table';
 import { FilteringMode } from 'ka-table/enums';
 import { updateData, hideLoading, showLoading } from 'ka-table/actionCreators';
 import { ActionButton, AddButton } from '../../../components/table-component';
-import ManufacturerForm from '../../../components/forms/product-configuration/manufacturer-form';
-import { manufacturerList } from '../server_action';
+import ProductForm from '../../../components/forms/product-configuration/product-form';
+import { productList } from '../server_action';
 
 
 const row = {paddingTop: 2, paddingBottom: 2}
 const columns = [
-  { key: 'name', title: 'Name', isResizable: true, style:{...row}},
-  { key: 'brand', title: 'Brand', isResizable: true, style:{...row}},
-  { key: 'contact_person', title: 'Contact Person', isResizable: true, style:{...row}},
-  { key: 'phone', title: 'Phone No.', isResizable: true, style:{...row}},
-  { key: 'email', title: 'Email', isResizable: true, style:{...row}},
-  { key: 'address', title: 'Address', style:{...row}},
+  { key: 'product_name', title: 'Name', isResizable: true, style:{...row, width: 220}},
+  { key: 'manufacturer', title: 'Manufacturer', isResizable: true, style:{...row, width: 200}},
+  { key: 'category', title: 'Category', isResizable: true, style:{...row, width: 200}},
+  { key: 'unit_price', title: 'Unit Price', isResizable: true, style:{...row, width: 120, textAlign: 'center'}},
+  { key: 'mrp_price', title: 'MRP', isResizable: true, style:{...row, width: 100, textAlign: 'center'}},
+  { key: 'description', title: 'Description', style:{...row}},
   { key: 'action', style:{...row, width: 80}},
 ]
 
@@ -44,9 +44,9 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, manufact
       aria-describedby="dialog-description"
       scroll="body"
     >
-      <DialogTitle className="text-center" id="dialog-title">{update?'Update Manufacturer':'Add Manufacturer'}</DialogTitle>
+      <DialogTitle className="text-center" id="dialog-title">{update?'Update Product':'Add Product'}</DialogTitle>
       <DialogContent>
-        <ManufacturerForm updateList={updateList} update={update} manufacturer_info={manufacturer_info} handleClose={handleClose}/>
+        <ProductForm updateList={updateList} update={update} manufacturer_info={manufacturer_info} handleClose={handleClose}/>
       </DialogContent>
     </Dialog>
   )
@@ -55,8 +55,6 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, manufact
 
 
 const ManufacturersList = ()=>{
-  // eslint-disable-next-line
-  const [manufacturer_list, setManufacturerList] = React.useState([])
   const [open, setOpen] = React.useState(false)
   const [tableProps, changeTableProps] = React.useState(tablePropsInit);
   const [manufacturer_info, setManufacturerInfo] = React.useState({})
@@ -77,11 +75,10 @@ const ManufacturersList = ()=>{
 
   React.useEffect(()=>{
     dispatch(showLoading('Getting Data ...'))
-    manufacturerList()
+    productList()
       .then(resp => {
         if(resp.success){
           dispatch(updateData(resp.message))
-          setManufacturerList(resp.message)
         }
       })
       .finally(()=>dispatch(hideLoading()))
@@ -98,14 +95,13 @@ const ManufacturersList = ()=>{
       new_list[index] = data
     }
     dispatch(updateData(new_list))
-    setManufacturerList(new_list)
     handleClose()
-  }, [tableProps, dispatch, setManufacturerList, handleClose])
+  }, [tableProps, dispatch, handleClose])
 
 
   return(
     <React.Fragment>
-      <h5 className="text-center font-weight-bold">Manufacturers</h5>
+      <h5 className="text-center font-weight-bold">Products</h5>
       <div className="card overflow-hidden">
         <Table
           {...tableProps}
@@ -115,7 +111,7 @@ const ManufacturersList = ()=>{
               content: (props) => {
                 // eslint-disable-next-line
                 switch(props.column.key){
-                  case 'address': return <React.Fragment/>
+                  case 'description': return <React.Fragment/>
                   case 'action': return <React.Fragment/>
                 }
               }

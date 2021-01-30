@@ -16,14 +16,7 @@ const App = React.memo(()=>{
           isAuthenticated ? (
             React.createElement(component, props)
           ) : (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: {
-                  from: props.location,
-                },
-              }}
-            />
+            <Redirect to={{pathname: "/login", state: {from: props.location}}}/>
           )
         }
       />
@@ -36,11 +29,7 @@ const App = React.memo(()=>{
         {...rest}
         render={props =>
           isAuthenticated ? (
-            <Redirect
-              to={{
-                pathname: "/",
-              }}
-            />
+            <Redirect to={{pathname: "/"}}/>
           ) : (
             React.createElement(component, props)
           )

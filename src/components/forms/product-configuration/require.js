@@ -10,3 +10,12 @@ export const manufacturer_require = {
 export const category_require = {
   'name': false
 }
+
+export const product_require = {
+  'product_name': false,
+  'manufacturer_code': false,
+  'category_code': false,
+  'product_unit': false,
+  'unit_price': false,
+  'mrp_price': false,
+}

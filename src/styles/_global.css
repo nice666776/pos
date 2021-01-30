@@ -1,3 +1,5 @@
+@import "table_loader.css";
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -23,11 +25,23 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .app-wrapper{
-  margin-top: 50px;
+  margin-top: 35px;
 }
-
-.ka-paging-pages{
-  margin-bottom: 0px;
+.ka-thead-cell{
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+.ka-paging-pages {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+}
+.ka-paging-page-index{
+  margin: 0;
+}
+.ka-paging-page-index-active {
+  background-color: inherit;
 }
 .ka-input{
   border-radius: 10px;

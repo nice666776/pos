@@ -24,6 +24,7 @@ export default makeStyles(theme => ({
   toolbar: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    minHeight: 50,
   },
   hide: {
     display: "none",

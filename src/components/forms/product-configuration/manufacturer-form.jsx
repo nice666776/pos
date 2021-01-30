@@ -172,10 +172,10 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
       </div>
 
       <div className="text-center mt-3">
-        <Button className="text-capitalize mr-2" variant="outlined" color="primary" size="small" onClick={handleClose} disabled={saving}>
+        <Button className="mr-2" variant="outlined" color="primary" size="small" onClick={handleClose} disabled={saving}>
           Cancel
         </Button>
-        <Button className="text-capitalize" variant="contained" color="primary" size="small" onClick={handleSave} disabled={saving}>
+        <Button variant="contained" color="primary" size="small" onClick={handleSave} disabled={saving}>
           Save {saving && <DataSaving/>}
         </Button>
       </div>

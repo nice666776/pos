@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import {
   Menu as MenuIcon,
-  NotificationsNone as NotificationsIcon,
   Person as AccountIcon,
   Search as SearchIcon,
   MenuOpen
@@ -20,10 +19,8 @@ import classNames from "classnames";
 import useStyles from "./styles";
 
 // components
-import { Badge, Typography } from "../Wrappers";
-import Notification from "../Notification/Notification";
+import { Typography } from "../Wrappers";
 
-// context
 import {
   useLayoutState,
   useLayoutDispatch,
@@ -33,35 +30,11 @@ import { useUserDispatch, signOut } from "../../context/UserContext";
 
 
 
-const notifications = [
-  { id: 0, color: "warning", message: "Check out this awesome ticket" },
-  {
-    id: 1,
-    color: "success",
-    type: "info",
-    message: "What is the best way to get ...",
-  },
-  {
-    id: 2,
-    color: "secondary",
-    type: "notification",
-    message: "This is just a simple notification",
-  },
-  {
-    id: 3,
-    color: "primary",
-    type: "e-commerce",
-    message: "12 new orders has arrived today",
-  },
-];
-
 export default function Header(props) {
   var classes = useStyles();
   var layoutState = useLayoutState();
   var layoutDispatch = useLayoutDispatch();
   var userDispatch = useUserDispatch();
-  var [notificationsMenu, setNotificationsMenu] = useState(null);
-  var [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   var [profileMenu, setProfileMenu] = useState(null);
   var [isSearchOpen, setSearchOpen] = useState(false);
 
@@ -122,23 +95,6 @@ export default function Header(props) {
           />
         </div>
         <IconButton
-          color="inherit"
-          aria-haspopup="true"
-          aria-controls="mail-menu"
-          onClick={e => {
-            setNotificationsMenu(e.currentTarget);
-            setIsNotificationsUnread(false);
-          }}
-          className={classes.headerMenuButton}
-        >
-          <Badge
-            badgeContent={isNotificationsUnread ? notifications.length : null}
-            color="warning"
-          >
-            <NotificationsIcon classes={{ root: classes.headerIcon }} />
-          </Badge>
-        </IconButton>
-        <IconButton
           aria-haspopup="true"
           color="inherit"
           className={classes.headerMenuButton}
@@ -147,24 +103,6 @@ export default function Header(props) {
         >
           <AccountIcon classes={{ root: classes.headerIcon }} />
         </IconButton>
-        <Menu
-          id="notifications-menu"
-          open={Boolean(notificationsMenu)}
-          anchorEl={notificationsMenu}
-          onClose={() => setNotificationsMenu(null)}
-          className={classes.headerMenu}
-          disableAutoFocusItem
-        >
-          {notifications.map(notification => (
-            <MenuItem
-              key={notification.id}
-              onClick={() => setNotificationsMenu(null)}
-              className={classes.headerMenuItem}
-            >
-              <Notification {...notification} typographyVariant="inherit" />
-            </MenuItem>
-          ))}
-        </Menu>
         <Menu
           id="profile-menu"
           open={Boolean(profileMenu)}
@@ -188,10 +126,7 @@ export default function Header(props) {
             </Typography>
           </div>
           <MenuItem
-            className={classNames(
-              classes.profileMenuItem,
-              classes.headerMenuItem,
-            )}
+            className={classNames(classes.profileMenuItem, classes.headerMenuItem)}
           >
             <AccountIcon className={classes.profileMenuIcon} /> Profile
           </MenuItem>

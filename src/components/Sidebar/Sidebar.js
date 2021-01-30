@@ -34,6 +34,7 @@ const structure = [
     children: [
       { label: "Manufacturers", link: "/product-configuration/manufacturers" },
       { label: "Categories", link: "/product-configuration/categories" },
+      { label: "Products", link: "/product-configuration/products" },
     ],
   },
   {

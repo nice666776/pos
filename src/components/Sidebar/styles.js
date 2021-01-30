@@ -38,6 +38,7 @@ export default makeStyles(theme => ({
     [theme.breakpoints.down("sm")]: {
       display: "none",
     },
+    minHeight: "50px !important"
   },
   content: {
     flexGrow: 1,
