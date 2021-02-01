@@ -21,6 +21,7 @@ namespace POS.Models.Models
         public string category_code { get; set; }
         public string group_code { get; set; }
         public bool status { get; set; }
+        public string manufacturer_code { get; set; }
         public string manufacturer { get; set; }
         public string batch { get; set; }
         public string entry_by { get; set; }

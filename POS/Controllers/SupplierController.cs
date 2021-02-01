@@ -95,7 +95,7 @@ namespace POS.Controllers
             }
             else
             {
-                return Json(new { success = true, message = "Add failed!!" });
+                return Json(new { success = false, message = "Add failed!!" });
             }
            
         }

@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
 
@@ -21,50 +24,122 @@ namespace POS.Controllers
             IEnumerable<Unit> list = _unitOfWork.Unit.GetAll();
             return Json(new { success = true, message = list });
         }
-        public JsonResult getAll()
+      
+        public class MySelectListItem
         {
-            IEnumerable<Product> list = _unitOfWork.Product.GetAll();
-            return Json(new { success = true, message = list });
+            public string Name { get; set; }
+            public string Code { get; set; }
         }
+
+        public class ProductVM
+        {
+            
+            public IEnumerable<MySelectListItem> categories { get; set; }
+            public IEnumerable<MySelectListItem> manufacturers { get; set; }
+            public IEnumerable<MySelectListItem> units { get; set; }
+
+        }
+
 
         [Route("~/Product/")]
         [Route("~/Product/index")]
         public IActionResult product_Index()
         {
-            return getAll();
+            IEnumerable<Product> list = _unitOfWork.Product.GetAll();
+            return Json(new { success = true, message = list });
+        }
+
+
+        [Route("~/Product/DropDown")]
+        public async Task<IActionResult> product_dropdown()
+        {
+            try{
+                ProductVM productVM = new ProductVM();
+                IEnumerable<Category> CatList = await _unitOfWork.Category.GetAllAsync();
+                IEnumerable<Unit> UnitList = _unitOfWork.Unit.GetAll();
+                IEnumerable<Manufacturer> ManList = _unitOfWork.Manufacturer.GetAll();
+                productVM.categories = CatList.Select(i => new MySelectListItem
+                {
+                    Name = i.name,
+                    Code = i.code
+
+                });
+                productVM.manufacturers = ManList.Select(i => new MySelectListItem
+                {
+                    Name = i.name,
+                    Code = i.code
+
+                });
+                productVM.units = UnitList.Select(i => new MySelectListItem
+                {
+                    Name = i.unit,
+                    Code = i.id.ToString()
+
+
+                });
+
+                return Json(new { success = true, message = productVM });
+            }
+            catch(Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+
+            }
         }
         [HttpPost]
         [Route("~/Product/add")]
-        public IActionResult Upsert([FromBody] Product product)
+        public async Task<IActionResult> Upsert([FromBody] Product product)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                if (product.id == 0)
+                if (ModelState.IsValid)
                 {
-                    string p_code = _unitOfWork.Product.getProductCode(product.category_code);
-                    product.product_code = p_code;
-                    product.product_name = product.product_name.ToUpper();
-                    _unitOfWork.Product.Add(product);
-                    POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault();
-                    pOSLog.product_code = p_code;
-                    _unitOfWork.POSLog.Update(pOSLog);
+                    if (product.id == 0)
+                    {
+                        string p_code = _unitOfWork.Product.getProductCode(product.category_code);
+                        Category cat = await  _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code);
+                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code== product.manufacturer_code);
+                        product.manufacturer = man.name;
+                        product.category = cat.name;
+                        product.product_code = p_code;
+                        product.product_name = product.product_name.ToUpper();
+
+
+
+                        _unitOfWork.Product.Add(product);
+                        POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault();
+                        pOSLog.product_code = p_code;
+                        _unitOfWork.POSLog.Update(pOSLog);
+                    }
+                    else
+                    {
+
+                        product.product_name = product.product_name.ToUpper();
+                        Category cat = await _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code);
+                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code == product.manufacturer_code);
+                        product.manufacturer = man.name;
+                        product.category = cat.name;
+                        product.product_name = product.product_name.ToUpper();
+
+                        _unitOfWork.Product.Update(product);
+                    }
+
+
+                    _unitOfWork.Save();
+                    Product product1 = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product.product_code);
+                    return Json(new { success = true, message = product });
+
                 }
                 else
                 {
-                    product.product_name = product.product_name.ToUpper();
-
-                    _unitOfWork.Product.Update(product);
+                    return Json(new { success = false, message = "Add failed!!" });
                 }
-
-
-                _unitOfWork.Save();
-                return Ok(product);
             }
-            else
+            catch(Exception e)
             {
-                return Json(new { success = true, message = "Add failed!!" });
+                return Json(new { success = false, message = e.Message });
             }
+          
 
         }
 
