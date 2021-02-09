@@ -28,5 +28,8 @@ namespace POS.DataAccess.Data
         public DbSet<Category> Category_info { get; set; }
         public DbSet<Product> Product_info { get; set; }
         public DbSet<Unit> Z_unit_info { get; set; }
+        public DbSet<ProductEventInfo> Product_event_info { get; set; }
+        public DbSet<ProductStock> Product_stock{ get; set; }
+        public DbSet<ProductStockIn> Product_stock_in { get; set; }
     }
 }

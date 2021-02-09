@@ -23,7 +23,8 @@ namespace POS.Controllers
 
         public async Task<JsonResult> getAll()
         {
-            IEnumerable<Category> list = await _unitOfWork.Category.GetAllAsync();
+            string client_code = "CL799";
+            IEnumerable<Category> list = await _unitOfWork.Category.GetAllAsync(u=>u.client_code == client_code);
             return Json(new { success = true, message = list });
         }
 
@@ -31,7 +32,8 @@ namespace POS.Controllers
         [Route("~/Category/index")]
         public async Task<IActionResult> category_Index()
         {
-            IEnumerable<Category> list = await _unitOfWork.Category.GetAllAsync();
+            string client_code = "CL799";
+            IEnumerable<Category> list = await _unitOfWork.Category.GetAllAsync(u=>u.client_code == client_code);
             return Json(new { success = true, message = list });
         }
         [HttpPost]
@@ -43,10 +45,12 @@ namespace POS.Controllers
             {
                 if (category.id == 0)
                 {
+                    string client_code = "CL799";
                     string c_code = _unitOfWork.Category.getCategoryCode();
                     category.code = c_code;
                     category.name = category.name.ToUpper();
-                  await _unitOfWork.Category.AddAsync(category);
+                    category.client_code = client_code;
+                    await _unitOfWork.Category.AddAsync(category);
                     POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault();
                     pOSLog.category_code = c_code;
                     _unitOfWork.POSLog.Update(pOSLog);
@@ -67,19 +71,19 @@ namespace POS.Controllers
             }
 
         }
-        [HttpDelete]
-        [Route("Category/delete/{id}")]
-        public IActionResult Delete(int id)
-        {
-            var objFromDb = _unitOfWork.Category.GetAsync(id);
-            if (objFromDb == null)
-            {
-                return Json(new { success = false, message = "Error while deleting" });
-            }
-           _unitOfWork.Category.RemoveAsync(id);
-            _unitOfWork.Save();
-            return Json(new { success = true, message = "Delete Successful" });
+        //[HttpDelete]
+        //[Route("Category/delete/{id}")]
+        //public IActionResult Delete(int id)
+        //{
+        //    var objFromDb = _unitOfWork.Category.GetAsync(id);
+        //    if (objFromDb == null)
+        //    {
+        //        return Json(new { success = false, message = "Error while deleting" });
+        //    }
+        //   _unitOfWork.Category.RemoveAsync(id);
+        //    _unitOfWork.Save();
+        //    return Json(new { success = true, message = "Delete Successful" });
 
-        }
+        //}
     }
 }

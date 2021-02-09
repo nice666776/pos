@@ -77,21 +77,21 @@ namespace POS.DataAccess.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task RemoveAsync(int id)
-        {
-            T entity = await dbSet.FindAsync(id);
-            await RemoveAsync(entity);
-        }
+        //public async Task RemoveAsync(int id)
+        //{
+        //    T entity = await dbSet.FindAsync(id);
+        //    await RemoveAsync(entity);
+        //}
 
-        public async Task RemoveAsync(T entity)
-        {
-            dbSet.Remove(entity);
+        //public async Task RemoveAsync(T entity)
+        //{
+        //    dbSet.Remove(entity);
 
-        }
+        //}
 
-        public async Task RemoveRangeAsync(IEnumerable<T> entity)
-        {
-            dbSet.RemoveRange(entity);
-        }
+        //public async Task RemoveRangeAsync(IEnumerable<T> entity)
+        //{
+        //    dbSet.RemoveRange(entity);
+        //}
     }
 }

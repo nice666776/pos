@@ -45,19 +45,25 @@ namespace POS.Controllers
         [Route("~/Product/index")]
         public IActionResult product_Index()
         {
-            IEnumerable<Product> list = _unitOfWork.Product.GetAll();
+            string client_code = "CL799";
+            IEnumerable<Product> list = _unitOfWork.Product.GetAll(u=>u.client_code ==client_code);
             return Json(new { success = true, message = list });
         }
 
-
+         
         [Route("~/Product/DropDown")]
         public async Task<IActionResult> product_dropdown()
         {
-            try{
+            
+            try
+
+            {
+                string client_code = "CL799";
+
                 ProductVM productVM = new ProductVM();
-                IEnumerable<Category> CatList = await _unitOfWork.Category.GetAllAsync();
+                IEnumerable<Category> CatList = await _unitOfWork.Category.GetAllAsync(u=>u.client_code == client_code);
                 IEnumerable<Unit> UnitList = _unitOfWork.Unit.GetAll();
-                IEnumerable<Manufacturer> ManList = _unitOfWork.Manufacturer.GetAll();
+                IEnumerable<Manufacturer> ManList = _unitOfWork.Manufacturer.GetAll(u => u.client_code == client_code);
                 productVM.categories = CatList.Select(i => new MySelectListItem
                 {
                     Name = i.name,
@@ -94,20 +100,22 @@ namespace POS.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    string client_code = "CL799";
                     if (product.id == 0)
                     {
+                       
                         string p_code = _unitOfWork.Product.getProductCode(product.category_code);
-                        Category cat = await  _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code);
-                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code== product.manufacturer_code);
+                        Category cat = await  _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code && u.client_code == client_code );
+                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code== product.manufacturer_code && u.client_code == client_code);
                         product.manufacturer = man.name;
                         product.category = cat.name;
                         product.product_code = p_code;
                         product.product_name = product.product_name.ToUpper();
-
+                        product.client_code = client_code;
 
 
                         _unitOfWork.Product.Add(product);
-                        POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault();
+                        POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault(u =>  u.client_code == client_code);
                         pOSLog.product_code = p_code;
                         _unitOfWork.POSLog.Update(pOSLog);
                     }
@@ -115,8 +123,8 @@ namespace POS.Controllers
                     {
 
                         product.product_name = product.product_name.ToUpper();
-                        Category cat = await _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code);
-                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code == product.manufacturer_code);
+                        Category cat = await _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code && u.client_code == client_code);
+                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code == product.manufacturer_code && u.client_code == client_code);
                         product.manufacturer = man.name;
                         product.category = cat.name;
                         product.product_name = product.product_name.ToUpper();
@@ -126,7 +134,7 @@ namespace POS.Controllers
 
 
                     _unitOfWork.Save();
-                    Product product1 = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product.product_code);
+                    Product product1 = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product.product_code && u.client_code == client_code);
                     return Json(new { success = true, message = product });
 
                 }

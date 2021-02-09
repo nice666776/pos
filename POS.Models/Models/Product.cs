@@ -13,6 +13,7 @@ namespace POS.Models.Models
         public string product_unit { get; set; }
         public double quantity_in { get; set; }
         public double quantity_out { get; set; }
+        public double quantity { get; set; }
         public double unit_price { get; set; }
         public double mrp_price { get; set; }
         public string description { get; set; }

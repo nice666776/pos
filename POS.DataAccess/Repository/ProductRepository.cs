@@ -66,6 +66,7 @@ namespace POS.DataAccess.Repository
                 AProduct.group_code = product.group_code;
                 AProduct.status = product.status;
                 AProduct.manufacturer = product.manufacturer;
+                AProduct.manufacturer_code = product.manufacturer_code;
                 AProduct.batch = product.batch;
             }
 

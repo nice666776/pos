@@ -11,6 +11,8 @@ namespace POS.Models.Models
         public string manufacturer_code { get; set; }
         public string category_code { get; set; }
         public string product_code { get; set; }
+        public string transaction_id { get; set; }
         public string client_code { get; set; }
+
     }
 }

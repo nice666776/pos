@@ -3,26 +3,22 @@ using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace POS.DataAccess.Repository
 {
-  
-    public class POSLogRepository : Repository<POSLog>, IPOSLogRepository
+    public class ProductStockInRepository : Repository<ProductStockIn>, IProductStockInRepository
     {
+
         private readonly ApplicationDbContext _db;
 
-        public POSLogRepository(ApplicationDbContext db) : base(db)
+        public ProductStockInRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
-
-        public void Update(POSLog pOSLog)
+        public void Update(ProductStockIn productStockIn)
         {
-            _db.Pos_log.Update(pOSLog);
-
+            _db.Product_stock_in.Update(productStockIn);
         }
-
     }
 }
