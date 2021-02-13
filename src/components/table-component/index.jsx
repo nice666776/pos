@@ -40,7 +40,7 @@ export const AddButton = React.memo((props) => {
   const { dispatch } = props
   return (
     <div className="d-flex justify-content-center animated zoomIn animation-duration-3">
-      <Button className="text-capitalize p-0 m-0" variant="contained" color="secondary" onClick={() => dispatch({type: 'ADD'})}>
+      <Button className="p-0 m-0" variant="contained" color="secondary" onClick={() => dispatch({type: 'ADD'})}>
         <AddRounded fontSize="small"/> Add
       </Button>
     </div>

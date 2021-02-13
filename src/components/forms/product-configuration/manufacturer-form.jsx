@@ -35,7 +35,7 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
           updateList(resp, `${update?'UPDATE':'ADD_NEW'}`)
         })
         .finally(() => setSaving(false))
-    } else cogoToast.error('Please fill all required fields')
+    } else cogoToast.error('Please, fill up all required fields!')
     setRequireFields({...require_fields})
   }, [form_inputs, requires, update, updateList])
 

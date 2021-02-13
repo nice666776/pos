@@ -33,6 +33,7 @@ function Layout(props) {
           <Switch>
             <Redirect exact from={path} to="/dashboard" />
             <Route path="/dashboard" component={asyncComponent(() => import('../../pages/dashboard'))} />
+            <Route path="/purchase" component={asyncComponent(() => import('../../pages/purchase'))} />
             <Route path="/configuration" component={Configuration}/>
             <Route path="/product-configuration" component={ProductConfiguration}/>
             <Route component={asyncComponent(() => import('../../pages/error/Error'))} />

@@ -3,7 +3,9 @@ import { Drawer, IconButton, List } from "@material-ui/core";
 import {
   Home as HomeIcon,
   ArrowBack as ArrowBackIcon,
-  Settings
+  Settings,
+  Build,
+  AddShoppingCart
 } from "@material-ui/icons";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
@@ -16,21 +18,16 @@ import useStyles from "./styles";
 import SidebarLink from "./components/SidebarLink/SidebarLink";
 
 // context
-import {
-  useLayoutState,
-  useLayoutDispatch,
-  toggleSidebar,
-} from "../../context/LayoutContext";
-
-
+import {useLayoutState, useLayoutDispatch, toggleSidebar} from "../../context/LayoutContext";
 
 
 const structure = [
   { label: "Dashboard", link: "/dashboard", icon: <HomeIcon />},
+  { label: "Purchase", link: "/purchase", icon: <AddShoppingCart />},
   {
     label: "Product Configuration",
     link: "/product-configuration",
-    icon: <Settings />,
+    icon: <Build />,
     children: [
       { label: "Manufacturers", link: "/product-configuration/manufacturers" },
       { label: "Categories", link: "/product-configuration/categories" },

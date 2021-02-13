@@ -15,6 +15,7 @@ import { categoryList } from '../server_action';
 const row = {paddingTop: 2, paddingBottom: 2}
 const columns = [
   { key: 'name', title: 'Category Name', isResizable: true, style:{...row, width: 300}},
+  { key: 'subcategories', title: 'Subcategories', style:{...row}},
   { key: 'description', title: 'Description', style:{...row}},
   { key: 'action', style:{...row, width: 80}},
 ]
@@ -27,7 +28,7 @@ const tablePropsInit = {
   paging: {
     enabled: true,
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 15,
   }
 }
 
@@ -51,8 +52,6 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, category
 
 
 const Categories = ()=>{
-  // eslint-disable-next-line
-  const [category_list, setCategoryList] = React.useState([])
   const [open, setOpen] = React.useState(false)
   const [tableProps, changeTableProps] = React.useState(tablePropsInit);
   const [category_info, setCategoryInfo] = React.useState({})
@@ -77,7 +76,6 @@ const Categories = ()=>{
       .then(resp => {
         if(resp.success){
           dispatch(updateData(resp.message))
-          setCategoryList(resp.message)
         }
       })
       .finally(()=>dispatch(hideLoading()))
@@ -94,24 +92,21 @@ const Categories = ()=>{
       new_list[index] = data
     }
     dispatch(updateData(new_list))
-    setCategoryList(new_list)
     handleClose()
-  }, [tableProps, dispatch, setCategoryList, handleClose])
+  }, [tableProps, dispatch, handleClose])
 
   return(
     <React.Fragment>
       <h5 className="text-center font-weight-bold">Categories</h5>
       <div className="card overflow-hidden">
-        <Table
-          {...tableProps}
+        <Table {...tableProps}
           dispatch={dispatch}
           childComponents={{
             filterRowCell: {
               content: (props) => {
-                // eslint-disable-next-line
                 switch(props.column.key){
-                  case 'description': return <React.Fragment/>
-                  case 'action': return <React.Fragment/>
+                  case 'name': return
+                  default: return <React.Fragment/>
                 }
               }
             },
@@ -119,6 +114,7 @@ const Categories = ()=>{
               content: props => {
                 switch(props.column.key){
                   case 'action': return <ActionButton {...props} />
+                  case 'subcategories': return <p className="text-truncate m-0">{props.value && props.value.join(', ')}</p>
                   default: return <p className="text-truncate m-0">{props.value}</p>
                 }
               }

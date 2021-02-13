@@ -30,6 +30,8 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
     let value = e.target.value
     if((['mrp_price', 'reorder_level', 'unit_price']).indexOf(e.target.name) !== -1)
       value = parseFloat(e.target.value)
+    else if(e.target.name === 'category_code')
+      form_inputs['subcategory_code'] = null
     setFormInputs({...form_inputs, [e.target.name]: value})
   }, [form_inputs])
 
@@ -71,6 +73,41 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
 
       <div className="form-row">
         <div className="col-md-6 col-12">
+          <FormControl fullWidth size="small" margin="dense" variant="outlined" required error={requires.category_code}>
+            <InputLabel id="category-label">Category</InputLabel>
+            <Select
+              labelId="category-label"
+              name="category_code"
+              label="Category"
+              value={form_inputs.category_code}
+              onChange={handleChange}
+            >
+              {form_data.categories && form_data.categories.map(val => 
+                <MenuItem key={val.category.code} value={val.category.code}>{val.category.name}</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </div>
+        <div className="col-md-6 col-12">
+          <FormControl fullWidth size="small" margin="dense" variant="outlined">
+            <InputLabel id="category-label">Subcategory</InputLabel>
+            <Select
+              labelId="category-label"
+              name="subcategory_code"
+              label="Subcategory"
+              value={form_inputs.subcategory_code || ''}
+              onChange={handleChange}
+            >
+              {form_inputs.category_code && form_data.categories && form_data.categories.find(val => val.category.code===form_inputs.category_code).subcategories.map(val=>
+                <MenuItem key={val.code} value={val.code}>{val.name}</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="col-md-8 col-12">
           <FormControl fullWidth size="small" margin="dense" variant="outlined" required error={requires.manufacturer}>
             <InputLabel id="manufacturer-label">Manufacturer</InputLabel>
             <Select
@@ -81,22 +118,6 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
               onChange={handleChange}
             >
               {form_data.manufacturers && form_data.manufacturers.map(val => 
-                <MenuItem key={val.code} value={val.code}>{val.name}</MenuItem>
-              )}
-            </Select>
-          </FormControl>
-        </div>
-        <div className="col-md-6 col-12">
-          <FormControl fullWidth size="small" margin="dense" variant="outlined" required error={requires.category}>
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              labelId="category-label"
-              name="category_code"
-              label="Category"
-              value={form_inputs.category_code}
-              onChange={handleChange}
-            >
-              {form_data.categories && form_data.categories.map(val => 
                 <MenuItem key={val.code} value={val.code}>{val.name}</MenuItem>
               )}
             </Select>

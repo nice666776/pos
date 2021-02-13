@@ -14,7 +14,7 @@ import { manufacturerList } from '../server_action';
 
 const row = {paddingTop: 2, paddingBottom: 2}
 const columns = [
-  { key: 'name', title: 'Name', isResizable: true, style:{...row}},
+  { key: 'name', title: 'Name', isResizable: true, style:{...row, minWidth: 200}},
   { key: 'brand', title: 'Brand', isResizable: true, style:{...row}},
   { key: 'contact_person', title: 'Contact Person', isResizable: true, style:{...row}},
   { key: 'phone', title: 'Phone No.', isResizable: true, style:{...row}},
@@ -55,8 +55,6 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, manufact
 
 
 const ManufacturersList = ()=>{
-  // eslint-disable-next-line
-  const [manufacturer_list, setManufacturerList] = React.useState([])
   const [open, setOpen] = React.useState(false)
   const [tableProps, changeTableProps] = React.useState(tablePropsInit);
   const [manufacturer_info, setManufacturerInfo] = React.useState({})
@@ -81,7 +79,6 @@ const ManufacturersList = ()=>{
       .then(resp => {
         if(resp.success){
           dispatch(updateData(resp.message))
-          setManufacturerList(resp.message)
         }
       })
       .finally(()=>dispatch(hideLoading()))
@@ -98,9 +95,8 @@ const ManufacturersList = ()=>{
       new_list[index] = data
     }
     dispatch(updateData(new_list))
-    setManufacturerList(new_list)
     handleClose()
-  }, [tableProps, dispatch, setManufacturerList, handleClose])
+  }, [tableProps, dispatch, handleClose])
 
 
   return(
@@ -124,6 +120,7 @@ const ManufacturersList = ()=>{
               content: props => {
                 switch(props.column.key){
                   case 'action': return <ActionButton {...props} />
+                  case 'name': return <p className="font-weight-bold text-truncate m-0">{props.value}</p>
                   default: return <p className="text-truncate m-0">{props.value}</p>
                 }
               }

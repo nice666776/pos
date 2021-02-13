@@ -1,8 +1,10 @@
 import React from 'react';
 import {
   TextField,
-  Button
+  Button,
+  Chip
 } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import cogoToast from 'cogo-toast';
 import {category_require} from './require';
 import checkValidation from '../../../util/checkValidation';
@@ -16,9 +18,16 @@ export default React.memo(({updateList, update, category_info, handleClose})=>{
   const [saving, setSaving] = React.useState(false)
 
 
-  const handleChange = React.useCallback((e)=>{
-    setFormInputs({...form_inputs, [e.target.name]: e.target.value})
+  const handleChange = React.useCallback((e, val)=>{
+    let inputs = form_inputs
+    if(!e.target.name){
+      inputs['subcategories'] = val
+    } else {
+      inputs[e.target.name] = e.target.value
+    }
+    setFormInputs({...inputs})
   }, [form_inputs])
+
 
   const handleSave = React.useCallback(()=>{
     const {isFormValid, require_fields} = checkValidation(form_inputs, requires)
@@ -30,13 +39,13 @@ export default React.memo(({updateList, update, category_info, handleClose})=>{
           updateList(resp, `${update?'UPDATE':'ADD_NEW'}`)
         })
         .finally(() => setSaving(false))
-    } else cogoToast.error('Please fill all required fields')
+    } else cogoToast.error('Please, fill up all required fields!')
     setRequireFields({...require_fields})
   }, [form_inputs, requires, update, updateList])
 
 
   return(
-    <form>
+    <React.Fragment>
       <div className="form-row">
         <div className="col-12">
           <TextField
@@ -53,6 +62,22 @@ export default React.memo(({updateList, update, category_info, handleClose})=>{
           />
         </div>
       </div>
+
+      <Autocomplete
+        options={[]}
+        multiple
+        freeSolo
+        defaultValue={form_inputs.subcategories}
+        onChange={handleChange}
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip variant="default" size="small" label={option} {...getTagProps({ index })} />
+          ))
+        }
+        renderInput={(params) => (
+          <TextField {...params} size="small" margin="dense" variant="outlined" label="Subcategories" placeholder="Subcategory" />
+        )}
+      />
 
       <div className="form-row">
         <div className="col">
@@ -79,6 +104,6 @@ export default React.memo(({updateList, update, category_info, handleClose})=>{
         </Button>
       </div>
 
-    </form>
+    </React.Fragment>
   )
 })
