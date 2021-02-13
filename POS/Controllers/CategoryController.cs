@@ -6,18 +6,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
+using AutoMapper;
+using POS.ViewModels;
 
 namespace POS.Controllers
 {
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-      
+        private readonly IMapper _mapper;
 
 
-        public CategoryController(IUnitOfWork unitOfWork)
+        public CategoryController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
            
         }
 
@@ -34,23 +37,42 @@ namespace POS.Controllers
         {
             string client_code = "CL799";
             IEnumerable<Category> list = await _unitOfWork.Category.GetAllAsync(u=>u.client_code == client_code);
-            return Json(new { success = true, message = list });
+            List<CategoryVM> categoryVMs = new List<CategoryVM>();
+            foreach(Category cat in list)
+            {
+                CategoryVM categoryVM = new CategoryVM();
+                categoryVM = _mapper.Map<CategoryVM>(cat);
+                var SubCategories = _unitOfWork.SubCategory.GetAll(u => u.client_code == client_code && u.category_code == cat.code);
+                categoryVM.subcategories = from s in SubCategories
+                                           select (s.name).ToString();
+                categoryVMs.Add(categoryVM);
+            }
+            return Json(new { success = true, message = categoryVMs });
         }
+
+       
+
+
         [HttpPost]
         [Route("~/Category/add")]
-        public async Task<IActionResult> Upsert([FromBody] Category category)
+        public async Task<IActionResult> Upsert([FromBody] CategoryVM categoryVM)
         {
 
             if (ModelState.IsValid)
             {
+                string client_code = "CL799";
+                Category category = _mapper.Map<Category>(categoryVM);
                 if (category.id == 0)
                 {
-                    string client_code = "CL799";
+                  
                     string c_code = _unitOfWork.Category.getCategoryCode();
                     category.code = c_code;
                     category.name = category.name.ToUpper();
                     category.client_code = client_code;
                     await _unitOfWork.Category.AddAsync(category);
+                   
+
+
                     POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault();
                     pOSLog.category_code = c_code;
                     _unitOfWork.POSLog.Update(pOSLog);
@@ -62,8 +84,40 @@ namespace POS.Controllers
                     _unitOfWork.Category.Update(category);
                 }
 
+                if(categoryVM.subcategories!=null)
+                {
+                    IEnumerable<SubCategory> subCategories = _unitOfWork.SubCategory.GetAll(u => u.category_code == category.code && u.client_code == client_code);
+                    if (subCategories.Count() != 0)
+                    {
+                        _unitOfWork.SubCategory.RemoveRange(subCategories);
+                    }
+                    if (categoryVM.subcategories.Count() != 0)
+                    {
+                        int i = 1;
+
+                        foreach (string subcat in categoryVM.subcategories)
+                        {
+
+                            if (i <= 99)
+                            {
+                                SubCategory subCategory = new SubCategory();
+                                subCategory.code = category.code + i.ToString("00");
+                                subCategory.name = subcat.ToUpper();
+                                subCategory.client_code = client_code;
+                                subCategory.category_code = category.code;
+                                subCategory.category_name = categoryVM.name;
+                                i++;
+                                _unitOfWork.SubCategory.Add(subCategory);
+                            }
+
+                        }
+                    }
+                }
+
                 _unitOfWork.Save();
-                return Ok(category);
+               CategoryVM categoryVMReturn = _mapper.Map<CategoryVM>(category);
+                categoryVMReturn.subcategories = categoryVM.subcategories.ToList().ConvertAll(d => d.ToUpper()) ;
+                return Ok(categoryVMReturn);
             }
             else
             {

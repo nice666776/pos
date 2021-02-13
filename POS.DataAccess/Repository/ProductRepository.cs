@@ -63,11 +63,14 @@ namespace POS.DataAccess.Repository
                 AProduct.reorder_level = product.reorder_level;
                 AProduct.category = product.category;
                 AProduct.category_code = product.category_code;
-                AProduct.group_code = product.group_code;
+                AProduct.barcode = product.barcode;
+                AProduct.subcategory = product.subcategory;
+                AProduct.subcategory_code = product.subcategory_code;
                 AProduct.status = product.status;
                 AProduct.manufacturer = product.manufacturer;
                 AProduct.manufacturer_code = product.manufacturer_code;
                 AProduct.batch = product.batch;
+                AProduct.last_expire_date = product.last_expire_date;
             }
 
 

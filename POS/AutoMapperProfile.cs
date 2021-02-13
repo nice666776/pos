@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using POS.Models.Models;
+using POS.ViewModels;
 
 namespace POS
 {
@@ -6,7 +8,10 @@ namespace POS
     {
         public AutoMapperProfile()
         {
-           // CreateMap< source , destination >();
+            CreateMap< Category , CategoryVM >();
+            CreateMap<CategoryVM, Category>();
+            CreateMap<ProductStockIn, ProductStock>();
+            CreateMap<ProductStock, ProductStockIn>();
         }
     }
 }

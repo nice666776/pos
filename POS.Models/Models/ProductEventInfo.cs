@@ -20,7 +20,8 @@ namespace POS.Models.Models
         public double dr_discount { get; set; }
         public double dr_total { get; set; }
         public string user_id { get; set; }
-        public double client_code { get; set; }
+        public string client_code { get; set; }
+   
 
     }
 }

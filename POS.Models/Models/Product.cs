@@ -20,12 +20,15 @@ namespace POS.Models.Models
         public double reorder_level { get; set; }
         public string category { get; set; }
         public string category_code { get; set; }
-        public string group_code { get; set; }
+        public string subcategory { get; set; }
+        public string subcategory_code { get; set; }
         public bool status { get; set; }
         public string manufacturer_code { get; set; }
         public string manufacturer { get; set; }
         public string batch { get; set; }
         public string entry_by { get; set; }
         public string client_code { get; set; }
+        public string barcode { get; set; }
+        public DateTime last_expire_date { get; set; }
     }
 }

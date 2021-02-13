@@ -31,10 +31,17 @@ namespace POS.Controllers
             public string Code { get; set; }
         }
 
+        public class CategoryModel
+        {
+            public MySelectListItem category { get; set; }
+            public List<MySelectListItem> subcategories { get; set; }
+
+        }
+
         public class ProductVM
         {
             
-            public IEnumerable<MySelectListItem> categories { get; set; }
+            public List<CategoryModel> categories { get; set; }
             public IEnumerable<MySelectListItem> manufacturers { get; set; }
             public IEnumerable<MySelectListItem> units { get; set; }
 
@@ -50,7 +57,12 @@ namespace POS.Controllers
             return Json(new { success = true, message = list });
         }
 
-         
+    
+
+
+
+
+
         [Route("~/Product/DropDown")]
         public async Task<IActionResult> product_dropdown()
         {
@@ -64,12 +76,22 @@ namespace POS.Controllers
                 IEnumerable<Category> CatList = await _unitOfWork.Category.GetAllAsync(u=>u.client_code == client_code);
                 IEnumerable<Unit> UnitList = _unitOfWork.Unit.GetAll();
                 IEnumerable<Manufacturer> ManList = _unitOfWork.Manufacturer.GetAll(u => u.client_code == client_code);
-                productVM.categories = CatList.Select(i => new MySelectListItem
+                productVM.categories = new List<CategoryModel>();
+                foreach(Category cat in CatList)
                 {
-                    Name = i.name,
-                    Code = i.code
-
-                });
+                    CategoryModel cm = new CategoryModel();
+                    cm.category = new MySelectListItem();
+                    cm.category.Name = cat.name;
+                    cm.category.Code = cat.code;
+                    var SubCategories = _unitOfWork.SubCategory.GetAll(u => u.client_code == client_code && u.category_code == cat.code);
+                    cm.subcategories = (from c in SubCategories
+                                       select (new MySelectListItem {
+                                           Name = c.name,
+                                           Code =c.code
+                                       })).ToList();
+                    productVM.categories.Add(cm);
+                    
+                }
                 productVM.manufacturers = ManList.Select(i => new MySelectListItem
                 {
                     Name = i.name,
@@ -92,6 +114,7 @@ namespace POS.Controllers
 
             }
         }
+
         [HttpPost]
         [Route("~/Product/add")]
         public async Task<IActionResult> Upsert([FromBody] Product product)
@@ -109,7 +132,16 @@ namespace POS.Controllers
                         Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code== product.manufacturer_code && u.client_code == client_code);
                         product.manufacturer = man.name;
                         product.category = cat.name;
+                        if(product.subcategory_code!= null)
+                        {
+                            product.subcategory = _unitOfWork.SubCategory.GetFirstOrDefault(u => u.code == product.subcategory_code).name;
+                    
+                        }
                         product.product_code = p_code;
+                        if (product.barcode == null)
+                        {
+                            product.barcode = p_code;
+                        }
                         product.product_name = product.product_name.ToUpper();
                         product.client_code = client_code;
 
@@ -128,7 +160,11 @@ namespace POS.Controllers
                         product.manufacturer = man.name;
                         product.category = cat.name;
                         product.product_name = product.product_name.ToUpper();
+                        if (product.subcategory_code != null)
+                        {
+                            product.subcategory = _unitOfWork.SubCategory.GetFirstOrDefault(u => u.code == product.subcategory_code).name;
 
+                        }
                         _unitOfWork.Product.Update(product);
                     }
 
