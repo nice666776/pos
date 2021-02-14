@@ -5,7 +5,8 @@ import {
   ArrowBack as ArrowBackIcon,
   Settings,
   Build,
-  AddShoppingCart
+  AddShoppingCart,
+  LocalMallTwoTone
 } from "@material-ui/icons";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
@@ -23,6 +24,7 @@ import {useLayoutState, useLayoutDispatch, toggleSidebar} from "../../context/La
 
 const structure = [
   { label: "Dashboard", link: "/dashboard", icon: <HomeIcon />},
+  { label: "Sales", link: "/sales", icon: <LocalMallTwoTone />},
   { label: "Purchase", link: "/purchase", icon: <AddShoppingCart />},
   {
     label: "Product Configuration",

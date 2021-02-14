@@ -61,6 +61,7 @@ export default function SidebarLink({
             }),
           }}
           disableRipple
+          data-toggle="tooltip" data-placement="right" title={label}
         >
           <ListItemIcon
             className={classnames(classes.linkIcon, {
@@ -91,6 +92,7 @@ export default function SidebarLink({
         className={classes.link}
         to={link}
         disableRipple
+        data-toggle="tooltip" data-placement="right" title={label}
       >
         <ListItemIcon
           className={classnames(classes.linkIcon, {

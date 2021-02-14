@@ -8,7 +8,7 @@ const ProductConfigurationRoutes = (props)=>{
   return(
     <div className="app-wrapper">
       <Switch>
-        <Redirect exact from={match} to={`${match}/supplier-entry`} />
+        <Redirect exact from={match} to={`${match}/products`} />
         <Route path={`${match}/manufacturers`} component={asyncComponent(() => import('./Manufacturers'))}/>
         <Route path={`${match}/categories`} component={asyncComponent(() => import('./Categories'))}/>
         <Route path={`${match}/products`} component={asyncComponent(() => import('./Products'))}/>

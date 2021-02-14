@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  IconButton,
-  Button
-} from '@material-ui/core';
-import {
-  deleteRow,
-} from 'ka-table/actionCreators';
+import {IconButton, Button} from '@material-ui/core';
+import { deleteRow } from 'ka-table/actionCreators';
 import DataRowContent from "ka-table/Components/DataRowContent/DataRowContent";
 import {
   EditTwoTone,
@@ -22,7 +17,7 @@ export const DataRow = React.memo(
 export const ActionButton = React.memo((props) => {
   const { dispatch, rowKeyValue, rowData, del } = props
   return (
-    <div className="d-flex justify-content-center animated zoomIn animation-duration-3">
+    <div className="d-flex justify-content-center">
       <IconButton className="p-1" onClick={() => dispatch({type: 'EDIT', rowData})}>
         <EditTwoTone color="primary"/>
       </IconButton>
@@ -39,10 +34,22 @@ export const ActionButton = React.memo((props) => {
 export const AddButton = React.memo((props) => {
   const { dispatch } = props
   return (
-    <div className="d-flex justify-content-center animated zoomIn animation-duration-3">
+    <div className="d-flex justify-content-center">
       <Button className="p-0 m-0" variant="contained" color="secondary" onClick={() => dispatch({type: 'ADD'})}>
         <AddRounded fontSize="small"/> Add
       </Button>
+    </div>
+  );
+})
+
+
+export const DeleteButton = React.memo((props) => {
+  const { dispatch, rowKeyValue } = props
+  return (
+    <div className="d-flex justify-content-end">
+      <IconButton className="p-1" onClick={() => dispatch(deleteRow(rowKeyValue))}>
+        <DeleteTwoTone color="error"/>
+      </IconButton>
     </div>
   );
 })

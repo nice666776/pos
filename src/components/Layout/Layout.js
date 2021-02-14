@@ -33,9 +33,10 @@ function Layout(props) {
           <Switch>
             <Redirect exact from={path} to="/dashboard" />
             <Route path="/dashboard" component={asyncComponent(() => import('../../pages/dashboard'))} />
+            <Route path="/sales" component={asyncComponent(() => import('../../pages/sales'))} />
             <Route path="/purchase" component={asyncComponent(() => import('../../pages/purchase'))} />
-            <Route path="/configuration" component={Configuration}/>
             <Route path="/product-configuration" component={ProductConfiguration}/>
+            <Route path="/configuration" component={Configuration}/>
             <Route component={asyncComponent(() => import('../../pages/error/Error'))} />
           </Switch>
         </div>
