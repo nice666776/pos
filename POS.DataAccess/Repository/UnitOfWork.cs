@@ -19,7 +19,9 @@ namespace POS.DataAccess.Repository
             ProductEventInfo = new ProductEventInfoRepository(_db);
             ProductStock = new ProductStockRepository(_db);
             ProductStockIn = new ProductStockInRepository(_db);
+            ProductStockOut = new ProductStockOutRepository(_db);
             SubCategory = new SubCategoryRepository(_db);
+            SP_Call = new SP_Call(_db);
         }
  
         public ISupplierRepository Supplier { get; private set; }
@@ -31,7 +33,9 @@ namespace POS.DataAccess.Repository
         public IProductEventInfoRepository ProductEventInfo { get; private set; }
         public IProductStockRepository ProductStock { get; private set; }
         public IProductStockInRepository ProductStockIn { get; private set; }
+        public IProductStockOutRepository ProductStockOut { get; private set; }
         public ISubCategoryRepository SubCategory { get; private set; }
+        public ISP_Call SP_Call { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

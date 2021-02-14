@@ -3,6 +3,7 @@ using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace POS.DataAccess.Repository
@@ -15,6 +16,31 @@ namespace POS.DataAccess.Repository
         public ProductStockRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
+        }
+
+
+
+        public string setTransactionID(string client_code)
+        {
+            string trxID;
+            POSLog objFromDb = _db.Pos_log.FirstOrDefault(u=>u.client_code == client_code);
+            if (objFromDb.transaction_id == null)
+            {
+                trxID = "TRX000000001";
+            }
+            else
+            {
+                string sub = objFromDb.transaction_id.Substring(3, 9);
+                int c = Convert.ToInt32(sub);
+                c++;
+                string s = c.ToString("000000000");
+                trxID = "TRX" + s;
+
+            }
+            objFromDb.transaction_id = trxID;
+            _db.Pos_log.Update(objFromDb);
+            _db.SaveChanges();
+            return trxID;
         }
         public void Update(ProductStock productStock)
         {

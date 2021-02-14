@@ -31,6 +31,7 @@ namespace POS.DataAccess.Data
         public DbSet<ProductEventInfo> Product_event_info { get; set; }
         public DbSet<ProductStock> Product_stock{ get; set; }
         public DbSet<ProductStockIn> Product_stock_in { get; set; }
+        public DbSet<ProductStockOut> Product_stock_Out{ get; set; }
         public DbSet<SubCategory> Subcategory_info { get; set; }
     }
 }

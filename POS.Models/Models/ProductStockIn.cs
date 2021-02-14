@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace POS.Models.Models
@@ -18,7 +19,9 @@ namespace POS.Models.Models
         public double unit_price { get; set; }
         public double total_price { get; set; }
         public double mrp_price { get; set; }
+         [DataType(DataType.Date)]
         public DateTime expire_date { get; set; }
+        [DataType(DataType.Date)]
         public DateTime entry_date { get; set; }
         public string invoice { get; set; }
         public string user_id { get; set; }

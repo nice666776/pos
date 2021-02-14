@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
@@ -20,9 +22,36 @@ namespace POS.Controllers
 
         }
       
+        public string getClient()
+        {
+            return "CL799";
+        }
+
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
 
 
-    
+        public static string MySpecialString()
+        {
+
+            string base64Guid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            string pattern = "[\\~#%&*{}/:<>?|\"-$^.()!@]";
+            string replacement = random.Next(9).ToString();
+            Regex regEx = new Regex(pattern);
+            string sanitized = Regex.Replace(regEx.Replace(base64Guid, replacement), @"\s+", " ");
+
+            return sanitized.Trim('=');
+        }
+
+
+
+
+
         [HttpGet]
         [Route("~/DropDown/suppliers")]
         public  IActionResult purchase_dropdown_supplier()
@@ -30,7 +59,7 @@ namespace POS.Controllers
             try
 
             {
-                string client_code = "CL799";
+                string client_code = getClient();
                 IEnumerable<Supplier> supList = _unitOfWork.Supplier.GetAll(u => u.client_code == client_code); 
                 var suppliers = from c in supList select (new { c.code, c.name });
                 return Json(new { success = true, Suppliers = suppliers });
@@ -49,7 +78,7 @@ namespace POS.Controllers
 
             try
             {
-                string client_code = "CL799";
+                string client_code = getClient();
                 Product prod = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product_code && u.client_code == client_code);
                 if(prod == null)
                 {
@@ -84,7 +113,7 @@ namespace POS.Controllers
             try
 
             {
-                string client_code = "CL799";
+                string client_code = getClient();
                 List<Product> prodList = _unitOfWork.Product.GetAll(u => u.category_code == category_code && u.client_code == client_code).ToList();
                 if (prodList.Count == 0)
                 {
@@ -103,6 +132,9 @@ namespace POS.Controllers
         }
 
 
+
+
+
         [HttpPost]
         [Route("~/Purchase/confirm")]
         public IActionResult PurchaseConfirm([FromBody] PurchaseVM purchaseVM)
@@ -112,8 +144,9 @@ namespace POS.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string client_code = "CL799";
-                    string TRX_ID = "TRX54454";
+                    string client_code = getClient();
+                    //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
+                    string TRX_ID = RandomString(12);
                     if (purchaseVM.purchase_list == null)
                     {
                         return Json(new { success = false, message = "There are no Purchased product entry!" });
@@ -158,6 +191,58 @@ namespace POS.Controllers
                         prodStockIn.barcode = product.barcode;
 
                         _unitOfWork.ProductStockIn.Add(prodStockIn);
+
+
+
+
+                        ProductStock ps = _unitOfWork.ProductStock.GetFirstOrDefault(u => u.product_code == po.product_code && u.entry_date == purchaseVM.entry_date && u.client_code==client_code);
+                        if(ps == null)
+                        {
+                            ps = new ProductStock();
+                            ps.product_code = po.product_code;
+                            ps.product_name = product.product_name;
+                            ps.manufacturer_code = product.manufacturer_code;
+                            var parameter = new DynamicParameters();
+                            parameter.Add("ProductCode", po.product_code);
+                            parameter.Add("ClientCode", client_code);
+                            parameter.Add("EntryDate", purchaseVM.entry_date.ToString("yyyy-MM-dd"));
+
+
+                           
+                            ProductStock psPrevious = _unitOfWork.SP_Call.OneRecord<ProductStock>("latest_stock_entry", parameter);
+                            if(psPrevious != null)
+                            {
+                                ps.opening_stock = (psPrevious.opening_stock + psPrevious.quantity_in) - psPrevious.quantity_out;
+                               
+                            }
+                            else
+                            {
+                                ps.opening_stock = 0;
+                            }
+                            
+                            ps.quantity_in = po.quantity;
+                            ps.quantity_out = 0;
+                            ps.closing_stock = (ps.opening_stock + ps.quantity_in) - ps.quantity_out;
+                            ps.unit_price = po.unit_price;
+                            ps.mrp_price = po.mrp_price;
+                            ps.expire_date = po.expire_date;
+                            ps.entry_date = purchaseVM.entry_date;
+                            ps.user_id = "ADMIN";
+                            ps.barcode = product.barcode;
+                            ps.client_code = client_code;
+                            _unitOfWork.ProductStock.Add(ps);
+
+                        }
+                        else
+                        {
+                            ps.quantity_in += po.quantity;
+                            ps.closing_stock = (ps.opening_stock + ps.quantity_in) - ps.quantity_out;
+                            ps.unit_price = po.unit_price;
+                            ps.mrp_price = po.mrp_price;
+                            ps.user_id = "ADMIN";
+                            ps.expire_date = po.expire_date;
+                            _unitOfWork.ProductStock.Update(ps);
+                        }
 
 
                         total += po.quantity * po.unit_price;
