@@ -11,6 +11,7 @@ namespace POS.DataAccess.Repository
         {
             _db = db;
             Supplier = new SupplierRepository(_db);
+            Customer = new CustomerRepository(_db);
             POSLog = new POSLogRepository(_db);
             Manufacturer = new ManufacturerRepository(_db);
             Category = new CategoryRepository(_db);
@@ -25,6 +26,7 @@ namespace POS.DataAccess.Repository
         }
  
         public ISupplierRepository Supplier { get; private set; }
+        public ICustomerRepository Customer { get; private set; }
         public IPOSLogRepository POSLog { get; private set; }
         public IManufacturerRepository Manufacturer { get; private set; }
         public ICategoryRepository Category { get; private set; }

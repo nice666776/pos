@@ -8,6 +8,7 @@ namespace POS.Models.Models
     {
         public int id { get; set; }
         public string supplier_code { get; set; }
+        public string customer_code { get; set; }
         public string manufacturer_code { get; set; }
         public string category_code { get; set; }
         public string product_code { get; set; }

@@ -8,6 +8,7 @@ namespace POS.DataAccess.Repository.IRepository
     public interface IUnitOfWork : IDisposable
     {
         ISupplierRepository Supplier { get; }
+        ICustomerRepository Customer { get; }
         IPOSLogRepository POSLog { get; }
         IManufacturerRepository Manufacturer { get; }
         ICategoryRepository Category { get; }

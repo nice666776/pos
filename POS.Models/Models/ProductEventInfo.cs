@@ -13,6 +13,8 @@ namespace POS.Models.Models
         public DateTime entry_date { get; set; }
         public string supplier_code { get; set; }
         public string supplier_name { get; set; }
+        public string customer_code { get; set; }
+        public string customer_name { get; set; }
         public double cr_amount { get; set; }
         public double cr_discount{ get; set; }
         public double cr_total { get; set; }

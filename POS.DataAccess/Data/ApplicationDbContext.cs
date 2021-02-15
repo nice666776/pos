@@ -33,5 +33,6 @@ namespace POS.DataAccess.Data
         public DbSet<ProductStockIn> Product_stock_in { get; set; }
         public DbSet<ProductStockOut> Product_stock_Out{ get; set; }
         public DbSet<SubCategory> Subcategory_info { get; set; }
+        public DbSet<Customer> Customers_info { get; set; }
     }
 }

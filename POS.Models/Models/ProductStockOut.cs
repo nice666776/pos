@@ -13,7 +13,7 @@ namespace POS.Models.Models
         public string product_code { get; set; }
         public string product_name { get; set; }
         public string manufacturer_code { get; set; }
-        public string supplier_code { get; set; }
+        public string customer_code { get; set; }
         public double quantity { get; set; }
         public double unit_price { get; set; }
         public double total_price { get; set; }

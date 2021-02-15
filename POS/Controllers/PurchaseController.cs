@@ -147,6 +147,12 @@ namespace POS.Controllers
                     string client_code = getClient();
                     //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
                     string TRX_ID = RandomString(12);
+                    if (purchaseVM.invoice == null)
+                    {
+                        purchaseVM.invoice = "INV" + DateTime.Now.ToString("MM") + DateTime.Now.ToString("yy") + RandomString(7);
+
+                    }
+              
                     if (purchaseVM.purchase_list == null)
                     {
                         return Json(new { success = false, message = "There are no Purchased product entry!" });
@@ -159,6 +165,7 @@ namespace POS.Controllers
                     ProductEventInfo productEventInfo = new ProductEventInfo();
                     productEventInfo.transaction_id = TRX_ID;
                     productEventInfo.transaction_type = "PURCHASE";
+                    
                     productEventInfo.invoice = purchaseVM.invoice;
                     productEventInfo.entry_date = purchaseVM.entry_date;
                     productEventInfo.supplier_code = purchaseVM.supplier_code;
@@ -166,7 +173,7 @@ namespace POS.Controllers
                     double total = 0.0;
                     foreach (ProductObject po in purchaseVM.purchase_list)
                     {
-                        Product product = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == po.product_code);
+                        Product product = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == po.product_code && u.client_code == client_code);
                         product.quantity_in += po.quantity;
                         product.quantity += po.quantity;
                         product.unit_price = po.unit_price;
@@ -279,6 +286,141 @@ namespace POS.Controllers
 
             
         }
+
+
+        [HttpGet]
+        [Route("~/Purchase/history")]
+        public IActionResult PurchaseHistoryByDate(DateTime entry_date)
+        {
+
+            try{
+
+                string client_code = getClient();
+                List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(
+                    u => u.entry_date == entry_date
+                    && u.transaction_type == "PURCHASE"
+                    && u.client_code == client_code
+                    ).ToList();
+                if(peList.Count == 0)
+                {
+                    return Json(new { success = false, message = "No Purchase was made in this day!" });
+                }
+                List<PurchaseVM> purchaseVMList = new List<PurchaseVM>();
+                foreach(ProductEventInfo pe in peList)
+                {
+
+                    PurchaseVM pv = new PurchaseVM();
+                    pv.transaction_id = pe.transaction_id;
+                    pv.invoice = pe.invoice;
+                    pv.payment = pe.dr_amount;
+                    pv.discount = pe.dr_discount;
+                    pv.entry_date = pe.entry_date;
+                    pv.supplier_code = pe.supplier_code;
+                    pv.supplier_name = pe.supplier_name;
+                    List<ProductStockIn> prodstockin = _unitOfWork.ProductStockIn.GetAll(u=>u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
+                    if(prodstockin.Count() == 0)
+                    {
+                        purchaseVMList.Add(pv);
+                        continue;
+
+                    }
+                    pv.purchase_list = new List<ProductObject>();
+                    pv.purchase_list = (from p in prodstockin
+                                        select (new ProductObject
+                                        {
+                                            product_code = p.product_code,
+                                            product_name = p.product_name,
+                                            mrp_price = p.mrp_price,
+                                            unit_price = p.unit_price,
+                                            expire_date = p.expire_date,
+                                            quantity = p.quantity
+                                        })).ToList();
+
+
+                    purchaseVMList.Add(pv);
+
+
+                }
+
+
+                return Json(new { success = true, message = purchaseVMList });
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+        
+        }
+
+        [HttpGet]
+        [Route("~/Purchase/history/single")]
+        public IActionResult PurchaseHistoryByInvoice(string invoice)
+        {
+
+            try
+            {
+
+                string client_code = getClient();
+                List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(
+                    u => u.invoice == invoice
+                    && u.transaction_type == "PURCHASE"
+                    && u.client_code == client_code
+                    ).ToList();
+                if (peList.Count == 0)
+                {
+                    return Json(new { success = false, message = "No PURCHASE found with this invoice no.!" });
+                }
+                List<PurchaseVM> purchaseVMList = new List<PurchaseVM>();
+                foreach (ProductEventInfo pe in peList)
+                {
+
+                    PurchaseVM pv = new PurchaseVM();
+                    pv.transaction_id = pe.transaction_id;
+                    pv.invoice = pe.invoice;
+                    pv.payment = pe.dr_amount;
+                    pv.discount = pe.dr_discount;
+                    pv.entry_date = pe.entry_date;
+                    pv.supplier_code = pe.supplier_code;
+                    pv.supplier_name = pe.supplier_name;
+                    List<ProductStockIn> prodstockin = _unitOfWork.ProductStockIn.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
+                    if (prodstockin.Count() == 0)
+                    {
+                        purchaseVMList.Add(pv);
+                        continue;
+
+                    }
+                    pv.purchase_list = new List<ProductObject>();
+                    pv.purchase_list = (from p in prodstockin
+                                        select (new ProductObject
+                                        {
+                                            product_code = p.product_code,
+                                            product_name = p.product_name,
+                                            mrp_price = p.mrp_price,
+                                            unit_price = p.unit_price,
+                                            expire_date = p.expire_date,
+                                            quantity = p.quantity
+                                        })).ToList();
+
+
+                    purchaseVMList.Add(pv);
+
+
+                }
+
+
+                return Json(new { success = true, message = purchaseVMList });
+            }
+
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+
+        }
+
+
+
 
 
 
