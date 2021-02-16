@@ -75,7 +75,6 @@ namespace POS.Controllers
         [Route("~/Product/info")]
         public IActionResult product_info(string product_code)
         {
-
             try
             {
                 string client_code = getClient();

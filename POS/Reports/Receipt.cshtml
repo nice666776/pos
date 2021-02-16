@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap" rel="stylesheet">
+    <style>
+
+        @@media print {
+            h1 {
+                page-break-before: always;
+            }
+        }
+
+        body {
+            width: 314px;
+            /*   height:32000px;*/
+            margin: 0;
+            background: #fbfbeb;
+            /* font-family: 'IBM Plex Sans', sans-serif;*/
+            font-family: 'Inconsolata', monospace;
+        }
+
+        #dataTable {
+            /* font-family: 'IBM Plex Sans', sans-serif;*/
+            font-family: 'Inconsolata', monospace;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            #dataTable th {
+                border-top: 2px dashed #000000;
+                border-bottom: 2px dashed #000000;
+                padding: 8px 8px 8px 8px;
+            }
+
+            #dataTable td {
+                border: 0px;
+                padding: 8px 8px 8px 8px;
+            }
+
+            /*#customers tr:nth-child(even){background-color: #f2f2f2;}*/
+
+            /*#customers tr:hover {background-color: #ddd;}*/
+
+            #dataTable th {
+                text-align: left;
+                color: #000000;
+            }
+
+        img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .center {
+            margin: auto;
+            /*  margin: 3rem 5rem 2rem 0rem;*/
+            /*margin-right: auto;*/
+        }
+
+        #head_table {
+            border-collapse: collapse;
+            margin: 2rem 5rem 2rem 0rem; /* top=1em, right=2em, bottom=3em, left=2em */
+        }
+
+            #head_table td {
+                padding: 8px 8px 8px 8px;
+            }
+
+        .centerImg {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+
+        <div class="center">
+         
+
+                
+                 
+                        @*<td style="padding: 8px 8px 8px 8px;"><img src="http://localhost:44317@(Model.School.school_logo)" alt="Image" /></td>*@
+            <div class="centerImg">
+                <img src="https://image.freepik.com/free-vector/organic-store-logo-design-inspiration_18099-270.jpg" alt="Image" />
+                </div>
+                <div style="text-align:center;">
+                    @*<h1>@Model.School.school_name</h1>*@
+                    <h1>BEST SUPER STORE</h1>
+
+                </div>
+
+
+
+
+                <table class="center">
+                    @*<tr><td style="text-align:center; font-size:15px ;"> @Model.School.address, @Model.School.thana, @Model.School.district - @Model.School.zip_code  </td></tr>*@
+                    <tr><td style="text-align:center; font-size:15px ;"> 49 WEST VIEW ROAD, KAWRAN BAZAR, DHAKA - 1215  </td></tr>
+                </table>
+
+
+            </div>
+        <div style=" text-align: right;
+        margin: 2rem 0rem 0rem 0rem;">
+            <strong> Date : </strong> @Model.Date
+        </div>
+
+
+        <table id="head_table">
+            <tr>
+                <td><strong> Ref : </strong></td>
+                <td>2021/08/75/Manufacturer</td>
+
+            </tr>
+
+            <tr>
+                <td><strong> USER : </strong></td>
+                <td>IKBAL</td>
+                @*<td><strong> Version : </strong></td>
+                <td>@Model.Class_name</td>
+                <td><strong> Shift : </strong></td>
+                <td>Morning</td>*@
+            </tr>
+            @*<tr>
+                <td><strong> Group : </strong></td>
+                <td>None</td>
+                <td><strong> Section : </strong></td>
+                <td>A</td>
+            </tr>*@
+
+        </table>
+        @*<table id="dataTable">
+            <thead>
+                <tr>
+
+                    <th>SL</th>
+                    <th>NAME</th>
+                    <th>CONTACT PERSON</th>
+                    <th>BRAND</th>
+                    <th>ADDRESS</th>
+                    <th>PHONE</th>
+
+                </tr>
+            </thead>
+            @{ int i = 1;}
+            @foreach (var p in Model.ManufacturerList)
+            {
+                <tr>
+                  <td>@(i++)</td>
+                  <td>@p.name</td>
+                  <td>@p.contact_person</td>
+                  <td>@p.brand</td>
+                  <td>@p.address</td>
+                  <td>@p.phone</td>
+              </tr>
+
+
+            }
+        </table>*@
+
+    <table id="dataTable">
+      
+        <tr>
+
+            <th colspan="3">Item NAME</th>
+            <th>Qty.</th>
+            <th>Price</th>
+            <th>T.Price</th>
+
+
+        </tr>
+        
+        @for (int i = 1; i <= 200; i++)
+        {
+    <tr>
+        <td colspan="3">ICE CREAM ICE CREAM ICE CREAM ICE CREAM</td>
+        <td>@i PCs</td>
+        <td style="text-align:right;">20</td>
+        <td style="text-align:right;">@(i*20)</td>
+
+    </tr>
+        }
+
+
+
+
+
+    </table>
+
+    </div>
+
+</body>
+</html>

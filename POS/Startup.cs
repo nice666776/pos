@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using POS.DataAccess.Data;
 using POS.DataAccess.Repository;
 using POS.DataAccess.Repository.IRepository;
+using Wkhtmltopdf.NetCore;
 
 namespace POS
 {
@@ -31,6 +32,7 @@ namespace POS
         {
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllers();
+            services.AddWkhtmltopdf();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
@@ -67,6 +69,7 @@ namespace POS
                 app.UseDeveloperExceptionPage();
             }
             app.UseStaticFiles();
+            app.UseDefaultFiles();
             app.UseRouting();
             app.UseCors("AllowOrigin");//^ referenced in configuration cors
             app.UseAuthorization();
