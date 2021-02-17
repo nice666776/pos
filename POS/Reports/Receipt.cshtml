@@ -3,11 +3,7 @@
 <head>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
     <style>
 
         @@media print {
@@ -15,32 +11,33 @@
                 page-break-before: always;
             }
         }
+        @@font-face {
+            font-family: IDAutomationHC39M;
+            src: url(http://localhost:44317/IDAutomationHC39M.woff);
+        }
 
         body {
             width: 314px;
-            /*   height:32000px;*/
-            margin: 0;
-            background: #fbfbeb;
-            /* font-family: 'IBM Plex Sans', sans-serif;*/
+    /*        background: #fbfbeb;*/
             font-family: 'Inconsolata', monospace;
         }
 
         #dataTable {
-            /* font-family: 'IBM Plex Sans', sans-serif;*/
+
             font-family: 'Inconsolata', monospace;
             border-collapse: collapse;
             width: 100%;
         }
 
             #dataTable th {
-                border-top: 2px dashed #000000;
-                border-bottom: 2px dashed #000000;
-                padding: 8px 8px 8px 8px;
+                border-top: 1px dashed #000000;
+                border-bottom: 1px dashed #000000;
+                padding: 4px;
             }
 
             #dataTable td {
-                border: 0px;
-                padding: 8px 8px 8px 8px;
+                border-bottom: 1px dashed #000000;
+                padding: 2px 8px 2px 8px;
             }
 
             /*#customers tr:nth-child(even){background-color: #f2f2f2;}*/
@@ -57,25 +54,20 @@
             height: 150px;
         }
 
-        .center {
-            margin: auto;
-            /*  margin: 3rem 5rem 2rem 0rem;*/
-            /*margin-right: auto;*/
-        }
-
         #head_table {
-            border-collapse: collapse;
-            margin: 2rem 5rem 2rem 0rem; /* top=1em, right=2em, bottom=3em, left=2em */
+
+         /* top=1em, right=2em, bottom=3em, left=2em */
         }
 
             #head_table td {
-                padding: 8px 8px 8px 8px;
+                padding: 2px 2px 2px 2px;
             }
 
         .centerImg {
             display: block;
             margin-left: auto;
             margin-right: auto;
+            margin: auto;
             width: 50%;
         }
     </style>
@@ -84,60 +76,52 @@
 
     <div>
 
-        <div class="center">
-         
+        <div>
 
-                
-                 
-                        @*<td style="padding: 8px 8px 8px 8px;"><img src="http://localhost:44317@(Model.School.school_logo)" alt="Image" /></td>*@
-            <div class="centerImg">
+            @*<td style="padding: 8px 8px 8px 8px;"><img src="http://localhost:44317@(Model.School.school_logo)" alt="Image" /></td>*@
+            <div class="centerImg" style="padding-top:40px;margin-bottom:0px;padding-bottom:0px;">
                 <img src="https://image.freepik.com/free-vector/organic-store-logo-design-inspiration_18099-270.jpg" alt="Image" />
-                </div>
-                <div style="text-align:center;">
-                    @*<h1>@Model.School.school_name</h1>*@
-                    <h1>BEST SUPER STORE</h1>
-
-                </div>
-
-
-
-
-                <table class="center">
-                    @*<tr><td style="text-align:center; font-size:15px ;"> @Model.School.address, @Model.School.thana, @Model.School.district - @Model.School.zip_code  </td></tr>*@
-                    <tr><td style="text-align:center; font-size:15px ;"> 49 WEST VIEW ROAD, KAWRAN BAZAR, DHAKA - 1215  </td></tr>
-                </table>
-
+            </div>
+            <div style="text-align:center; font-size:30px ;">
+                @*<h1>@Model.School.school_name</h1>*@
+                <strong>BEST SUPER STORE</strong>
 
             </div>
-        <div style=" text-align: right;
-        margin: 2rem 0rem 0rem 0rem;">
+            <div style="text-align:center; font-size:12px ;">
+                @*<h1>@Model.School.school_name</h1>*@
+                49 WEST VIEW ROAD, KAWRAN BAZAR, DHAKA - 1215
+            </div>
+
+
+
+            <!--<table align="center">-->
+            @*<tr><td style="text-align:center; font-size:15px ;"> @Model.School.address, @Model.School.thana, @Model.School.district - @Model.School.zip_code  </td></tr>*@
+            <!--<tr><td style="text-align:center; font-size:12px ;"> 49 WEST VIEW ROAD, KAWRAN BAZAR, DHAKA - 1215  </td></tr>
+        </table>-->
+
+            <table id="head_table" style=" border-top: 1px dashed #000;  width: 100%; color: black;">
+                <tr>
+                    <td><strong> Invoice No.: </strong></td>
+                    <td>@Model.SaleList.invoice</td>
+                </tr>
+            </table>
+
+        </div>
+        <div style=" text-align: right;">
             <strong> Date : </strong> @Model.Date
         </div>
-
+        <div style=" text-align: right;">
+            <strong> Time : </strong> 6:03 PM
+        </div>
 
         <table id="head_table">
             <tr>
-                <td><strong> Ref : </strong></td>
-                <td>2021/08/75/Manufacturer</td>
+                <td><strong> Name:</strong></td>
+                <td>HABIB</td>
 
             </tr>
-
-            <tr>
-                <td><strong> USER : </strong></td>
-                <td>IKBAL</td>
-                @*<td><strong> Version : </strong></td>
-                <td>@Model.Class_name</td>
-                <td><strong> Shift : </strong></td>
-                <td>Morning</td>*@
-            </tr>
-            @*<tr>
-                <td><strong> Group : </strong></td>
-                <td>None</td>
-                <td><strong> Section : </strong></td>
-                <td>A</td>
-            </tr>*@
-
         </table>
+
         @*<table id="dataTable">
             <thead>
                 <tr>
@@ -167,35 +151,59 @@
             }
         </table>*@
 
-    <table id="dataTable">
-      
+    <table id="dataTable" style="font-size:15px;">
+
         <tr>
 
-            <th colspan="3">Item NAME</th>
-            <th>Qty.</th>
-            <th>Price</th>
-            <th>T.Price</th>
+            <th>Item Name</th>
+
+            <th style="text-align:right;">Price</th>
+            <th style="text-align:right;">Qty.</th>
+
+            <th style="text-align:right;">T.Price</th>
 
 
         </tr>
-        
-        @for (int i = 1; i <= 200; i++)
+
+        @foreach (var s in @Model.SaleList.sales_list)
         {
-    <tr>
-        <td colspan="3">ICE CREAM ICE CREAM ICE CREAM ICE CREAM</td>
-        <td>@i PCs</td>
-        <td style="text-align:right;">20</td>
-        <td style="text-align:right;">@(i*20)</td>
+            <tr>
+                <td>@s.product_name</td>
+                <td style="text-align:right;">@s.mrp_price</td>
+                <td style="text-align:right;">@s.quantity</td>
 
-    </tr>
+                <td style="text-align:right;">@(s.mrp_price*s.quantity)</td>
+
+            </tr>
         }
+        
+
+        <tr style="border-top:2px double; border-bottom:1px dashed;">
+            <td style="text-align:left" colspan="2"><strong>GROSS TOTAL : </strong></td>
 
 
+            <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.payment</strong></td>
+
+        </tr>
+        <tr style="border-top:1px dashed; border-bottom:1px dashed;">
+            <td style="text-align:left" colspan="2"><strong>DISCOUNT : </strong></td>
 
 
+            <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.discount</strong></td>
+
+        </tr>
+        <tr style="border-top:1px dashed; border-bottom:1px dashed;">
+            <td style="text-align:left" colspan="2"><strong>GRAND TOTAL : </strong></td>
+
+
+            <td style="text-align:right;" colspan="2"><strong>@(Model.SaleList.payment - Model.SaleList.discount)</strong></td>
+
+        </tr>
 
     </table>
-
+        <p style="font-size:15pt ; font-family: IDAutomationHC39M; text-align:center; align-content:center;">@Model.SaleList.invoice</p>
+        <hr style="width:100%; border-top:dashed 1px;" />
+        <p style="text-align:center;">Powered by: NICE POWER & IT SOLUTION</p>
     </div>
 
 </body>

@@ -240,7 +240,7 @@ namespace POS.Controllers
                     _unitOfWork.Save();
 
 
-                    return Json(new { success = true, message = "Successful!!" });
+                    return Json(new { success = true, message = "Successful!!", invoice= productEventInfo.invoice });
                 }
                 else
                 {
@@ -288,8 +288,8 @@ namespace POS.Controllers
                     SaleVM sv = new SaleVM();
                     sv.transaction_id = pe.transaction_id;
                     sv.invoice = pe.invoice;
-                    sv.payment = pe.dr_amount;
-                    sv.discount = pe.dr_discount;
+                    sv.payment = pe.cr_amount;
+                    sv.discount = pe.cr_discount;
                     sv.entry_date = pe.entry_date;
                     sv.customer_code = pe.customer_code;
                     sv.customer_name = pe.customer_name;
@@ -354,8 +354,8 @@ namespace POS.Controllers
                     SaleVM sv = new SaleVM();
                     sv.transaction_id = pe.transaction_id;
                     sv.invoice = pe.invoice;
-                    sv.payment = pe.dr_amount;
-                    sv.discount = pe.dr_discount;
+                    sv.payment = pe.cr_amount;
+                    sv.discount = pe.cr_discount;
                     sv.entry_date = pe.entry_date;
                     sv.customer_code = pe.customer_code;
                     sv.customer_name = pe.customer_name;
