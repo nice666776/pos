@@ -36,7 +36,7 @@ export default React.memo(({form_inputs, handleInputs, handleSave, saving})=>{
       </div>
       <div className="text-center">
         <Button className="w-25" variant="contained" size="small" color="primary" onClick={handleSave} disabled={saving}>
-          Save {saving && <DataSaving/>}
+          Submit {saving && <DataSaving/>}
         </Button>
       </div>
     </div>

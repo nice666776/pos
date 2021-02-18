@@ -6,7 +6,8 @@ import {
   Settings,
   Build,
   AddShoppingCart,
-  LocalMallTwoTone
+  LocalMallTwoTone,
+  HistoryRounded
 } from "@material-ui/icons";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
@@ -26,20 +27,20 @@ const structure = [
   { label: "Dashboard", link: "/dashboard", icon: <HomeIcon />},
   { label: "Sales", link: "/sales", icon: <LocalMallTwoTone />},
   { label: "Purchase", link: "/purchase", icon: <AddShoppingCart />},
-  {
-    label: "Product Configuration",
-    link: "/product-configuration",
-    icon: <Build />,
+  { label: "History", link: "/history", icon: <HistoryRounded />,
+    children: [
+      { label: "Purchase", link: "/history/purchase" },
+      { label: "Sales", link: "/history/sales" }
+    ],
+  },
+  { label: "Product Configuration", link: "/product-configuration", icon: <Build />,
     children: [
       { label: "Manufacturers", link: "/product-configuration/manufacturers" },
       { label: "Categories", link: "/product-configuration/categories" },
       { label: "Products", link: "/product-configuration/products" },
     ],
   },
-  {
-    label: "Configuration",
-    link: "/configuration",
-    icon: <Settings />,
+  { label: "Configuration", link: "/configuration", icon: <Settings />, 
     children: [
       { label: "Suppliers", link: "/configuration/supplier-entry"},
       { label: "Util Info", link: "/configuration/util-info" },

@@ -4,7 +4,7 @@ export default makeStyles(theme => ({
   link: {
     textDecoration: "none",
     "&:hover, &:focus": {
-      backgroundColor: theme.palette.background.light,
+      backgroundColor: theme.palette.background.default,
     },
   },
   linkActive: {
@@ -13,7 +13,7 @@ export default makeStyles(theme => ({
   linkNested: {
     paddingLeft: 0,
     "&:hover, &:focus": {
-      backgroundColor: theme.palette.background.light,
+      backgroundColor: theme.palette.background.default,
     },
   },
   linkIcon: {
@@ -21,7 +21,7 @@ export default makeStyles(theme => ({
     marginRight: 10
   },
   linkIconActive: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.light,
   },
   linkText: {
     padding: 0,

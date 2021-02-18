@@ -33,7 +33,7 @@ export default function SidebarLink({
 
   // local
   var [isOpen, setIsOpen] = useState(false);
-  var isLinkActive = link && (location.pathname === link || location.pathname.indexOf(link) !== -1);
+  var isLinkActive = link && (location.pathname === link || (children && location.pathname.indexOf(link) !== -1));
 
   if (type === "title")
     return (

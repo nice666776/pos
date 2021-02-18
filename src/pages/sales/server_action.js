@@ -11,3 +11,25 @@ export const productSaleinformation = (p_code)=>{                     // product
     })
   })
 }
+
+export const searchProduct = (q)=>{                                 // Search for product
+  return new Promise((resolve, reject)=>{
+    axios.get(`/Product/Sale/search?search_string=${q}`)
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
+
+export const saleSubmit = (form_input)=>{                            // Sale submit
+  return new Promise((resolve, reject)=>{
+    axios.post('/Sale/confirm', form_input)
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
