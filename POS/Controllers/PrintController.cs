@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -144,21 +145,22 @@ namespace POS.Controllers
                 return Json(new { success = false, message = "No SALE found with this invoice No.!" });
             }
             SaleVM sv = new SaleVM();
+           
             foreach (ProductEventInfo pe in peList)
             {
 
-              
+
                 sv.transaction_id = pe.transaction_id;
                 sv.invoice = pe.invoice;
                 sv.payment = pe.cr_amount;
                 sv.discount = pe.cr_discount;
                 sv.entry_date = pe.entry_date;
+                sv.entry_time = pe.entry_time;
                 sv.customer_code = pe.customer_code;
                 sv.customer_name = pe.customer_name;
                 List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
                 if (prodstockout.Count() == 0)
                 {
-                  
                     continue;
 
                 }
@@ -167,7 +169,7 @@ namespace POS.Controllers
                                  select (new ProductObject
                                  {
                                      product_code = p.product_code,
-                                     product_name = p.product_name,
+                                     product_name = p.product_name.Length > 30 ? p.product_name.Substring(0, 30) + "..." : p.product_name,
                                      mrp_price = p.mrp_price,
                                      unit_price = p.unit_price,
                                      expire_date = p.expire_date,
@@ -175,7 +177,8 @@ namespace POS.Controllers
                                  })).ToList();
 
             }
-            double page_width = 200;
+            
+            double page_height = 102+(sv.sales_list.Count()*8);
             /////////////////////////////////
             var kv = new Dictionary<string, string>
             {
@@ -188,7 +191,7 @@ namespace POS.Controllers
             {
              
                 PageOrientation = Wkhtmltopdf.NetCore.Options.Orientation.Portrait,
-                PageHeight = page_width,
+                PageHeight = page_height,
                 PageWidth = 53.97500,
                 PageMargins = new Wkhtmltopdf.NetCore.Options.Margins()
                 {
@@ -203,7 +206,7 @@ namespace POS.Controllers
 
 
 
-            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), SaleList = sv });
+            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), SaleList = sv, EntryTime = DateTime.SpecifyKind(sv.entry_time, DateTimeKind.Local).ToString("mm:ss tt") });
             string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/Receipt.cshtml");
             return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
 

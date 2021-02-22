@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace POS.Models.Models
@@ -23,7 +24,8 @@ namespace POS.Models.Models
         public double dr_total { get; set; }
         public string user_id { get; set; }
         public string client_code { get; set; }
-   
+        [DataType(DataType.Time)]
+        public DateTime entry_time { get; set; }
 
     }
 }

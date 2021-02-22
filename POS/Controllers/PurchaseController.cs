@@ -167,6 +167,7 @@ namespace POS.Controllers
                     
                     productEventInfo.invoice = purchaseVM.invoice;
                     productEventInfo.entry_date = purchaseVM.entry_date;
+                   
                     productEventInfo.supplier_code = purchaseVM.supplier_code;
                     productEventInfo.supplier_name = _unitOfWork.Supplier.GetFirstOrDefault(u => u.code == purchaseVM.supplier_code && u.client_code == client_code).name;
                     double total = 0.0;

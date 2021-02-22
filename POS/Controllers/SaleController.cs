@@ -137,6 +137,7 @@ namespace POS.Controllers
                     productEventInfo.transaction_type = "SALE";
                     productEventInfo.invoice = saleVM.invoice;
                     productEventInfo.entry_date = saleVM.entry_date;
+                productEventInfo.entry_time = DateTime.Now;
                     productEventInfo.customer_code = saleVM.customer_code;
                    // productEventInfo.customer_name = _unitOfWork.Customer.GetFirstOrDefault(u => u.code == saleVM.customer_code && u.client_code == client_code).name;
                     double total = 0.0;
