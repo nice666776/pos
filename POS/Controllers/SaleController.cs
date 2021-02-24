@@ -118,8 +118,8 @@ namespace POS.Controllers
             //{
                 if (ModelState.IsValid)
                 {
-                    saleVM.invoice= "INV" + DateTime.Now.ToString("MM") + DateTime.Now.ToString("yy") + RandomString(7);
-                    saleVM.entry_date = DateTime.Now.Date;
+                    saleVM.invoice= DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + RandomString(7);
+                saleVM.entry_date = DateTime.Now.Date;
                     string client_code = getClient();
                     //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
                     string TRX_ID = RandomString(12);
@@ -164,7 +164,7 @@ namespace POS.Controllers
                         prodStockOut.quantity = po.quantity;
                         prodStockOut.unit_price = po.unit_price;
                         prodStockOut.mrp_price = po.mrp_price;
-                        prodStockOut.total_price = po.quantity * po.unit_price;
+                        prodStockOut.total_price = po.quantity * po.mrp_price;
                         prodStockOut.expire_date = po.expire_date;
                         prodStockOut.entry_date = saleVM.entry_date;
                         prodStockOut.invoice = saleVM.invoice;
@@ -226,7 +226,7 @@ namespace POS.Controllers
                         }
 
 
-                        total += po.quantity * po.unit_price;
+                        total += po.quantity * po.mrp_price;
 
                     }
                     productEventInfo.cr_amount = total;
@@ -289,6 +289,7 @@ namespace POS.Controllers
                     SaleVM sv = new SaleVM();
                     sv.transaction_id = pe.transaction_id;
                     sv.invoice = pe.invoice;
+                    sv.total = pe.cr_total;
                     sv.payment = pe.cr_amount;
                     sv.discount = pe.cr_discount;
                     sv.entry_date = pe.entry_date;
@@ -355,6 +356,7 @@ namespace POS.Controllers
                     SaleVM sv = new SaleVM();
                     sv.transaction_id = pe.transaction_id;
                     sv.invoice = pe.invoice;
+                    sv.total = pe.cr_total;
                     sv.payment = pe.cr_amount;
                     sv.discount = pe.cr_discount;
                     sv.entry_date = pe.entry_date;

@@ -17,7 +17,7 @@
         }
 
         body {
-            width: 314px;
+            width: 98%;
     /*        background: #fbfbeb;*/
             font-family: 'Inconsolata', monospace;
         }
@@ -64,6 +64,7 @@
             }
 
         .centerImg {
+            text-align: center;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -101,8 +102,9 @@
 
             <table id="head_table" style=" border-top: 1px dashed #000;  width: 100%; color: black;">
                 <tr>
-                    <td><strong> Invoice No.: </strong></td>
-                    <td>@Model.SaleList.invoice</td>
+                    <td><strong> Invoice No.: </strong>     @Model.SaleList.invoice</td>
+                
+                   
                 </tr>
             </table>
 
@@ -151,57 +153,58 @@
             }
         </table>*@
 
-    <table id="dataTable" style="font-size:15px;">
+        <table id="dataTable" style="font-size:15px;">
 
-        <tr>
-
-            <th>Item Name</th>
-
-            <th style="text-align:right;">Price</th>
-            <th style="text-align:right;">Qty.</th>
-
-            <th style="text-align:right;">T.Price</th>
-
-
-        </tr>
-
-        @foreach (var s in @Model.SaleList.sales_list)
-        {
             <tr>
-                <td style="font-size:14px;">@s.product_name</td>
-                <td style="text-align:right;">@s.mrp_price</td>
-                <td style="text-align:right;">@s.quantity</td>
 
-                <td style="text-align:right;">@(s.mrp_price*s.quantity)</td>
+                <th>Item Name</th>
+
+                <th style="text-align:right;">Price</th>
+                <th style="text-align:right;">Qty.</th>
+
+                <th style="text-align:right;">T.Price</th>
+
 
             </tr>
-        }
-        
 
-        <tr style="border-top:2px double; border-bottom:1px dashed;">
-            <td style="text-align:left" colspan="2"><strong>GROSS TOTAL : </strong></td>
+            @foreach (var s in @Model.SaleList.sales_list)
+            {
+                <tr>
+                    <td style="font-size:14px;">@s.product_name</td>
+                    <td style="text-align:right;">@s.mrp_price</td>
+                    <td style="text-align:right;">@s.quantity</td>
 
+                    <td style="text-align:right;">@(s.mrp_price*s.quantity)</td>
 
-            <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.payment</strong></td>
-
-        </tr>
-        <tr style="border-top:1px dashed; border-bottom:1px dashed;">
-            <td style="text-align:left" colspan="2"><strong>DISCOUNT : </strong></td>
-
-
-            <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.discount</strong></td>
-
-        </tr>
-        <tr style="border-top:1px dashed; border-bottom: 0px;">
-            <td style="text-align:left; border-bottom: 0px;" colspan="2"><strong>GRAND TOTAL : </strong></td>
+                </tr>
+            }
 
 
-            <td style="text-align:right;  border-bottom: 0px;" colspan="2"><strong>@(Model.SaleList.payment - Model.SaleList.discount)</strong></td>
+            <tr style="border-top:2px double; border-bottom:1px dashed;">
+                <td style="text-align:left" colspan="2"><strong>GROSS TOTAL : </strong></td>
 
-        </tr>
 
-    </table>
-        <p style="font-size:15pt ; font-family: IDAutomationHC39M; text-align:center; align-content:center;">@Model.SaleList.invoice</p>
+                <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.payment</strong></td>
+
+            </tr>
+            <tr style="border-top:1px dashed; border-bottom:1px dashed;">
+                <td style="text-align:left" colspan="2"><strong>DISCOUNT : </strong></td>
+
+
+                <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.discount</strong></td>
+
+            </tr>
+            <tr style="border-top:1px dashed; border-bottom: 0px;">
+                <td style="text-align:left; border-bottom: 0px;" colspan="2"><strong>GRAND TOTAL : </strong></td>
+
+
+                <td style="text-align:right;  border-bottom: 0px;" colspan="2"><strong>@(Model.SaleList.payment - Model.SaleList.discount)</strong></td>
+
+            </tr>
+
+        </table>
+        <p style="font-size:22px ; font-family: IDAutomationHC39M; text-align:center; align-content:center;">*@Model.SaleList.invoice*</p>
+
         <hr style="width:100%; border-top:dashed 1px;" />
         <p style="text-align:center;">Powered by: NICE POWER & IT SOLUTION Ltd.</p>
     </div>

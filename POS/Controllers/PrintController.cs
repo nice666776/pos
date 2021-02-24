@@ -89,8 +89,6 @@ namespace POS.Controllers
         [Route("~/print/Manufacturers")]
         public async Task<IActionResult> ManufacturerList()
         {
-
-
             string client_code = getClient();
             List<Manufacturer> manufacturers = _unitOfWork.Manufacturer.GetAll(u => u.client_code == client_code).ToList();
 
@@ -148,8 +146,6 @@ namespace POS.Controllers
            
             foreach (ProductEventInfo pe in peList)
             {
-
-
                 sv.transaction_id = pe.transaction_id;
                 sv.invoice = pe.invoice;
                 sv.payment = pe.cr_amount;
@@ -177,8 +173,8 @@ namespace POS.Controllers
                                  })).ToList();
 
             }
-            
-            double page_height = 102+(sv.sales_list.Count()*8);
+            double ratio = 74;
+            double page_height = 102+(sv.sales_list.Count()*(ratio/2));
             /////////////////////////////////
             var kv = new Dictionary<string, string>
             {
@@ -192,7 +188,8 @@ namespace POS.Controllers
              
                 PageOrientation = Wkhtmltopdf.NetCore.Options.Orientation.Portrait,
                 PageHeight = page_height,
-                PageWidth = 53.97500,
+                // PageWidth = 73.97500,//If width is changed so must be the ratio variable
+                PageWidth = ratio,
                 PageMargins = new Wkhtmltopdf.NetCore.Options.Margins()
                 {
                     Top = 0,
@@ -203,9 +200,6 @@ namespace POS.Controllers
 
             };
             _generatePdf.SetConvertOptions(options);
-
-
-
             var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), SaleList = sv, EntryTime = DateTime.SpecifyKind(sv.entry_time, DateTimeKind.Local).ToString("mm:ss tt") });
             string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/Receipt.cshtml");
             return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
@@ -215,25 +209,67 @@ namespace POS.Controllers
 
 
         [HttpGet]
-        [Route("~/print/Invoice")]
-        public async Task<IActionResult> Invoice()
+        [Route("~/print/PurchaseOrder")]
+        public async Task<IActionResult> Invoice(string invoice)
         {
+            string client_code = getClient();
+            ProductEventInfo pe = _unitOfWork.ProductEventInfo.GetFirstOrDefault(
+                u => u.invoice == invoice
+                && u.transaction_type == "PURCHASE"
+                && u.client_code == client_code
+                );
+            if (pe == null)
+            {
+                return Json(new { success = false, message = "No PURCHASE found with this invoice no.!" });
+            }
+      
+           
+                PurchaseVM pv = new PurchaseVM();
+                pv.transaction_id = pe.transaction_id;
+                pv.invoice = pe.invoice;
+                 pv.total = pe.dr_total;
+                pv.payment = pe.dr_amount;
+                pv.discount = pe.dr_discount;
+                pv.entry_date = pe.entry_date;
+                pv.supplier_code = pe.supplier_code;
+                pv.supplier_name = pe.supplier_name;
+                Supplier supl = _unitOfWork.Supplier.GetFirstOrDefault(u => u.code == pv.supplier_code);
+                List<ProductStockIn> prodstockin = _unitOfWork.ProductStockIn.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
+                if (prodstockin.Count() == 0)
+                {
+
+                return Json(new { success = false, message = "No Items Found!" });
+
+            }
+                pv.purchase_list = new List<ProductObject>();
+                pv.purchase_list = (from p in prodstockin
+                                    select (new ProductObject
+                                    {
+                                        product_code = p.product_code,
+                                        product_name = p.product_name,
+                                        mrp_price = p.mrp_price,
+                                        unit_price = p.unit_price,
+                                        expire_date = p.expire_date,
+                                        quantity = p.quantity
+                                    })).ToList();
 
 
+                
 
+
+            
 
             var options = new ConvertOptions
             {
 
                 PageOrientation = Wkhtmltopdf.NetCore.Options.Orientation.Portrait,
-                PageHeight = 3000,
-                PageWidth = 53.97500,
+                HeaderHtml = "http://localhost:44317/header.html",
                 PageMargins = new Wkhtmltopdf.NetCore.Options.Margins()
                 {
-                    Top = 5,
-                    Left = 5,
+                    Top = 20,
+                    Left = 10,
                     Right = 5,
-                    Bottom = 5
+                    Bottom = 20
                 }
 
             };
@@ -241,8 +277,8 @@ namespace POS.Controllers
 
 
 
-            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy") });
-            string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/invoice.cshtml");
+            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), Purchase = pv, Supplier =supl});
+            string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/PurchaseOrder.cshtml");
             return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
 
         }

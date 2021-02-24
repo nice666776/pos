@@ -139,8 +139,8 @@ namespace POS.Controllers
         public IActionResult PurchaseConfirm([FromBody] PurchaseVM purchaseVM)
         {
 
-            try
-            {
+           // try
+          //  {
                 if (ModelState.IsValid)
                 {
                     string client_code = getClient();
@@ -148,7 +148,7 @@ namespace POS.Controllers
                     string TRX_ID = RandomString(12);
                     if (purchaseVM.invoice == null)
                     {
-                        purchaseVM.invoice = "INV" + DateTime.Now.ToString("MM") + DateTime.Now.ToString("yy") + RandomString(7);
+                        purchaseVM.invoice = DateTime.Now.ToString("yy")+ DateTime.Now.ToString("MM")  + RandomString(7);
 
                     }
               
@@ -267,7 +267,7 @@ namespace POS.Controllers
                     _unitOfWork.Save();
 
 
-                    return Json(new { success = true, message = "Successful!!" });
+                    return Json(new { success = true, message = "Successful!!" , invoice= purchaseVM.invoice});
                 }
                 else
                 {
@@ -275,13 +275,13 @@ namespace POS.Controllers
                 }
 
 
-            }
+           // }
 
 
-            catch (Exception e)
-            {
-                return Json(new { success = false, message = e.Message });
-            }
+         //   catch (Exception e)
+          //  {
+          //      return Json(new { success = false, message = e.Message });
+           // }
              
 
             
@@ -312,6 +312,7 @@ namespace POS.Controllers
                     PurchaseVM pv = new PurchaseVM();
                     pv.transaction_id = pe.transaction_id;
                     pv.invoice = pe.invoice;
+                    pv.total = pe.dr_total;
                     pv.payment = pe.dr_amount;
                     pv.discount = pe.dr_discount;
                     pv.entry_date = pe.entry_date;
@@ -378,6 +379,7 @@ namespace POS.Controllers
                     PurchaseVM pv = new PurchaseVM();
                     pv.transaction_id = pe.transaction_id;
                     pv.invoice = pe.invoice;
+                    pv.total = pe.dr_total;
                     pv.payment = pe.dr_amount;
                     pv.discount = pe.dr_discount;
                     pv.entry_date = pe.entry_date;
