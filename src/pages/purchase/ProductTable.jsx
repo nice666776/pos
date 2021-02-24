@@ -76,7 +76,7 @@ export default React.memo(({handlePurchaseList})=>{
     <div className="card overflow-hidden">
       <TableContainer>
         <Table size="small">
-          <TableHead style={{background: '#F1F5F7'}}>
+          <TableHead>
             <TableRow>
               <TableCell className="font-weight-bold">Name</TableCell>
               <TableCell className="font-weight-bold">Category</TableCell>

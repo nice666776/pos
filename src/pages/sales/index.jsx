@@ -18,7 +18,9 @@ class Sales extends React.Component{
     form_inputs: {},
     sale_list: [],
     total: 0,
-    saving: false
+    saving: false,
+    saved: false,
+    invoice: ''
   }
 
   updateSaleList = (list)=>{
@@ -48,12 +50,15 @@ class Sales extends React.Component{
     output['sales_list'] = this.state.sale_list
     if(this.state.sale_list.length > 0){
       this.setState({saving: true})
+      const {hide} = cogoToast.loading('Saving information...')
       saleSubmit(output)
         .then(resp => {
-          resp.success && cogoToast.success('Sales Submited!')
-          !resp.success && cogoToast.error(resp.message)
+          if(resp.success){
+            cogoToast.success('Submited!')
+            this.setState({saved: true, invoice: resp.invoice})
+          } else cogoToast.error(resp.message)
         })
-        .finally(()=>this.setState({saving: false}))
+        .finally(()=>{this.setState({saving: false}); hide()})
     } else cogoToast.warn('Select some product to sale')
   }
 
@@ -68,6 +73,8 @@ class Sales extends React.Component{
           handleInputs={this.handleInputs.bind(this)}
           handleSave={this.handleSave.bind(this)}
           saving={this.state.saving}
+          saved={this.state.saved}
+          invoice={this.state.invoice}
         />
       </div>
     )

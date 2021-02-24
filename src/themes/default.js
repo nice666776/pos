@@ -129,14 +129,14 @@ export default {
       },
     },
     MuiTableRow: {
-      root: {
-        height: 56,
+      head: {
+        backgroundColor: '#F1F5F7'
       },
     },
     MuiTableCell: {
       root: {
-        borderBottom: "1px solid rgba(224, 224, 224, .5)",
-        paddingLeft: 24
+        borderBottom: "1px solid #e0e0e0",
+        fontFamily: "var(--font-family-ubuntu)"
       },
       head: {
         fontSize: "0.95rem",

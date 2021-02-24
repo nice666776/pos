@@ -29,11 +29,11 @@ const tableProps = {
   rowKeyField: 'product_code',
 };
 
-class SalesTable extends React.PureComponent {
+class SalesTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableProps,
+      tableProps: {...tableProps},
       modal_open: false
     };
   }
@@ -52,10 +52,16 @@ class SalesTable extends React.PureComponent {
       new_data.data[index]['total_price'] = new_data.data[index]['mrp_price'] * action.value
       new_data.data[index]['quantity'] = action.value
       this.props.updateSaleList(new_data.data)
-    } else if(action.type === 'UpdateData' || action.type === 'DeleteRow'){
-      this.props.updateSaleList(new_data.data)
     }
-    this.setState({tableProps: kaReducer(new_data, action)});
+    const update_table = kaReducer(new_data, action)
+    this.setState({tableProps: update_table});
+    if(action.type === 'UpdateData' || action.type === 'DeleteRow'){
+      this.props.updateSaleList(update_table.data)
+    }
+  }
+
+  componentDidMount(){
+    this.dispatch(updateData([]))
   }
 
   handleClose = ()=> this.setState({modal_open: false})

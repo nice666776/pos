@@ -2,9 +2,9 @@ import React from 'react';
 import {Route, withRouter, Switch, Redirect} from 'react-router-dom';
 import asyncComponent from '../../util/asyncComponent';
 
+
 const ProductConfigurationRoutes = (props)=>{
   const match = props.match.path
-
   return(
     <div className="app-wrapper">
       <Switch>

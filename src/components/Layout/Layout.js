@@ -15,12 +15,27 @@ import History from "../../pages/history";
 import { useLayoutState } from "../../context/LayoutContext";
 import asyncComponent from '../../util/asyncComponent';
 
+
+const Routes = React.memo(({path, reset})=>{
+  return(
+    <Switch>
+      <Redirect exact from={path} to="/dashboard" />
+      <Route path="/dashboard" component={asyncComponent(() => import('pages/dashboard'))} />
+      <Route path="/sales" component={asyncComponent(() => import('pages/sales'))} />
+      <Route path="/purchase" component={asyncComponent(() => import('pages/purchase'))} />
+      <Route path="/history" component={History}/>
+      <Route path="/product-configuration" component={ProductConfiguration}/>
+      <Route path="/configuration" component={Configuration}/>
+      <Route component={asyncComponent(() => import('../../pages/error/Error'))} />
+    </Switch>
+  )
+})
+
 function Layout(props) {
   var classes = useStyles();
   var layoutState = useLayoutState();
-
-  const path = props.match.path
-
+  const match = props.match
+  
   return (
     <div className={classes.root}>
       <React.Fragment>
@@ -31,16 +46,7 @@ function Layout(props) {
             [classes.contentShift]: layoutState.isSidebarOpened,
           })}
         >
-          <Switch>
-            <Redirect exact from={path} to="/dashboard" />
-            <Route path="/dashboard" component={asyncComponent(() => import('../../pages/dashboard'))} />
-            <Route path="/sales" component={asyncComponent(() => import('../../pages/sales'))} />
-            <Route path="/purchase" component={asyncComponent(() => import('../../pages/purchase'))} />
-            <Route path="/history" component={History}/>
-            <Route path="/product-configuration" component={ProductConfiguration}/>
-            <Route path="/configuration" component={Configuration}/>
-            <Route component={asyncComponent(() => import('../../pages/error/Error'))} />
-          </Switch>
+          <Routes path={match.path} reset={props.location.search.split('=')[1]}/>
         </div>
       </React.Fragment>
     </div>

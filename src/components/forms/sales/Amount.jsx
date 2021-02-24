@@ -1,8 +1,19 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import {TextField, Button} from '@material-ui/core';
 import { DataSaving } from 'components/loading/DataSaving';
+import {PrintButton} from 'components/PDF';
+import SyncRoundedIcon from '@material-ui/icons/SyncRounded';
 
-export default React.memo(({form_inputs, handleInputs, handleSave, saving})=>{
+
+let SALE = 1
+
+export default React.memo(({form_inputs, handleInputs, handleSave, saving, saved, invoice})=>{
+  const history = useHistory()
+  const handleReset = useCallback(()=>{
+    history.replace(`${history.location.pathname}?sale=${SALE++}`)
+  }, [history])
+
   return(
     <div className="card py-2 px-3">
       <div className="form-row d-flex justify-content-center mb-3">
@@ -35,9 +46,17 @@ export default React.memo(({form_inputs, handleInputs, handleSave, saving})=>{
         </div>
       </div>
       <div className="text-center">
-        <Button className="w-25" variant="contained" size="small" color="primary" onClick={handleSave} disabled={saving}>
-          Submit {saving && <DataSaving/>}
-        </Button>
+        {!saved
+          ? <Button className="w-25" variant="contained" size="small" color="primary" onClick={handleSave} disabled={saving}>
+              Submit {saving && <DataSaving/>}
+            </Button>
+          : <div>
+              <PrintButton url={`/print/receipt?invoice=${invoice}`}/>
+              <Button className="ml-2" variant="contained" size="small" color="primary" onClick={handleReset} disabled={saving}>
+                Reset <SyncRoundedIcon fontSize="small"/>
+              </Button>
+            </div>
+        }
       </div>
     </div>
   )

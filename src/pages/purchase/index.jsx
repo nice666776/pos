@@ -16,7 +16,8 @@ const Total = React.memo(({total})=>{
   )
 })
 
-class Purchase extends React.PureComponent{
+
+class Purchase extends React.Component{
   constructor(props){
     super(props)
     const date = new Date()
@@ -26,7 +27,9 @@ class Purchase extends React.PureComponent{
       require_field: {supplier_code: false},
       purchase_list: [],
       total: 0,
-      saving: false
+      saving: false,
+      saved: false,
+      invoice: ''
     }
   }
 
@@ -56,15 +59,17 @@ class Purchase extends React.PureComponent{
     if(isFormValid){
       if(this.state.purchase_list.length > 0){
         this.setState({saving: true})
+        const {hide} = cogoToast.loading('Saving information...')
         const output = this.state.form_inputs
         output['purchase_list'] = this.state.purchase_list
         purchaseConfirm(output)
           .then(resp => {
-            resp.success
-              ? cogoToast.success('product added successfully!')
-              : cogoToast.error(resp.message)
+            if(resp.success){
+              cogoToast.success('Product added successfully!')
+              this.setState({saved: true, invoice: resp.invoice})
+            } else cogoToast.error(resp.message)
           })
-          .finally(()=>this.setState({saving: false}))
+          .finally(()=>{this.setState({saving: false}); hide()})
       } else cogoToast.error('Please, Add some product')
     } else cogoToast.error('Please, fill up all required fields!')
     this.setState({require_field: {...require_fields}})
@@ -86,6 +91,8 @@ class Purchase extends React.PureComponent{
           handleInputs={this.handleFormInputs.bind(this)}
           handleSave={this.handleSave.bind(this)}
           saving={this.state.saving}
+          saved={this.state.saved}
+          invoice={this.state.invoice}
         />
       </div>
     )
