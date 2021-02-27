@@ -27,5 +27,11 @@ namespace POS.Models.Models
         [DataType(DataType.Time)]
         public DateTime entry_time { get; set; }
 
+
+        public ProductEventInfo ShallowCopy()
+        {
+            return (ProductEventInfo)this.MemberwiseClone();
+        }
+
     }
 }

@@ -366,3 +366,4 @@ D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.Views.pdb
 D:\POS\POS\POS\obj\Debug\netcoreapp3.1\Razor\Reports\ManufacturerList.cshtml.g.cs
 D:\POS\POS\POS\obj\Debug\netcoreapp3.1\Razor\Reports\Receipt.cshtml.g.cs
 D:\POS\POS\POS\obj\Debug\netcoreapp3.1\Razor\Reports\PurchaseOrder.cshtml.g.cs
+D:\POS\POS\POS\obj\Debug\netcoreapp3.1\Razor\Reports\Ledger.cshtml.g.cs

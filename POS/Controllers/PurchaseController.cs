@@ -143,6 +143,7 @@ namespace POS.Controllers
           //  {
                 if (ModelState.IsValid)
                 {
+                    
                     string client_code = getClient();
                     //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
                     string TRX_ID = RandomString(12);
@@ -261,10 +262,15 @@ namespace POS.Controllers
                     productEventInfo.cr_amount = productEventInfo.cr_discount = productEventInfo.cr_total = 0.0;
                     productEventInfo.user_id = "ADMIN";
                     productEventInfo.client_code = client_code;
-
-                    _unitOfWork.ProductEventInfo.Add(productEventInfo);
-
-                    _unitOfWork.Save();
+                ProductEventInfo productEventInfoEntry = productEventInfo.ShallowCopy();
+                _unitOfWork.ProductEventInfo.Add(productEventInfo);
+                productEventInfoEntry.transaction_type = purchaseVM.payment_type.ToUpper();
+                productEventInfoEntry.cr_amount = total;
+                productEventInfoEntry.cr_discount = purchaseVM.discount;
+                productEventInfoEntry.cr_total = productEventInfoEntry.cr_amount - productEventInfoEntry.cr_discount;
+                productEventInfoEntry.dr_amount = productEventInfoEntry.dr_discount = productEventInfoEntry.dr_total = 0.0;
+                _unitOfWork.ProductEventInfo.Add(productEventInfoEntry);
+                _unitOfWork.Save();
 
 
                     return Json(new { success = true, message = "Successful!!" , invoice= purchaseVM.invoice});

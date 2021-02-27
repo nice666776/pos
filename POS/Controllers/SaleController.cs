@@ -107,7 +107,7 @@ namespace POS.Controllers
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
+     
 
         [HttpPost]
         [Route("~/Sale/confirm")]
@@ -118,7 +118,11 @@ namespace POS.Controllers
             //{
                 if (ModelState.IsValid)
                 {
-                    saleVM.invoice= DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + RandomString(7);
+                //if (saleVM.receive_type == null)
+                //{
+                //    return Json(new { success = false, message = "Please Confirm A Payment Receive type!" });
+                //}
+                saleVM.invoice= DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + RandomString(7);
                 saleVM.entry_date = DateTime.Now.Date;
                     string client_code = getClient();
                     //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
@@ -137,7 +141,7 @@ namespace POS.Controllers
                     productEventInfo.transaction_type = "SALE";
                     productEventInfo.invoice = saleVM.invoice;
                     productEventInfo.entry_date = saleVM.entry_date;
-                productEventInfo.entry_time = DateTime.Now;
+                    productEventInfo.entry_time = DateTime.Now;
                     productEventInfo.customer_code = saleVM.customer_code;
                    // productEventInfo.customer_name = _unitOfWork.Customer.GetFirstOrDefault(u => u.code == saleVM.customer_code && u.client_code == client_code).name;
                     double total = 0.0;
@@ -235,10 +239,16 @@ namespace POS.Controllers
                     productEventInfo.dr_amount = productEventInfo.dr_discount = productEventInfo.dr_total = 0.0;
                     productEventInfo.user_id = "ADMIN";
                     productEventInfo.client_code = client_code;
+                ProductEventInfo productEventInfoEntry = productEventInfo.ShallowCopy();
+                _unitOfWork.ProductEventInfo.Add(productEventInfo);
 
-                    _unitOfWork.ProductEventInfo.Add(productEventInfo);
-
-                    _unitOfWork.Save();
+                productEventInfoEntry.transaction_type = saleVM.receive_type.ToUpper();
+                productEventInfoEntry.dr_amount = total;
+                productEventInfoEntry.dr_discount = saleVM.discount;
+                productEventInfoEntry.dr_total = productEventInfoEntry.dr_amount - productEventInfoEntry.dr_discount;
+                productEventInfoEntry.cr_amount = productEventInfoEntry.cr_discount = productEventInfoEntry.cr_total = 0.0;
+                _unitOfWork.ProductEventInfo.Add(productEventInfoEntry);
+                _unitOfWork.Save();
 
 
                     return Json(new { success = true, message = "Successful!!", invoice= productEventInfo.invoice });

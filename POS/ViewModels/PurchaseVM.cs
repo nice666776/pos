@@ -11,6 +11,7 @@ namespace POS.ViewModels
         public string supplier_name { get; set; }
         public string transaction_id { get; set; }
         public DateTime entry_date { get; set; }
+        public string payment_type { get; set; }
         public string invoice { get; set; }
         public double total { get; set; }
         public double payment { get; set; }

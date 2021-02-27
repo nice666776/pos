@@ -174,7 +174,7 @@ namespace POS.Controllers
 
             }
             double ratio = 74;
-            double page_height = 102+(sv.sales_list.Count()*(ratio/2));
+            double page_height = 102+(sv.sales_list.Count()*(ratio));
             /////////////////////////////////
             var kv = new Dictionary<string, string>
             {
