@@ -20,6 +20,7 @@ namespace POS.DataAccess.Repository.IRepository
         IProductStockOutRepository ProductStockOut { get; }
         ISubCategoryRepository SubCategory { get; }
         ISP_Call SP_Call { get; }
+        IUserRepository User { get; }
         void Save();
     }
 

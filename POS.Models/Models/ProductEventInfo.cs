@@ -26,7 +26,7 @@ namespace POS.Models.Models
         public string client_code { get; set; }
         [DataType(DataType.Time)]
         public DateTime entry_time { get; set; }
-
+        public string trade_code { get; set; }
 
         public ProductEventInfo ShallowCopy()
         {

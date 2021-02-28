@@ -13,5 +13,6 @@ namespace POS.Models.Models
         public string client_code { get; set; }
         public string category_code { get; set; }
         public string category_name { get; set; }
+        public string trade_code { get; set; }
     }
 }

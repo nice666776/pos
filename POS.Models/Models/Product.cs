@@ -30,5 +30,6 @@ namespace POS.Models.Models
         public string client_code { get; set; }
         public string barcode { get; set; }
         public DateTime last_expire_date { get; set; }
+        public string trade_code { get; set; }
     }
 }

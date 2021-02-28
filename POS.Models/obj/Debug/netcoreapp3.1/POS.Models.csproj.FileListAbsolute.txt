@@ -4,6 +4,6 @@ D:\POS\POS\POS.Models\bin\Debug\netcoreapp3.1\POS.Models.pdb
 D:\POS\POS\POS.Models\obj\Debug\netcoreapp3.1\POS.Models.csprojAssemblyReference.cache
 D:\POS\POS\POS.Models\obj\Debug\netcoreapp3.1\POS.Models.AssemblyInfoInputs.cache
 D:\POS\POS\POS.Models\obj\Debug\netcoreapp3.1\POS.Models.AssemblyInfo.cs
-D:\POS\POS\POS.Models\obj\Debug\netcoreapp3.1\POS.Models.csproj.CoreCompileInputs.cache
 D:\POS\POS\POS.Models\obj\Debug\netcoreapp3.1\POS.Models.dll
 D:\POS\POS\POS.Models\obj\Debug\netcoreapp3.1\POS.Models.pdb
+D:\POS\POS\POS.Models\obj\Debug\netcoreapp3.1\POS.Models.csproj.CoreCompileInputs.cache

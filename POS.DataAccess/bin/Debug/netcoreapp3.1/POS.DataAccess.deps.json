@@ -646,6 +646,10 @@
       },
       "System.Text.Encodings.Web/4.5.0": {},
       "POS.Models/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity": "2.2.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.8"
+        },
         "runtime": {
           "POS.Models.dll": {}
         }
