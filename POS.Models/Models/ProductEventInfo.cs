@@ -18,9 +18,11 @@ namespace POS.Models.Models
         public string customer_name { get; set; }
         public double cr_amount { get; set; }
         public double cr_discount{ get; set; }
+        public double cr_discount_percent { get; set; }
         public double cr_total { get; set; }
         public double dr_amount { get; set; }
         public double dr_discount { get; set; }
+        public double dr_discount_percent { get; set; }
         public double dr_total { get; set; }
         public string user_id { get; set; }
         public string client_code { get; set; }

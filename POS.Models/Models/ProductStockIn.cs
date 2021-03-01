@@ -29,5 +29,8 @@ namespace POS.Models.Models
         public string client_code { get; set; }
         public string barcode { get; set; }
         public string trade_code { get; set; }
+        public double discount_percentage { get; set; }
+        public double discount { get; set; }
+
     }
 }

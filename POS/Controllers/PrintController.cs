@@ -149,7 +149,9 @@ namespace POS.Controllers
                 sv.transaction_id = pe.transaction_id;
                 sv.invoice = pe.invoice;
                 sv.payment = pe.cr_amount;
+                sv.total = pe.cr_total;
                 sv.discount = pe.cr_discount;
+                sv.discount_p = pe.cr_discount_percent;
                 sv.entry_date = pe.entry_date;
                 sv.entry_time = pe.entry_time;
                 sv.customer_code = pe.customer_code;
@@ -168,6 +170,8 @@ namespace POS.Controllers
                                      product_name = p.product_name.Length > 30 ? p.product_name.Substring(0, 30) + "..." : p.product_name,
                                      mrp_price = p.mrp_price,
                                      unit_price = p.unit_price,
+                                     discount = p.discount_percentage,
+                                     total_price = p.total_price_deducted,
                                      expire_date = p.expire_date,
                                      quantity = p.quantity
                                  })).ToList();

@@ -161,7 +161,7 @@
 
                 <th style="text-align:right;">Price</th>
                 <th style="text-align:right;">Qty.</th>
-
+                <th style="text-align:right;">Disc.(%)</th>
                 <th style="text-align:right;">T.Price</th>
 
 
@@ -169,36 +169,36 @@
 
             @foreach (var s in @Model.SaleList.sales_list)
             {
-                <tr>
-                    <td style="font-size:14px;">@s.product_name</td>
-                    <td style="text-align:right;">@s.mrp_price</td>
-                    <td style="text-align:right;">@s.quantity</td>
+        <tr>
+            <td style="font-size:14px;">@s.product_name</td>
+            <td style="text-align:right;">@s.mrp_price</td>
+            <td style="text-align:right;">@s.quantity</td>
+            <td style="text-align:right;">@s.discount</td>
+            <td style="text-align:right;">@s.total_price</td>
 
-                    <td style="text-align:right;">@(s.mrp_price*s.quantity)</td>
-
-                </tr>
+        </tr>
             }
 
 
             <tr style="border-top:2px double; border-bottom:1px dashed;">
-                <td style="text-align:left" colspan="2"><strong>GROSS TOTAL : </strong></td>
+                <td style="text-align:left" colspan="4"><strong>GROSS TOTAL : </strong></td>
 
 
-                <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.payment</strong></td>
+                <td style="text-align:right;" colspan="1"><strong>@Model.SaleList.payment</strong></td>
 
             </tr>
             <tr style="border-top:1px dashed; border-bottom:1px dashed;">
-                <td style="text-align:left" colspan="2"><strong>DISCOUNT : </strong></td>
+                <td style="text-align:left" colspan="4"><strong>DISCOUNT(@Model.SaleList.discount_p%) : </strong></td>
 
 
-                <td style="text-align:right;" colspan="2"><strong>@Model.SaleList.discount</strong></td>
+                <td style="text-align:right;" colspan="1"><strong>@Model.SaleList.discount</strong></td>
 
             </tr>
             <tr style="border-top:1px dashed; border-bottom: 0px;">
-                <td style="text-align:left; border-bottom: 0px;" colspan="2"><strong>GRAND TOTAL : </strong></td>
+                <td style="text-align:left; border-bottom: 0px;" colspan="4"><strong>GRAND TOTAL : </strong></td>
 
 
-                <td style="text-align:right;  border-bottom: 0px;" colspan="2"><strong>@(Model.SaleList.payment - Model.SaleList.discount)</strong></td>
+                <td style="text-align:right;  border-bottom: 0px;" colspan="1"><strong>@Model.SaleList.total</strong></td>
 
             </tr>
 

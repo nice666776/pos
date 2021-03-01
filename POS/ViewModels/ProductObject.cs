@@ -12,6 +12,8 @@ namespace POS.ViewModels
         public double mrp_price { get; set; }
         public double unit_price { get; set; }
         public double quantity { get; set; }
+        public double total_price { get; set; }
+        public double discount { get; set; }
         public DateTime expire_date { get; set; }
                     
     }

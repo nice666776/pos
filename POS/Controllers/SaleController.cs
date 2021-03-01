@@ -55,7 +55,9 @@ namespace POS.Controllers
                     mrp_price = prod.mrp_price,
                     unit_price = prod.unit_price,
                     manufacturer = prod.manufacturer,
-                    description = prod.description
+                    description = prod.description,
+                    available_quantity = prod.quantity,
+                    discount= 0.00
 
                 };
 
@@ -169,6 +171,9 @@ namespace POS.Controllers
                         prodStockOut.unit_price = po.unit_price;
                         prodStockOut.mrp_price = po.mrp_price;
                         prodStockOut.total_price = po.quantity * po.mrp_price;
+                        prodStockOut.discount_percentage = po.discount;
+                        prodStockOut.discount = prodStockOut.total_price * (po.discount / 100);
+                        prodStockOut.total_price_deducted = prodStockOut.total_price-prodStockOut.discount;
                         prodStockOut.expire_date = po.expire_date;
                         prodStockOut.entry_date = saleVM.entry_date;
                         prodStockOut.invoice = saleVM.invoice;
@@ -230,23 +235,38 @@ namespace POS.Controllers
                         }
 
 
-                        total += po.quantity * po.mrp_price;
+                        total += prodStockOut.total_price_deducted;
 
                     }
                     productEventInfo.cr_amount = total;
-                    productEventInfo.cr_discount = saleVM.discount;
+                if (saleVM.percent)
+                {
+                    productEventInfo.cr_discount_percent = saleVM.discount;
+                    productEventInfo.cr_discount = productEventInfo.cr_amount * (productEventInfo.cr_discount_percent / 100);
                     productEventInfo.cr_total = productEventInfo.cr_amount - productEventInfo.cr_discount;
-                    productEventInfo.dr_amount = productEventInfo.dr_discount = productEventInfo.dr_total = 0.0;
-                    productEventInfo.user_id = "ADMIN";
-                    productEventInfo.client_code = client_code;
+                }
+                else
+                {
+                    productEventInfo.cr_discount = saleVM.discount;
+                    productEventInfo.cr_discount_percent = (productEventInfo.cr_discount / productEventInfo.cr_amount)*100;
+                    productEventInfo.cr_total = productEventInfo.cr_amount - productEventInfo.cr_discount;
+                }
+                    
+
+                 
+                productEventInfo.dr_amount = productEventInfo.dr_discount = productEventInfo.dr_total = 0.0;
+                productEventInfo.user_id = "ADMIN";
+                productEventInfo.client_code = client_code;
                 ProductEventInfo productEventInfoEntry = productEventInfo.ShallowCopy();
                 _unitOfWork.ProductEventInfo.Add(productEventInfo);
 
                 productEventInfoEntry.transaction_type = saleVM.receive_type.ToUpper();
-                productEventInfoEntry.dr_amount = total;
-                productEventInfoEntry.dr_discount = saleVM.discount;
-                productEventInfoEntry.dr_total = productEventInfoEntry.dr_amount - productEventInfoEntry.dr_discount;
-                productEventInfoEntry.cr_amount = productEventInfoEntry.cr_discount = productEventInfoEntry.cr_total = 0.0;
+                productEventInfoEntry.dr_amount = productEventInfo.cr_amount;
+                productEventInfoEntry.dr_discount = productEventInfo.cr_discount;
+                productEventInfoEntry.dr_discount_percent = productEventInfo.cr_discount_percent;
+
+                productEventInfoEntry.dr_total = productEventInfo.cr_total;
+                productEventInfoEntry.cr_amount = productEventInfoEntry.cr_discount = productEventInfoEntry.cr_discount_percent = productEventInfoEntry.cr_total = 0.0;
                 _unitOfWork.ProductEventInfo.Add(productEventInfoEntry);
                 _unitOfWork.Save();
 

@@ -17,6 +17,8 @@ namespace POS.ViewModels
         public double total { get; set; }
         public double payment { get; set; }
         public double discount { get; set; }
+        public double discount_p { get; set; }
+        public bool percent { get; set; }
         public List<ProductObject> sales_list { get; set; }
 
     }
