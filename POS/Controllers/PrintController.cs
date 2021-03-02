@@ -231,7 +231,7 @@ namespace POS.Controllers
                 PurchaseVM pv = new PurchaseVM();
                 pv.transaction_id = pe.transaction_id;
                 pv.invoice = pe.invoice;
-                 pv.total = pe.dr_total;
+                pv.total = pe.dr_total;
                 pv.payment = pe.dr_amount;
                 pv.discount = pe.dr_discount;
                 pv.entry_date = pe.entry_date;

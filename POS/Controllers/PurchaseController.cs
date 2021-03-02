@@ -257,17 +257,31 @@ namespace POS.Controllers
 
                     }
                     productEventInfo.dr_amount = total;
-                    productEventInfo.dr_discount = purchaseVM.discount;
+                if (purchaseVM.percent)
+                {
+                    productEventInfo.dr_discount_percent = purchaseVM.discount;
+                    productEventInfo.dr_discount = productEventInfo.dr_amount * (productEventInfo.dr_discount_percent / 100);
                     productEventInfo.dr_total = productEventInfo.dr_amount - productEventInfo.dr_discount;
+                }
+                else
+                {
+                    productEventInfo.dr_discount = purchaseVM.discount;
+                    productEventInfo.dr_discount_percent = (productEventInfo.dr_discount / productEventInfo.dr_amount) * 100;
+                    productEventInfo.dr_total = productEventInfo.dr_amount - productEventInfo.dr_discount;
+                }
+
+
+
                     productEventInfo.cr_amount = productEventInfo.cr_discount = productEventInfo.cr_total = 0.0;
                     productEventInfo.user_id = "ADMIN";
                     productEventInfo.client_code = client_code;
                 ProductEventInfo productEventInfoEntry = productEventInfo.ShallowCopy();
                 _unitOfWork.ProductEventInfo.Add(productEventInfo);
                 productEventInfoEntry.transaction_type = purchaseVM.payment_type.ToUpper();
-                productEventInfoEntry.cr_amount = total;
-                productEventInfoEntry.cr_discount = purchaseVM.discount;
-                productEventInfoEntry.cr_total = productEventInfoEntry.cr_amount - productEventInfoEntry.cr_discount;
+                productEventInfoEntry.cr_amount = productEventInfo.dr_amount;
+                productEventInfoEntry.cr_discount = productEventInfo.dr_discount;
+                productEventInfoEntry.cr_discount_percent = productEventInfo.dr_discount_percent;
+                productEventInfoEntry.cr_total = productEventInfo.cr_total;
                 productEventInfoEntry.dr_amount = productEventInfoEntry.dr_discount = productEventInfoEntry.dr_total = 0.0;
                 _unitOfWork.ProductEventInfo.Add(productEventInfoEntry);
                 _unitOfWork.Save();

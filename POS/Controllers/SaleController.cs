@@ -91,9 +91,43 @@ namespace POS.Controllers
                 }
 
 
-                var productObject = from p in prodList select (new { p.product_code, p.product_name });
+                var productObject = from p in prodList select (new { p.product_code, p.product_name,p.quantity,p.category,p.subcategory });
 
                 return Json(new { success = true, message = productObject });
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("~/Supplier/search")]
+        public IActionResult supplier_search(string search_string)
+        {
+
+            try
+            {
+                string client_code = getClient();
+                if (search_string == null)
+                {
+                    return Json(new { success = false });
+                }
+
+                search_string = search_string.ToUpper();
+                List<Supplier> supList = _unitOfWork.Supplier.GetAll(u => (u.name.ToUpper().Contains(search_string) || u.code.Contains(search_string) || u.mobile.Contains(search_string)) && u.client_code == client_code).ToList();
+                if (supList.Count() == 0)
+                {
+                    return Json(new { success = false });
+                }
+
+
+                var suppliers = from p in supList select (new { p.code, p.name, p.mobile, p.company });
+
+                return Json(new { success = true, message = suppliers });
             }
             catch (Exception e)
             {
@@ -319,10 +353,12 @@ namespace POS.Controllers
                     SaleVM sv = new SaleVM();
                     sv.transaction_id = pe.transaction_id;
                     sv.invoice = pe.invoice;
-                    sv.total = pe.cr_total;
                     sv.payment = pe.cr_amount;
+                    sv.total = pe.cr_total;
                     sv.discount = pe.cr_discount;
+                    sv.discount_p = pe.cr_discount_percent;
                     sv.entry_date = pe.entry_date;
+                    sv.entry_time = pe.entry_time;
                     sv.customer_code = pe.customer_code;
                     sv.customer_name = pe.customer_name;
                     List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
@@ -340,6 +376,8 @@ namespace POS.Controllers
                                             product_name = p.product_name,
                                             mrp_price = p.mrp_price,
                                             unit_price = p.unit_price,
+                                            discount = p.discount_percentage,
+                                            total_price = p.total_price_deducted,
                                             expire_date = p.expire_date,
                                             quantity = p.quantity
                                         })).ToList();
@@ -386,10 +424,12 @@ namespace POS.Controllers
                     SaleVM sv = new SaleVM();
                     sv.transaction_id = pe.transaction_id;
                     sv.invoice = pe.invoice;
-                    sv.total = pe.cr_total;
                     sv.payment = pe.cr_amount;
+                    sv.total = pe.cr_total;
                     sv.discount = pe.cr_discount;
+                    sv.discount_p = pe.cr_discount_percent;
                     sv.entry_date = pe.entry_date;
+                    sv.entry_time = pe.entry_time;
                     sv.customer_code = pe.customer_code;
                     sv.customer_name = pe.customer_name;
                     List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
@@ -404,9 +444,11 @@ namespace POS.Controllers
                                      select (new ProductObject
                                      {
                                          product_code = p.product_code,
-                                         product_name = p.product_name,
+                                         product_name =  p.product_name,
                                          mrp_price = p.mrp_price,
                                          unit_price = p.unit_price,
+                                         discount = p.discount_percentage,
+                                         total_price = p.total_price_deducted,
                                          expire_date = p.expire_date,
                                          quantity = p.quantity
                                      })).ToList();
