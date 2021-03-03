@@ -206,7 +206,7 @@
             <tr>
 
                 <th>SL</th>
-                <th>ITEM</th>
+                <th>Item</th>
                 <th>Unit Price</th>
                 <th>Quantity</th>
                 <th>Total Price</th>
@@ -222,7 +222,7 @@
                 <td>@s.product_name</td>
                 <td>@s.quantity</td>
                 <td>@s.unit_price</td>
-                <td>@(s.quantity * s.unit_price)</td>
+                <td>@s.total_price</td>
 
             </tr>
 
@@ -237,7 +237,7 @@
         </tr>
         <tr>
             <td rowspan="2" colspan="3" style="font-size:15pt ; font-family: IDAutomationHC39M; text-align:left; align-content:center; border:0px;">*@Model.Purchase.invoice*</td>
-            <td style="border: 0px ; text-align:end;">Discount</td>
+            <td style="border: 0px ; text-align:end;">Discount(@Model.Purchase.discount_p%)</td>
             <td >@Model.Purchase.discount</td>
 
         </tr>

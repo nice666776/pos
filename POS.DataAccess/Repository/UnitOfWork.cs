@@ -23,6 +23,7 @@ namespace POS.DataAccess.Repository
             ProductStockOut = new ProductStockOutRepository(_db);
             SubCategory = new SubCategoryRepository(_db);
             SP_Call = new SP_Call(_db);
+            Trade = new TradeRepository(_db);
             User = new UserRepository(_db);
         }
  
@@ -40,6 +41,7 @@ namespace POS.DataAccess.Repository
         public ISubCategoryRepository SubCategory { get; private set; }
         public ISP_Call SP_Call { get; private set; }
         public IUserRepository User { get; private set; }
+        public ITradeRepository Trade { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

@@ -334,6 +334,7 @@ namespace POS.Controllers
                     pv.invoice = pe.invoice;
                     pv.total = pe.dr_total;
                     pv.payment = pe.dr_amount;
+                    pv.discount_p = pe.dr_discount_percent;
                     pv.discount = pe.dr_discount;
                     pv.entry_date = pe.entry_date;
                     pv.supplier_code = pe.supplier_code;
@@ -354,6 +355,7 @@ namespace POS.Controllers
                                             mrp_price = p.mrp_price,
                                             unit_price = p.unit_price,
                                             expire_date = p.expire_date,
+                                            total_price = p.total_price,
                                             quantity = p.quantity
                                         })).ToList();
 
@@ -400,6 +402,7 @@ namespace POS.Controllers
                     pv.transaction_id = pe.transaction_id;
                     pv.invoice = pe.invoice;
                     pv.total = pe.dr_total;
+                    pv.discount_p = pe.dr_discount_percent;
                     pv.payment = pe.dr_amount;
                     pv.discount = pe.dr_discount;
                     pv.entry_date = pe.entry_date;
@@ -421,6 +424,7 @@ namespace POS.Controllers
                                             mrp_price = p.mrp_price,
                                             unit_price = p.unit_price,
                                             expire_date = p.expire_date,
+                                            total_price = p.total_price,
                                             quantity = p.quantity
                                         })).ToList();
 

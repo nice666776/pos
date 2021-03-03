@@ -21,6 +21,7 @@ namespace POS.DataAccess.Repository.IRepository
         ISubCategoryRepository SubCategory { get; }
         ISP_Call SP_Call { get; }
         IUserRepository User { get; }
+        ITradeRepository Trade { get; }
         void Save();
     }
 
