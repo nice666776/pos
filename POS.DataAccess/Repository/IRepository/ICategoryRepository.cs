@@ -8,7 +8,7 @@ namespace POS.DataAccess.Repository.IRepository
     public interface ICategoryRepository: IRepositoryAsync<Category>
     {
         public void Update(Category category);
-        public string getCategoryCode();
+        public string getCategoryCode(string client_code,string trade_code);
 
     }
 }

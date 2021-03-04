@@ -13,6 +13,9 @@ namespace POS.Models.Models
         public string description { get; set; }
         public string in_charge { get; set; }
         public string client_code { get; set; }
-   
+        public string block { get; set; }
+        public string floor { get; set; }
+        public double vat_percent { get; set; }
+        public string phone { get; set; }
     }
 }

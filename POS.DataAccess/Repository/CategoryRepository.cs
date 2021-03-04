@@ -15,9 +15,9 @@ namespace POS.DataAccess.Repository
             _db = db;
         }
 
-        public string getCategoryCode()
+        public string getCategoryCode(string client_code, string trade_code)
         {
-            POSLog pOSLog = _db.Pos_log.FirstOrDefault();
+            POSLog pOSLog = _db.Pos_log.FirstOrDefault(u=>u.client_code== client_code && u.trade_code == trade_code);
             string category_code;
             if (pOSLog == null)
             {

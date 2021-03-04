@@ -23,5 +23,6 @@ namespace POS.Models.Models
         public string entry_by { get; set; }
         public bool status { get; set; }
         public string client_code { get; set; }
+        public string trade_code { get; set; }
     }
 }

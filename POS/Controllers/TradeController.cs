@@ -22,19 +22,48 @@ namespace POS.Controllers
             _mapper = mapper;
 
         }
+        public string getClient()
+        {
+            return "CL799";
+        }
 
+
+        [HttpGet]
+        [Route("~/trade")]
+        public IActionResult TradeList()
+        {
+            string client_code = getClient();
+            List<Trade> tradeList = _unitOfWork.Trade.GetAll(u => u.client_code == client_code).ToList();
+            return Json(new { success = true, message = tradeList });
+        }
 
         [HttpPost]
-        [Route("~/Category/add")]
-        public IActionResult Upsert( Trade trade)
+        [Route("~/trade/add")]
+        public IActionResult Upsert([FromBody] Trade trade)
         {
 
             if (ModelState.IsValid)
             {
-                trade.code = "03";
-                trade.client_code = "CL799";
+                if(trade.id == 0)
+                {
+                    string client_code = getClient();
+                    trade.code = _unitOfWork.Trade.GetTradeCode(client_code);
+                    trade.client_code = client_code;
+                    _unitOfWork.Trade.Add(trade);
+                    POSLog pOSLog = new POSLog();
+                    pOSLog.client_code = client_code;
+                    pOSLog.trade_code = trade.code;
+                    _unitOfWork.POSLog.Add(pOSLog);
+                    
+                }
+                else
+                {
+                    _unitOfWork.Trade.Update(trade);
+                   
+                }
+                _unitOfWork.Save();
+                return Json(new { success = true, message = trade });
 
-                return Json(new { success = true, message = "Trade Updated!!" });
             }
             else
             {

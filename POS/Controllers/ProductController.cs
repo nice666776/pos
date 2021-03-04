@@ -9,7 +9,7 @@ using POS.Models.Models;
 
 namespace POS.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -52,8 +52,9 @@ namespace POS.Controllers
         [Route("~/Product/index")]
         public IActionResult product_Index()
         {
-            string client_code = "CL799";
-            IEnumerable<Product> list = _unitOfWork.Product.GetAll(u=>u.client_code ==client_code);
+         
+            string trade_code = getTrade();
+            IEnumerable<Product> list = _unitOfWork.Product.GetAll(u=>u.trade_code ==trade_code);
             return Json(new { success = true, message = list });
         }
 
@@ -70,12 +71,12 @@ namespace POS.Controllers
             try
 
             {
-                string client_code = "CL799";
+                string trade_code = getTrade();
 
                 ProductVM productVM = new ProductVM();
-                IEnumerable<Category> CatList = await _unitOfWork.Category.GetAllAsync(u=>u.client_code == client_code);
+                IEnumerable<Category> CatList = await _unitOfWork.Category.GetAllAsync(u=>u.trade_code == trade_code);
                 IEnumerable<Unit> UnitList = _unitOfWork.Unit.GetAll();
-                IEnumerable<Manufacturer> ManList = _unitOfWork.Manufacturer.GetAll(u => u.client_code == client_code);
+                IEnumerable<Manufacturer> ManList = _unitOfWork.Manufacturer.GetAll(u => u.trade_code == trade_code);
                 productVM.categories = new List<CategoryModel>();
                 foreach(Category cat in CatList)
                 {
@@ -83,7 +84,7 @@ namespace POS.Controllers
                     cm.category = new MySelectListItem();
                     cm.category.Name = cat.name;
                     cm.category.Code = cat.code;
-                    var SubCategories = _unitOfWork.SubCategory.GetAll(u => u.client_code == client_code && u.category_code == cat.code);
+                    var SubCategories = _unitOfWork.SubCategory.GetAll(u => u.trade_code == trade_code && u.category_code == cat.code);
                     cm.subcategories = (from c in SubCategories
                                        select (new MySelectListItem {
                                            Name = c.name,
@@ -123,18 +124,19 @@ namespace POS.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string client_code = "CL799";
+                    string trade_code = getTrade();
+                    string client_code = getClient();
                     if (product.id == 0)
                     {
                        
                         string p_code = _unitOfWork.Product.getProductCode(product.category_code);
-                        Category cat = await  _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code && u.client_code == client_code );
-                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code== product.manufacturer_code && u.client_code == client_code);
+                        Category cat = await  _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code && u.trade_code == trade_code );
+                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code== product.manufacturer_code && u.trade_code == trade_code);
                         product.manufacturer = man.name;
                         product.category = cat.name;
                         if(product.subcategory_code!= null)
                         {
-                            product.subcategory = _unitOfWork.SubCategory.GetFirstOrDefault(u => u.code == product.subcategory_code).name;
+                            product.subcategory = _unitOfWork.SubCategory.GetFirstOrDefault(u => u.code == product.subcategory_code && u.trade_code == trade_code).name;
                     
                         }
                         product.product_code = p_code;
@@ -147,7 +149,7 @@ namespace POS.Controllers
 
 
                         _unitOfWork.Product.Add(product);
-                        POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault(u =>  u.client_code == client_code);
+                        POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault(u =>  u.client_code == client_code && u.trade_code == trade_code);
                         pOSLog.product_code = p_code;
                         _unitOfWork.POSLog.Update(pOSLog);
                     }
@@ -155,14 +157,14 @@ namespace POS.Controllers
                     {
 
                         product.product_name = product.product_name.ToUpper();
-                        Category cat = await _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code && u.client_code == client_code);
-                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code == product.manufacturer_code && u.client_code == client_code);
+                        Category cat = await _unitOfWork.Category.GetFirstOrDefaultAsync(u => u.code == product.category_code && u.trade_code == trade_code);
+                        Manufacturer man = _unitOfWork.Manufacturer.GetFirstOrDefault(u => u.code == product.manufacturer_code && u.trade_code == trade_code);
                         product.manufacturer = man.name;
                         product.category = cat.name;
                         product.product_name = product.product_name.ToUpper();
                         if (product.subcategory_code != null)
                         {
-                            product.subcategory = _unitOfWork.SubCategory.GetFirstOrDefault(u => u.code == product.subcategory_code).name;
+                            product.subcategory = _unitOfWork.SubCategory.GetFirstOrDefault(u => u.code == product.subcategory_code && u.trade_code == trade_code).name;
 
                         }
                         _unitOfWork.Product.Update(product);
@@ -170,7 +172,7 @@ namespace POS.Controllers
 
 
                     _unitOfWork.Save();
-                    Product product1 = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product.product_code && u.client_code == client_code);
+                    Product product1 = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product.product_code && u.trade_code == trade_code);
                     return Json(new { success = true, message = product });
 
                 }
@@ -188,20 +190,20 @@ namespace POS.Controllers
         }
 
 
-        [HttpDelete]
-        [Route("product/delete/{id}")]
-        public IActionResult Delete(int id)
-        {
-            var objFromDb = _unitOfWork.Product.Get(id);
-            if (objFromDb == null)
-            {
-                return Json(new { success = false, message = "Error while deleting" });
-            }
-            _unitOfWork.Product.Remove(objFromDb);
-            _unitOfWork.Save();
-            return Json(new { success = true, message = "Delete Successful" });
+        //[HttpDelete]
+        //[Route("product/delete/{id}")]
+        //public IActionResult Delete(int id)
+        //{
+        //    var objFromDb = _unitOfWork.Product.Get(id);
+        //    if (objFromDb == null)
+        //    {
+        //        return Json(new { success = false, message = "Error while deleting" });
+        //    }
+        //    _unitOfWork.Product.Remove(objFromDb);
+        //    _unitOfWork.Save();
+        //    return Json(new { success = true, message = "Delete Successful" });
 
 
-        }    
+        //}    
     }
 }
