@@ -13,7 +13,7 @@ class SalesHistory extends React.PureComponent{
   handleSearch = (by, value)=>{
     const search = by==='date' ? searchByDate : searchByInvoice
     this.setState({searching: true, history_list: []})
-    const {hide} = cogoToast.loading('Looking for history...')
+    const {hide} = cogoToast.loading('Looking for history...', {hideAfter: 10})
     search(value, 'sales')
       .then(resp => {
         if(resp.success){

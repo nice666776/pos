@@ -19,8 +19,9 @@ const tableProps = {
     { key: 'product_code', title: 'Code', isEditable: false, visible: false },
     { key: 'product_name', title: 'Product Name', isEditable: false },
     { key: 'category_name', title: 'Category', isEditable: false },
-    { key: 'quantity', title: 'Quantity', dataType: DataType.Number, style: {width: 120, textAlign: 'center'} },
-    { key: 'mrp_price', title: 'MRP', isEditable: false, style: {width: 150, textAlign: 'center'} },
+    { key: 'mrp_price', title: 'MRP', isEditable: false, style: {width: 140, textAlign: 'center'} },
+    { key: 'quantity', title: 'Quantity', dataType: DataType.Number, style: {width: 110, textAlign: 'center'} },
+    { key: 'discount', title: 'Discount (%)', dataType: DataType.Number, style: {width: 110, textAlign: 'center'} },
     { key: 'total_price', title: 'Total', isEditable: false, style: {width: 150, textAlign: 'center'} },
     { key: 'action', isEditable: false, style: {width: 90} },
   ],
@@ -47,10 +48,18 @@ class SalesTable extends React.Component {
     }
     const new_data = this.state.tableProps
     if(action.type === 'UpdateCellValue'){
-      action.value = parseInt(action.value) > 0 ? parseInt(action.value) : 1
       const index = new_data.data.findIndex(val => val.product_code === action.rowKeyValue)
-      new_data.data[index]['total_price'] = new_data.data[index]['mrp_price'] * action.value
-      new_data.data[index]['quantity'] = action.value
+      if(action.columnKey === "quantity"){
+        action.value = parseInt(action.value) > 0 ? parseInt(action.value) : 1
+        let total = new_data.data[index]['mrp_price'] * action.value
+        new_data.data[index]['total_price'] = total - (total*new_data.data[index]['discount']/100)
+        new_data.data[index]['quantity'] = action.value
+      } else if(action.columnKey === "discount") {
+        action.value = parseInt(action.value) > -1 ? parseInt(action.value) : 0
+        let total = new_data.data[index]['mrp_price'] * new_data.data[index]['quantity']
+        new_data.data[index]['total_price'] = total - (total*action.value/100)
+        new_data.data[index]['discount'] = action.value
+      }
       this.props.updateSaleList(new_data.data)
     }
     const update_table = kaReducer(new_data, action)
@@ -82,7 +91,8 @@ class SalesTable extends React.Component {
         })
     } else {
       table_data[index]['quantity'] += 1
-      table_data[index]['total_price'] = table_data[index].mrp_price * table_data[index]['quantity']
+      let total = table_data[index]['mrp_price'] * table_data[index]['quantity']
+      table_data[index]['total_price'] = total - (total*table_data[index]['discount']/100)
       this.dispatch(updateData(table_data));
     }
   }
@@ -113,6 +123,9 @@ class SalesTable extends React.Component {
             cellText: {
               content: props => {
                 switch(props.column.key){
+                  case 'total_price': return props.rowData.discount>0
+                                              ? <div>(<del>{props.rowData.mrp_price*props.rowData.quantity}</del>) {props.value}</div>
+                                              : <div>{props.value}</div>
                   case 'action': return <DeleteButton {...props} />
                   default: return
                 }

@@ -43,7 +43,7 @@ const structure = [
   { label: "Configuration", link: "/configuration", icon: <Settings />, 
     children: [
       { label: "Suppliers", link: "/configuration/supplier-entry"},
-      { label: "Util Info", link: "/configuration/util-info" },
+      { label: "Trade Management", link: "/configuration/trade" },
     ],
   },
 ];

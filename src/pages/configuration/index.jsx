@@ -11,7 +11,7 @@ const ConfigurationRoutes = (props)=>{
       <Switch>
         <Redirect exact from={match} to={`${match}/supplier-entry`} />
         <Route path={`${match}/supplier-entry`} component={asyncComponent(() => import('./SupplierEntry'))}/>
-        <Route path={`${match}/util-info`} component={asyncComponent(() => import('./UtilInfo'))}/>
+        <Route path={`${match}/trade`} component={asyncComponent(() => import('./TradeManagement'))}/>
         <Route component={asyncComponent(() => import('../error/Error'))}/>
       </Switch>
     </div>

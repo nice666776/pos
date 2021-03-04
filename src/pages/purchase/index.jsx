@@ -23,7 +23,7 @@ class Purchase extends React.Component{
     const date = new Date()
     const today = `${date.getFullYear()}-${('0'+(date.getMonth()+1)).slice(-2)}-${('0'+(date.getDate())).slice(-2)}`
     this.state={
-      form_inputs: {entry_date: today},
+      form_inputs: {entry_date: today, payment_type: 'Cash', percent: true},
       require_field: {supplier_code: false},
       purchase_list: [],
       total: 0,
@@ -36,12 +36,13 @@ class Purchase extends React.Component{
   handleFormInputs = (e)=>{
     const prev_state = this.state.form_inputs
     prev_state[e.target.name] = e.target.value
-    if(e.target.name === 'discount'){
-      let discount = parseFloat(e.target.value||0)
-      let t = this.state.total - discount
+    if(e.target.name === 'discount' || e.target.name === "percent"){
+      let discount = e.target.name === 'discount' ? parseFloat(e.target.value||0) : this.state.form_inputs.discount || 0
+      let t = this.state.form_inputs.percent ? this.state.total-(this.state.total*discount/100) : this.state.total - discount
       prev_state['discount'] = discount
       prev_state['payment'] = t<0?0:t
-    }
+    } else if(e.target.name === 'payment')
+      prev_state['payment'] = parseFloat(e.target.value)
     this.setState({form_inputs: {...prev_state}})
   }
 

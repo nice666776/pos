@@ -108,7 +108,7 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
 
       <div className="form-row">
         <div className="col-md-8 col-12">
-          <FormControl fullWidth size="small" margin="dense" variant="outlined" required error={requires.manufacturer}>
+          <FormControl fullWidth size="small" margin="dense" variant="outlined">
             <InputLabel id="manufacturer-label">Manufacturer</InputLabel>
             <Select
               labelId="manufacturer-label"
@@ -151,8 +151,7 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
             margin="dense"
             type="number"
             fullWidth
-            required
-            error={requires.unit_price}
+            disabled={update}
             value={form_inputs.unit_price}
             onChange={handleChange}
           />
@@ -166,8 +165,6 @@ export default React.memo(({updateList, update, manufacturer_info, handleClose})
             margin="dense"
             type="number"
             fullWidth
-            required
-            error={requires.mrp_price}
             value={form_inputs.mrp_price}
             onChange={handleChange}
           />

@@ -8,3 +8,7 @@ export const supplier_require = {
   'mobile': false,
   'email': false,
 }
+
+export const trade_require = {
+  'name': false
+}

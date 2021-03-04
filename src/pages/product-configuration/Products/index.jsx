@@ -8,7 +8,7 @@ import { kaReducer, Table } from 'ka-table';
 import { FilteringMode } from 'ka-table/enums';
 import { updateData, hideLoading, showLoading } from 'ka-table/actionCreators';
 import { ActionButton, AddButton } from '../../../components/table-component';
-import ProductForm from '../../../components/forms/product-configuration/product-form';
+import ProductForm from 'components/forms/product-configuration/product-form';
 import { productList } from '../server_action';
 
 

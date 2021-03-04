@@ -41,8 +41,10 @@ function Product({history, history_type}) {
             <Details
               purchase_list={history_type==="Sales"?history.sales_list:history.purchase_list}
               discount={history.discount}
+              discount_p={history.discount_p}
               payment={history.payment}
               history_type={history_type}
+              invoice={history.invoice}
             />
           </Collapse>
         </TableCell>

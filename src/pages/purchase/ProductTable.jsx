@@ -91,8 +91,8 @@ export default React.memo(({handlePurchaseList})=>{
             {purchase_list.map((product, i) => (
               <TableRow key={i} hover>
                 <TableCell component="th" scope="row">{product.product_name}</TableCell>
-                <TableCell>{product.category_name}</TableCell>
-                <TableCell>{product.subcategory_name}</TableCell>
+                <TableCell>{product.category}</TableCell>
+                <TableCell>{product.subcategory}</TableCell>
                 <TableCell align="center">{product.quantity}</TableCell>
                 <TableCell align="center">{product.unit_price}</TableCell>
                 <TableCell align="center">{(product.unit_price * product.quantity).toLocaleString()}</TableCell>
