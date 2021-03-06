@@ -10,7 +10,7 @@ using POS.ViewModels;
 
 namespace POS.Controllers
 {
-    public class SaleController : Controller
+    public class SaleController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -24,10 +24,7 @@ namespace POS.Controllers
         {
             return View();
         }
-        public string getClient()
-        {
-            return "CL799";
-        }
+   
         [HttpGet]
         [Route("~/Product/Sale/info")]
         public IActionResult product_info(string product_code)
@@ -36,7 +33,8 @@ namespace POS.Controllers
             try
             {
                 string client_code = getClient();
-                Product prod = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product_code && u.client_code == client_code);
+                string trade_code = getTrade();
+                Product prod = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == product_code && u.client_code == client_code && u.trade_code == trade_code);
                 if (prod == null)
                 {
                     return Json(new { success = false, message = "No Product Found !" });
@@ -77,14 +75,15 @@ namespace POS.Controllers
 
             try
             {
-                string client_code = getClient();
+                string client_code = getClient(); 
+                string trade_code = getTrade();
                 if (search_string == null)
                 {
                     return Json(new { success = false });
                 }
 
                 search_string = search_string.ToUpper();
-                List<Product> prodList = _unitOfWork.Product.GetAll(u => (u.product_name.ToUpper().Contains(search_string) || u.product_code.Contains(search_string)) &&  u.client_code == client_code).ToList();
+                List<Product> prodList = _unitOfWork.Product.GetAll(u => (u.product_name.ToUpper().Contains(search_string) || u.product_code.Contains(search_string)) &&  u.client_code == client_code && u.trade_code==trade_code).ToList();
                 if (prodList.Count() == 0)
                 {
                     return Json(new { success = false });
@@ -112,13 +111,14 @@ namespace POS.Controllers
             try
             {
                 string client_code = getClient();
+                string trade_code = getTrade();
                 if (search_string == null)
                 {
                     return Json(new { success = false });
                 }
 
                 search_string = search_string.ToUpper();
-                List<Supplier> supList = _unitOfWork.Supplier.GetAll(u => (u.name.ToUpper().Contains(search_string) || u.code.Contains(search_string) || u.mobile.Contains(search_string)) && u.client_code == client_code).ToList();
+                List<Supplier> supList = _unitOfWork.Supplier.GetAll(u => (u.name.ToUpper().Contains(search_string) || u.code.Contains(search_string) || u.mobile.Contains(search_string)) && u.client_code == client_code && u.trade_code == trade_code).ToList();
                 if (supList.Count() == 0)
                 {
                     return Json(new { success = false });
@@ -161,8 +161,9 @@ namespace POS.Controllers
                 saleVM.invoice= DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + RandomString(7);
                 saleVM.entry_date = DateTime.Now.Date;
                     string client_code = getClient();
-                    //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
-                    string TRX_ID = RandomString(12);
+                string trade_code = getTrade();
+                //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
+                string TRX_ID = RandomString(12);
                     if (saleVM.sales_list == null)
                     {
                         return Json(new { success = false, message = "There are no Purchased product entry!" });
@@ -184,7 +185,7 @@ namespace POS.Controllers
                     foreach (ProductObject po in saleVM.sales_list)
                     {
 
-                        Product product = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == po.product_code && u.client_code == client_code);
+                        Product product = _unitOfWork.Product.GetFirstOrDefault(u => u.product_code == po.product_code && u.client_code == client_code && u.trade_code==trade_code);
                         if(product.quantity < po.quantity)
                     {
                         return Json(new { success = false, message ="The quantity demanded for "+ product.product_name + " exceeds available quantity! Sales was Cancelled !" });
@@ -218,7 +219,7 @@ namespace POS.Controllers
                         _unitOfWork.ProductStockOut.Add(prodStockOut);
 
 
-                        ProductStock ps = _unitOfWork.ProductStock.GetFirstOrDefault(u => u.product_code == po.product_code && u.entry_date == saleVM.entry_date && u.client_code == client_code);
+                        ProductStock ps = _unitOfWork.ProductStock.GetFirstOrDefault(u => u.product_code == po.product_code && u.entry_date == saleVM.entry_date && u.client_code == client_code && u.trade_code == trade_code);
                         if (ps == null)
                         {
                             ps = new ProductStock();
@@ -337,10 +338,12 @@ namespace POS.Controllers
             {
 
                 string client_code = getClient();
+                string trade_code = getTrade();
                 List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(
                     u => u.entry_date == entry_date
                     && u.transaction_type == "SALE"
                     && u.client_code == client_code
+                    && u.trade_code== trade_code
                     ).ToList();
                 if (peList.Count == 0)
                 {
@@ -361,7 +364,7 @@ namespace POS.Controllers
                     sv.entry_time = pe.entry_time;
                     sv.customer_code = pe.customer_code;
                     sv.customer_name = pe.customer_name;
-                    List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
+                    List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id && u.trade_code==trade_code).ToList();
                     if (prodstockout.Count() == 0)
                     {
                         saleVMList.Add(sv);
@@ -408,10 +411,12 @@ namespace POS.Controllers
             {
 
                 string client_code = getClient();
+                string trade_code = getTrade();
                 List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(
                     u => u.invoice == invoice
                     && u.transaction_type == "SALE"
                     && u.client_code == client_code
+                    && u.trade_code== trade_code
                     ).ToList();
                 if (peList.Count == 0)
                 {
@@ -432,7 +437,7 @@ namespace POS.Controllers
                     sv.entry_time = pe.entry_time;
                     sv.customer_code = pe.customer_code;
                     sv.customer_name = pe.customer_name;
-                    List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
+                    List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id && u.trade_code == trade_code).ToList();
                     if (prodstockout.Count() == 0)
                     {
                         saleVMList.Add(sv);

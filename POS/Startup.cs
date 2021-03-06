@@ -106,10 +106,11 @@ namespace POS
             }
             app.UseStaticFiles();
             app.UseDefaultFiles();
-            app.UseRouting();
+        
             app.UseCors("AllowOrigin");//^ referenced in configuration cors
+            app.UseAuthentication();
+            app.UseRouting();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

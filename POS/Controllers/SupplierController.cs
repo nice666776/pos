@@ -7,7 +7,7 @@ using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
 namespace POS.Controllers
 {
-    public class SupplierController : Controller
+    public class SupplierController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -46,7 +46,9 @@ namespace POS.Controllers
 
         public JsonResult getAll()
         {
-            IEnumerable<Supplier> list = _unitOfWork.Supplier.GetAll();
+            string client_code = getClient();
+            string trade_code = getTrade();
+            IEnumerable<Supplier> list = _unitOfWork.Supplier.GetAll(u=>u.client_code ==  client_code && u.trade_code ==  trade_code);
             return Json(new { success = true, message = list });
         }
 
@@ -65,6 +67,8 @@ namespace POS.Controllers
             {
                 if (supplier.id == 0)
                 {
+                    string client_code = getClient();
+                    string trade_code = getTrade();
                     string s_code = _unitOfWork.Supplier.getSupplierCode();
                     supplier.code = s_code;
                     supplier.name = supplier.name.ToUpper();
@@ -72,7 +76,8 @@ namespace POS.Controllers
                     supplier.address = supplier.address.ToUpper();
                     supplier.entry_date = DateTime.Now.Date;
                     supplier.entry_by = "ADMIN";
-
+                    supplier.client_code = client_code;
+                    supplier.trade_code = trade_code;
                     _unitOfWork.Supplier.Add(supplier);
                     POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault();
                     pOSLog.supplier_code = s_code;

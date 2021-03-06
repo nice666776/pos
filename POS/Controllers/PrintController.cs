@@ -14,7 +14,7 @@ using Wkhtmltopdf.NetCore;
 
 namespace POS.Controllers
 {
-    public class PrintController : Controller
+    public class PrintController : BaseController
     {
 
         private readonly IGeneratePdf _generatePdf;
@@ -35,10 +35,7 @@ namespace POS.Controllers
         }
 
 
-        public string getClient()
-        {
-            return "CL799";
-        }
+   
 
         [HttpGet]
         [Route("~/print/Suppliers")]
@@ -47,7 +44,8 @@ namespace POS.Controllers
 
 
             string client_code = getClient();
-            List<Supplier> suppliers = _unitOfWork.Supplier.GetAll(u => u.client_code == client_code).ToList();
+            string trade_code = getTrade();
+            List<Supplier> suppliers = _unitOfWork.Supplier.GetAll(u => u.client_code == client_code && u.trade_code ==  trade_code).ToList();
 
             /////////////////////////////////
             var kv = new Dictionary<string, string>
@@ -90,7 +88,8 @@ namespace POS.Controllers
         public async Task<IActionResult> ManufacturerList()
         {
             string client_code = getClient();
-            List<Manufacturer> manufacturers = _unitOfWork.Manufacturer.GetAll(u => u.client_code == client_code).ToList();
+            string trade_code = getTrade();
+            List<Manufacturer> manufacturers = _unitOfWork.Manufacturer.GetAll(u => u.client_code == client_code && u.trade_code == trade_code).ToList();
 
             /////////////////////////////////
             var kv = new Dictionary<string, string>
@@ -133,10 +132,13 @@ namespace POS.Controllers
         {
 
             string client_code = getClient();
+
+            string trade_code = getTrade();
             List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(
                 u => u.invoice == invoice
                 && u.transaction_type == "SALE"
                 && u.client_code == client_code
+                && u.trade_code == trade_code
                 ).ToList();
             if (peList.Count == 0)
             {
@@ -156,7 +158,7 @@ namespace POS.Controllers
                 sv.entry_time = pe.entry_time;
                 sv.customer_code = pe.customer_code;
                 sv.customer_name = pe.customer_name;
-                List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
+                List<ProductStockOut> prodstockout = _unitOfWork.ProductStockOut.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id && u.trade_code ==  trade_code).ToList();
                 if (prodstockout.Count() == 0)
                 {
                     continue;
@@ -217,10 +219,12 @@ namespace POS.Controllers
         public async Task<IActionResult> Invoice(string invoice)
         {
             string client_code = getClient();
+            string trade_code = getTrade();
             ProductEventInfo pe = _unitOfWork.ProductEventInfo.GetFirstOrDefault(
                 u => u.invoice == invoice
                 && u.transaction_type == "PURCHASE"
                 && u.client_code == client_code
+                && u.trade_code ==  trade_code
                 );
             if (pe == null)
             {
@@ -239,7 +243,7 @@ namespace POS.Controllers
                 pv.supplier_code = pe.supplier_code;
                 pv.supplier_name = pe.supplier_name;
                 Supplier supl = _unitOfWork.Supplier.GetFirstOrDefault(u => u.code == pv.supplier_code);
-                List<ProductStockIn> prodstockin = _unitOfWork.ProductStockIn.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id).ToList();
+                List<ProductStockIn> prodstockin = _unitOfWork.ProductStockIn.GetAll(u => u.client_code == client_code && u.transaction_id == pe.transaction_id && u.trade_code ==  trade_code).ToList();
                 if (prodstockin.Count() == 0)
                 {
 

@@ -1,40 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
 using POS.Models.Models.Authentication;
 
 namespace POS.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
 
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IConfiguration _configuration;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AuthController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+            _configuration = configuration;
             _unitOfWork = unitOfWork;
         }
 
 
-        
 
+        [Authorize(Roles = UserRoles.SYSADMIN)]
         [HttpPost]
         [Route("~/Pos/Registration/")]
         public async Task<IActionResult> Register([FromBody] Registration registration)
         {
 
 
-            registration.client_code = "CL799";
+            registration.client_code = getClient();
+            
             registration.date_added = DateTime.Now.Date;
 
             if (registration.phone.Contains("[a-zA-Z]+") || registration.phone.Length <11)
@@ -67,12 +76,12 @@ namespace POS.Controllers
             if (registration.user_type == "ADMIN")
             {
 
-                if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+                if (!await roleManager.RoleExistsAsync(UserRoles.ADMIN))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.ADMIN));
 
-                if (await roleManager.RoleExistsAsync(UserRoles.Admin))
+                if (await roleManager.RoleExistsAsync(UserRoles.ADMIN))
                 {
-                    await userManager.AddToRoleAsync(user, UserRoles.Admin);
+                    await userManager.AddToRoleAsync(user, UserRoles.ADMIN);
                 }
 
 
@@ -82,13 +91,29 @@ namespace POS.Controllers
             {
              
 
-                if (!await roleManager.RoleExistsAsync(UserRoles.Accounts))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Accounts));
+                if (!await roleManager.RoleExistsAsync(UserRoles.ACCOUNTS))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.ACCOUNTS));
 
 
-                if (await roleManager.RoleExistsAsync(UserRoles.Accounts))
+                if (await roleManager.RoleExistsAsync(UserRoles.ACCOUNTS))
                 {
-                    await userManager.AddToRoleAsync(user, UserRoles.Accounts);
+                    await userManager.AddToRoleAsync(user, UserRoles.ACCOUNTS);
+                }
+
+
+            }
+
+            if (registration.user_type == "TEST")
+            {
+
+
+                if (!await roleManager.RoleExistsAsync(UserRoles.TEST))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.TEST));
+
+
+                if (await roleManager.RoleExistsAsync(UserRoles.TEST))
+                {
+                    await userManager.AddToRoleAsync(user, UserRoles.TEST);
                 }
 
 
@@ -99,19 +124,46 @@ namespace POS.Controllers
             {
                
 
-                if (!await roleManager.RoleExistsAsync(UserRoles.Sales))
-                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Sales));
+                if (!await roleManager.RoleExistsAsync(UserRoles.SALES))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.SALES));
 
-                if (await roleManager.RoleExistsAsync(UserRoles.Sales))
+                if (await roleManager.RoleExistsAsync(UserRoles.SALES))
                 {
-                    await userManager.AddToRoleAsync(user, UserRoles.Sales) ;
+                    await userManager.AddToRoleAsync(user, UserRoles.SALES) ;
                 }
 
 
             }
-            
 
 
+            if (registration.user_type == "INVENTORY")
+            {
+
+
+                if (!await roleManager.RoleExistsAsync(UserRoles.INVENTORY))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.INVENTORY));
+
+                if (await roleManager.RoleExistsAsync(UserRoles.INVENTORY))
+                {
+                    await userManager.AddToRoleAsync(user, UserRoles.INVENTORY);
+                }
+
+
+            }
+            //if (registration.user_type == "SYSADMIN")
+            //{
+
+
+            //    if (!await roleManager.RoleExistsAsync(UserRoles.SYSADMIN))
+            //        await roleManager.CreateAsync(new IdentityRole(UserRoles.SYSADMIN));
+
+            //    if (await roleManager.RoleExistsAsync(UserRoles.SYSADMIN))
+            //    {
+            //        await userManager.AddToRoleAsync(user, UserRoles.SYSADMIN);
+            //    }
+
+
+            //}
 
             var CreatedUser = await userManager.FindByEmailAsync(registration.email);
             User NewUSer = new User()
@@ -131,6 +183,57 @@ namespace POS.Controllers
             _unitOfWork.Save();
    
             return Json(new { success = true, message = NewUSer });
+
+
+        }
+
+
+
+        [HttpPost]
+        [Route("~/Pos/Login/")]
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        {
+
+            var user = await userManager.FindByNameAsync(loginModel.UserName);
+            if (user != null && await userManager.CheckPasswordAsync(user, loginModel.Password))
+            {
+                var userRoles = await userManager.GetRolesAsync(user);
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name,user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+
+                };
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+
+                var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(3),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
+                    );
+                User thisUser = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == user.Id);
+
+                return Ok(new
+                {
+                    success = true,
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    userid = user.Id,
+                    userrole = userRoles[0],
+                    name = thisUser.first_name+" "+thisUser.last_name,
+                    client_code = thisUser.client_code,
+                    trade_code = thisUser.trade_code
+
+
+
+                }); ;
+            }
+            return Unauthorized();
 
 
         }

@@ -10,7 +10,7 @@ using POS.Models.Models;
 
 namespace POS.Controllers
 {
-    public class ManufacturerController : Controller
+    public class ManufacturerController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -26,8 +26,9 @@ namespace POS.Controllers
 
         public JsonResult getAll()
         {
-            string client_code = "CL799";
-            IEnumerable<Manufacturer> list = _unitOfWork.Manufacturer.GetAll(u=>u.client_code == client_code);
+            string trade_code = getTrade();
+            string client_code = getClient();
+            IEnumerable<Manufacturer> list = _unitOfWork.Manufacturer.GetAll(u=>u.client_code == client_code && u.trade_code ==  trade_code);
             return Json(new { success = true, message = list });
         }
 
@@ -45,9 +46,11 @@ namespace POS.Controllers
 
             if (ModelState.IsValid)
             {
+                string trade_code = getTrade();
+                string client_code = getClient();
                 if (manufacturer.id == 0)
                 {
-                    string client_code = "CL799";
+                   
                     string m_code = _unitOfWork.Manufacturer.getManufacturerCode();
                     manufacturer.code = m_code;
                     manufacturer.name = manufacturer.name.ToUpper();
@@ -57,8 +60,9 @@ namespace POS.Controllers
                     manufacturer.entry_date = DateTime.Now.Date;
                     manufacturer.entry_by = "ADMIN";
                     manufacturer.client_code = client_code;
+                    manufacturer.trade_code = trade_code;
                     _unitOfWork.Manufacturer.Add(manufacturer);
-                    POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault(u=>u.client_code == client_code);
+                    POSLog pOSLog = _unitOfWork.POSLog.GetFirstOrDefault(u=>u.client_code == client_code && u.trade_code == trade_code);
                     pOSLog.manufacturer_code = m_code;
                     _unitOfWork.POSLog.Update(pOSLog);
                 }
