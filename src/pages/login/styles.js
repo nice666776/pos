@@ -59,7 +59,6 @@ export default makeStyles(theme => ({
   greeting: {
     fontWeight: 500,
     textAlign: "center",
-    marginTop: theme.spacing(4),
   },
   subGreeting: {
     fontWeight: 500,
@@ -79,6 +78,7 @@ export default makeStyles(theme => ({
   },
   errorMessage: {
     textAlign: "center",
+    color: "var(--red)"
   },
   textFieldUnderline: {
     "&:before": {
@@ -98,12 +98,8 @@ export default makeStyles(theme => ({
     width: "100%",
     marginTop: theme.spacing(4),
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-  },
-  forgetButton: {
-    textTransform: "none",
-    fontWeight: 400,
   },
   loginLoader: {
     marginLeft: theme.spacing(4),

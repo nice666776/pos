@@ -38,7 +38,7 @@ export default function asyncComponent(importComponent) {
       const Component = this.state.component ||
         <div className="d-flex flex-column justify-content-center align-items-center" style={{height: 'calc(100vh - 200px)'}}>
           <HoopSpinner size={100} color="#ff0f60"/>
-          <h4 className="text-muted mt-3">Loading...</h4>
+          <h5 className="text-muted mt-3">Loading...</h5>
         </div>;
       return (
         <ReactPlaceholder type="text" rows={7} ready={Component !== null}>

@@ -26,7 +26,7 @@ import {
   useLayoutDispatch,
   toggleSidebar,
 } from "../../context/LayoutContext";
-import { useUserDispatch, signOut } from "../../context/UserContext";
+import { useUserDispatch, signOut, useUserState } from "../../context/UserContext";
 
 
 
@@ -35,43 +35,45 @@ export default function Header(props) {
   var layoutState = useLayoutState();
   var layoutDispatch = useLayoutDispatch();
   var userDispatch = useUserDispatch();
+  var { userInfo } = useUserState();
   var [profileMenu, setProfileMenu] = useState(null);
   var [isSearchOpen, setSearchOpen] = useState(false);
+
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
-        <IconButton
-          color="inherit"
-          onClick={() => toggleSidebar(layoutDispatch)}
-          className={classNames(
-            classes.headerMenuButtonSandwich,
-            classes.headerMenuButtonCollapse,
-          )}
-        >
-          {layoutState.isSidebarOpened ? (
-            <MenuOpen
-              classes={{
-                root: classNames(
-                  classes.headerIcon,
-                  classes.headerIconCollapse,
-                ),
-              }}
-            />
-          ) : (
-            <MenuIcon
-              classes={{
-                root: classNames(
-                  classes.headerIcon,
-                  classes.headerIconCollapse,
-                ),
-              }}
-            />
-          )}
-        </IconButton>
-        <Typography variant="h6" weight="medium" className={classes.logotype}>
-          POS Admin
-        </Typography>
+        {!userInfo.role==="hLNKRZ0S2LVT+XIHhMz9FmFubj42XIVAU0x8zEVwJtY=" &&
+          <IconButton
+            color="inherit"
+            onClick={() => toggleSidebar(layoutDispatch)}
+            className={classNames(
+              classes.headerMenuButtonSandwich,
+              classes.headerMenuButtonCollapse,
+            )}
+          >
+            {layoutState.isSidebarOpened ? (
+              <MenuOpen
+                classes={{
+                  root: classNames(
+                    classes.headerIcon,
+                    classes.headerIconCollapse,
+                  ),
+                }}
+              />
+            ) : (
+              <MenuIcon
+                classes={{
+                  root: classNames(
+                    classes.headerIcon,
+                    classes.headerIconCollapse,
+                  ),
+                }}
+              />
+            )}
+          </IconButton>
+        }
+        <h4 className={classes.logotype}>POS Admin</h4>
         <div className={classes.grow} />
         <div
           className={classNames(classes.search, {
