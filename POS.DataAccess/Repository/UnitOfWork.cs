@@ -25,6 +25,7 @@ namespace POS.DataAccess.Repository
             SP_Call = new SP_Call(_db);
             Trade = new TradeRepository(_db);
             User = new UserRepository(_db);
+            Client = new ClientRepository(_db);
         }
  
         public ISupplierRepository Supplier { get; private set; }
@@ -42,6 +43,7 @@ namespace POS.DataAccess.Repository
         public ISP_Call SP_Call { get; private set; }
         public IUserRepository User { get; private set; }
         public ITradeRepository Trade { get; private set; }
+        public IClientRepository Client { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

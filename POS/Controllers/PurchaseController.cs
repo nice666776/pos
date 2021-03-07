@@ -436,7 +436,6 @@ namespace POS.Controllers
 
                     purchaseVMList.Add(pv);
 
-
                 }
 
 

@@ -36,5 +36,6 @@ namespace POS.DataAccess.Data
         public DbSet<Customer> Customers_info { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Trade> Trade { get; set; }
+        public DbSet<Client> Client { get; set; }
     }
 }
