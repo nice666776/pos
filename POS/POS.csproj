@@ -17,5 +17,9 @@
     <ProjectReference Include="..\POS.Models\POS.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\client\" />
+  </ItemGroup>
+
 
 </Project>

@@ -21,12 +21,9 @@ namespace POS.DataAccess.Repository
         public string GetClientCode()
         {
             string code;
-                string value = _db.Client
-                            .OrderByDescending(p => p.id)
-                            .Select(r => r.code)
-                            .FirstOrDefault().ToString();
-
-            if(value== null)
+            
+            Client client = _db.Client.OrderByDescending(p => p.id).FirstOrDefault();
+            if (client== null)
             {
                 code = "01";
 
@@ -34,7 +31,7 @@ namespace POS.DataAccess.Repository
             else
             {
               
-                int code_no = Convert.ToInt32(value);
+                int code_no = Convert.ToInt32(client.code);
                 code_no++;
                 code = code_no.ToString("00");
                
@@ -48,7 +45,8 @@ namespace POS.DataAccess.Repository
 
         public void Update(Client client)
         {
-           _db.Client.Update(client);
+            
+                _db.Client.Update(client);
         }
     }
 }

@@ -41,12 +41,10 @@ namespace POS.Controllers
         public async Task<IActionResult> Register([FromBody] Registration registration)
         {
            
-
-
-
             try
             {
-                registration.client_code = getClient();
+                if(registration.client_code == null) { registration.client_code = getClient(); }
+                
                 registration.date_added = DateTime.Now.Date;
 
                 if (registration.phone.Contains("[a-zA-Z]+") || registration.phone.Length < 11)

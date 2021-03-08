@@ -12,6 +12,9 @@ namespace POS
             CreateMap<CategoryVM, Category>();
             CreateMap<ProductStockIn, ProductStock>();
             CreateMap<ProductStock, ProductStockIn>();
+            CreateMap<Client, ClientVM>();
+            CreateMap<ClientVM, Client>();
+
         }
     }
 }
