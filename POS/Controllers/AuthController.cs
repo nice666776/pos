@@ -35,7 +35,65 @@ namespace POS.Controllers
 
 
 
-       [Authorize(Roles = UserRoles.SYSADMIN+","+UserRoles.ADMIN)]
+
+
+        [Authorize(Roles = UserRoles.SYSADMIN)]
+        [HttpPost]
+        [Route("~/Pos/Admin/Update")]
+        public async Task<IActionResult> Admin_Update([FromBody] Registration registration)
+        {
+
+            try
+            {
+                ApplicationUser user = await userManager.FindByIdAsync(registration.user_id);
+
+                user.Email = registration.email;
+                user.UserName = registration.phone;
+                user.PhoneNumber = registration.phone;
+                user.PasswordHash = userManager.PasswordHasher.HashPassword(user, registration.password);
+                var result = await userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    return Json(new { success = false, message = "Invalid Input!" });
+                }
+
+                User TUser = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == user.Id);
+                TUser.first_name = registration.first_name.ToUpper();
+                TUser.last_name = registration.last_name.ToUpper();
+                TUser.phone = registration.phone;
+                TUser.user_type = registration.user_type;
+                TUser.status = registration.status;
+                TUser.email = registration.email;
+                TUser.status = registration.status;
+                TUser.add_date = DateTime.Now;
+
+
+
+
+                _unitOfWork.User.Update(TUser);
+
+                _unitOfWork.Save();
+                if (result.Succeeded)
+                {
+                   
+                    return Json(new { success = true, message = TUser });
+                }
+                return Json(new { success = false, message = "Update Failed" });
+
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Admin Update failed!!" });
+            }
+
+
+        }
+
+
+
+
+        [Authorize(Roles = UserRoles.SYSADMIN+","+UserRoles.ADMIN)]
         [HttpPost]
         [Route("~/Pos/Registration/")]
         public async Task<IActionResult> Register([FromBody] Registration registration)
@@ -70,6 +128,7 @@ namespace POS.Controllers
                 };
 
                 var result = await userManager.CreateAsync(user, registration.password);
+       
                 if (!result.Succeeded)
                 {
                     return Json(new { success = false, message = "Invalid Input!" });

@@ -17,6 +17,7 @@ using POS.Models.Models;
 using POS.Models.Models.Authentication;
 using POS.ViewModels;
 
+
 namespace POS.Controllers
 {
     public class ClientController : BaseController
@@ -66,7 +67,7 @@ namespace POS.Controllers
         //        client.BaseAddress = new Uri("http://localhost:44317");
         //        client.DefaultRequestHeaders.Accept.Clear();
         //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                 
+
         //        var clientO = new Client()
         //        {
 
@@ -85,7 +86,7 @@ namespace POS.Controllers
         //        {
         //            string responseString = response.Content.ReadAsStringAsync().Result;
         //            Client modelObject = await JsonSerializer.DeserializeAsync<Client>(await response.Content.ReadAsStreamAsync());
-                 
+
         //        }
         //    }
         //    return Ok("Done");
@@ -119,6 +120,38 @@ namespace POS.Controllers
         //    };
         //    return Ok(c);
         //}
+
+
+        [Authorize(Roles = UserRoles.SYSADMIN)]
+        [HttpGet]
+        [Route("~/client/exists")]
+        public  IActionResult exists()
+        {
+
+            Client client = _unitOfWork.Client.GetFirstOrDefault();
+            if(client == null)
+            {
+                return Json(new { success = false });
+            }
+            else
+            {
+
+                User user = _unitOfWork.Client.GetFirstAdmin(client.code);
+                ClientVM clientVM = _mapper.Map<ClientVM>(client);
+                if(user!= null) {
+
+                    clientVM.admin_firstname = user.first_name;
+                    clientVM.admin_lastname = user.last_name;
+                    clientVM.admin_mobile = user.phone;
+                    clientVM.admin_email = user.email;
+                    clientVM.admin_id = user.user_id;
+                    
+                }
+
+                return Json(new { success = true, client = clientVM });
+            }
+
+        }
 
 
 
@@ -184,8 +217,8 @@ namespace POS.Controllers
                     //update when they do not change the image
                     if (client.id != 0)
                     {
-                        Client objFromDb = _unitOfWork.Client.Get(client.id);
-                        client.logo = objFromDb.logo;
+                        //Client objFromDb = _unitOfWork.Client.GetFirstOrDefault(u=>u.id == client.id);
+                        //client.logo = objFromDb.logo;
 
                     }
                 }
@@ -196,53 +229,97 @@ namespace POS.Controllers
                 {
                    
                     _unitOfWork.Client.Add(client);
-  
-                }
-                else
-                {
-                    _unitOfWork.Client.Update(client);
 
-                }
-
-
-                using (var Hclient = new HttpClient())
-                {
-                    Hclient.BaseAddress = new Uri("http://localhost:44317");
-                    Hclient.DefaultRequestHeaders.Accept.Clear();
-                    Hclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    string token = await HttpContext.GetTokenAsync("access_token");
-                    Hclient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                    Registration clientO = new Registration()
+                    using (var Hclient = new HttpClient())
                     {
-
-                        user_type = "ADMIN",
-                        first_name = clientVM.admin_firstname,
-                        last_name = clientVM.admin_lastname,
-                        phone = clientVM.admin_mobile,
-                        email = clientVM.email,
-                        password = clientVM.password
-                    };
-                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(clientO);
-                    var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-                    var response = Hclient.PostAsync("/Pos/Registration/", content).Result;
-                    // var response = client.GetAsync("test/second").Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseString = response.Content.ReadAsStringAsync().Result;
-                      //  Client modelObject = await JsonSerializer.DeserializeAsync<Client>(await response.Content.ReadAsStreamAsync());
-                      var x = await JsonSerializer.DeserializeAsync<ResponseN>(await response.Content.ReadAsStreamAsync());
-                        if (!x.success)
+                        Hclient.BaseAddress = new Uri("http://localhost:44317");
+                        Hclient.DefaultRequestHeaders.Accept.Clear();
+                        Hclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        string token = await HttpContext.GetTokenAsync("access_token");
+                        Hclient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                        Registration clientO = new Registration()
                         {
-                            return Json(new { success = false, message = "Admin Information was invalid!" });
+
+                            user_type = "ADMIN",
+                            first_name = clientVM.admin_firstname,
+                            last_name = clientVM.admin_lastname,
+                            phone = clientVM.admin_mobile,
+                            email = clientVM.email,
+                            password = clientVM.password,
+                            status = true,
+                            client_code = client.code
+                        };
+                        var json = Newtonsoft.Json.JsonConvert.SerializeObject(clientO);
+                        var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+                        var response = Hclient.PostAsync("/Pos/Registration/", content).Result;
+                        // var response = client.GetAsync("test/second").Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string responseString = response.Content.ReadAsStringAsync().Result;
+                            //  Client modelObject = await JsonSerializer.DeserializeAsync<Client>(await response.Content.ReadAsStreamAsync());
+                            var x = await JsonSerializer.DeserializeAsync<ResponseN>(await response.Content.ReadAsStreamAsync());
+                            if (!x.success)
+                            {
+                                return Json(new { success = false, message = x.message });
+                            }
                         }
+
                     }
 
                 }
+                else
+                {
+                    try { _unitOfWork.Client.Update(client); }
+                    catch(Exception e) { return Json(new { success = false, message = e.Message }); }
+                    
+
+
+                    using (var Hclient = new HttpClient())
+                    {
+                        Hclient.BaseAddress = new Uri("http://localhost:44317");
+                        Hclient.DefaultRequestHeaders.Accept.Clear();
+                        Hclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        string token = await HttpContext.GetTokenAsync("access_token");
+                        Hclient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                        Registration clientO = new Registration()
+                        {
+
+                            user_type = "ADMIN",
+                            first_name = clientVM.admin_firstname,
+                            last_name = clientVM.admin_lastname,
+                            phone = clientVM.admin_mobile,
+                            email = clientVM.email,
+                            password = clientVM.password,
+                            client_code = client.code,
+                            user_id = clientVM.admin_id
+                        };
+                        var json = Newtonsoft.Json.JsonConvert.SerializeObject(clientO);
+                        var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+                        var response = Hclient.PostAsync("/Pos/Admin/Update/", content).Result;
+                        // var response = client.GetAsync("test/second").Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string responseString = response.Content.ReadAsStringAsync().Result;
+                            //  Client modelObject = await JsonSerializer.DeserializeAsync<Client>(await response.Content.ReadAsStreamAsync());
+                            var x = await JsonSerializer.DeserializeAsync<ResponseN>(await response.Content.ReadAsStreamAsync());
+                            if (!x.success)
+                            {
+                                return Json(new { success = false, message = x.message });
+                            }
+                        }
+
+                    }
+
+
+                }
+
+
+               
 
 
 
                     _unitOfWork.Save();
-                return Json(new { success = false, message = client });
+                return Json(new { success = true, message = client });
             }
             else
             {

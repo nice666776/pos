@@ -43,6 +43,19 @@ namespace POS.DataAccess.Repository
 
         }
 
+
+        public User GetFirstAdmin(string client_code)
+        {
+            string code;
+
+            User user = _db.User.OrderBy(p => p.id).FirstOrDefault(u=>u.client_code== client_code && u.user_type == "ADMIN" );
+
+            return user;
+           
+
+        }
+
+
         public void Update(Client client)
         {
             

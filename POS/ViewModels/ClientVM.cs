@@ -25,6 +25,7 @@ namespace POS.ViewModels
         public string admin_lastname { get; set; }
         public string admin_mobile { get; set; }
         public string admin_email { get; set; }
+        public string admin_id { get; set; }
         public string password { get; set; }
 
     }

@@ -9,5 +9,6 @@ namespace POS.DataAccess.Repository.IRepository
     {
         public void Update(Client client);
         public string GetClientCode();
+        public User GetFirstAdmin(string client_code);
     }
 }
