@@ -10,7 +10,7 @@ using POS.ViewModels;
 
 namespace POS.Controllers
 {
-    public class TradeController : Controller
+    public class TradeController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,10 +22,7 @@ namespace POS.Controllers
             _mapper = mapper;
 
         }
-        public string getClient()
-        {
-            return "CL799";
-        }
+  
 
 
         [HttpGet]

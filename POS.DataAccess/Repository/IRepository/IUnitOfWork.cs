@@ -23,6 +23,7 @@ namespace POS.DataAccess.Repository.IRepository
         IUserRepository User { get; }
         ITradeRepository Trade { get; }
         IClientRepository Client { get; }
+        IUserTradeRepository UserTrade { get; }
         void Save();
     }
 

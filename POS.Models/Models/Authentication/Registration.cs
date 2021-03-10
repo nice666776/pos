@@ -16,6 +16,7 @@ namespace POS.Models.Models.Authentication
         public bool status { get; set; }
         public string client_code { get; set; }
         public string trade_code { get; set; }
+        public List<Trade> trade_list { get; set; }
         public DateTime date_added { get; set; }
     }
 }

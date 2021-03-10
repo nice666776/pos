@@ -1,5 +1,6 @@
 ﻿using POS.DataAccess.Data;
 using POS.DataAccess.Repository.IRepository;
+using POS.Models.Models;
 
 namespace POS.DataAccess.Repository
 {
@@ -26,6 +27,7 @@ namespace POS.DataAccess.Repository
             Trade = new TradeRepository(_db);
             User = new UserRepository(_db);
             Client = new ClientRepository(_db);
+            UserTrade = new UserTradeRepository(_db);
         }
  
         public ISupplierRepository Supplier { get; private set; }
@@ -44,6 +46,7 @@ namespace POS.DataAccess.Repository
         public IUserRepository User { get; private set; }
         public ITradeRepository Trade { get; private set; }
         public IClientRepository Client { get; private set; }
+        public IUserTradeRepository UserTrade { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

@@ -92,6 +92,56 @@ namespace POS.Controllers
 
 
 
+        [Authorize(Roles = UserRoles.SYSADMIN + "," + UserRoles.ADMIN)]
+        [HttpGet]
+        [Route("~/Pos/userlist/")]
+        public IActionResult UserList()
+        {
+            string client_code = getClient();
+            List<User> userList = _unitOfWork.User.GetAll(u => u.client_code == client_code).ToList();
+            List<Trade> tradeList = _unitOfWork.Trade.GetAll(u => u.client_code == client_code).ToList();
+            List<UserTrade> userTrades = _unitOfWork.UserTrade.GetAll(u => u.client_code == client_code).ToList();
+            var users = (from c in userList
+                         select (new
+                         {
+                             id = c.id,
+                             first_name = c.first_name,
+                             last_name = c.last_name,
+                             email = c.email,
+                             user_type = c.user_type,
+                             phone = c.phone,
+                             status = c.status,
+                             user_id = c.user_id,
+                             added_by = c.added_by,
+                             add_date = c.add_date,
+                             client_code = c.client_code,
+                             trade_code = c.trade_code,
+                             trade_name = from tl in tradeList
+                                          join ut in userTrades
+                                          on new { X1 = tl.code, X2 = c.user_id } equals new { X1 = ut.trade_code, X2 = ut.user_id }
+                                          select tl
+                                          //         from lc in ListC.DefaultIfEmpty()
+                                          //       select lc ?? lb;
+
+
+
+                         })).ToList();
+            if (userList.Count == 0)
+            {
+                return Json(new { sucess = false, message = "No User found!" });
+            }
+
+            return Json(new { success = true, message = users });
+        
+        
+        
+        
+        }
+
+
+
+
+
 
         [Authorize(Roles = UserRoles.SYSADMIN+","+UserRoles.ADMIN)]
         [HttpPost]
@@ -101,8 +151,10 @@ namespace POS.Controllers
            
             try
             {
+
+                string userId = GetUserId();
                 if(registration.client_code == null) { registration.client_code = getClient(); }
-                
+             //   if (registration.trade_code == null) { registration.trade_code = getTrade(); }
                 registration.date_added = DateTime.Now.Date;
 
                 if (registration.phone.Contains("[a-zA-Z]+") || registration.phone.Length < 11)
@@ -224,8 +276,19 @@ namespace POS.Controllers
 
 
                 //}
-
+             
                 var CreatedUser = await userManager.FindByEmailAsync(registration.email);
+                foreach (Trade t in registration.trade_list)
+                {
+                    UserTrade ut = new UserTrade()
+                    {
+                        user_id = CreatedUser.Id,
+                        trade_code = t.code,
+                        client_code = registration.client_code
+                    };
+                    _unitOfWork.UserTrade.Add(ut);
+
+                }
                 User NewUSer = new User()
                 {
                     first_name = registration.first_name.ToUpper(),
@@ -236,7 +299,10 @@ namespace POS.Controllers
                     user_type = registration.user_type,
                     user_id = CreatedUser.Id,
                     add_date = DateTime.Now.Date,
-
+                    added_by = userId,
+                    client_code = registration.client_code,
+                    trade_code = registration.trade_code
+               
 
                 };
                 _unitOfWork.User.Add(NewUSer);
@@ -284,7 +350,7 @@ namespace POS.Controllers
                     var token = new JwtSecurityToken(
                         issuer: _configuration["JWT:ValidIssuer"],
                         audience: _configuration["JWT:ValidAudience"],
-                        expires: DateTime.Now.AddHours(3),
+                        expires: DateTime.Now.AddHours(24),
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
                         );
