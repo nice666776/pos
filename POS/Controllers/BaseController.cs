@@ -11,7 +11,13 @@ namespace POS.Controllers
     {
         public string getClient()
         {
-            return "01";
+            string client_code = null;
+            if (HttpContext.Request.Headers.TryGetValue("client_code", out var traceValue))
+            {
+                if (traceValue == "undefined") return client_code = null;
+                client_code = traceValue;
+            }
+            return client_code;
         }
         public string getTrade()
         {

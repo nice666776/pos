@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using POS.DataAccess.Repository.IRepository;
 using POS.Models.Models;
 using POS.Models.Models.Authentication;
+using POS.ViewModels;
 
 namespace POS.Controllers
 {
@@ -98,7 +99,11 @@ namespace POS.Controllers
         public IActionResult UserList()
         {
             string client_code = getClient();
-            List<User> userList = _unitOfWork.User.GetAll(u => u.client_code == client_code).ToList();
+            if(client_code == null)
+            {
+                return Json(new { sucess = false });
+            }
+            List<User> userList = _unitOfWork.User.GetAll(u => u.client_code == client_code && u.user_type!= "SYSADMIN").ToList();
             List<Trade> tradeList = _unitOfWork.Trade.GetAll(u => u.client_code == client_code).ToList();
             List<UserTrade> userTrades = _unitOfWork.UserTrade.GetAll(u => u.client_code == client_code).ToList();
             var users = (from c in userList
@@ -116,12 +121,12 @@ namespace POS.Controllers
                              add_date = c.add_date,
                              client_code = c.client_code,
                              trade_code = c.trade_code,
-                             trade_name = from tl in tradeList
+                             trade_list = from tl in tradeList
                                           join ut in userTrades
                                           on new { X1 = tl.code, X2 = c.user_id } equals new { X1 = ut.trade_code, X2 = ut.user_id }
                                           select tl
-                                          //         from lc in ListC.DefaultIfEmpty()
-                                          //       select lc ?? lb;
+                                          //from lc in ListC.DefaultIfEmpty()
+                                          //select lc ?? lb;
 
 
 
@@ -137,7 +142,6 @@ namespace POS.Controllers
         
         
         }
-
 
 
 
@@ -321,6 +325,80 @@ namespace POS.Controllers
         }
 
 
+        [Authorize(Roles = UserRoles.SYSADMIN + "," + UserRoles.ADMIN)]
+        [HttpPost]
+        [Route("~/Pos/UpdateByAdmin/")]
+        public async Task<IActionResult> UpdateByAdmin([FromBody] UpdateModel updateModel)
+        {
+
+            try
+            {
+
+                string adminID = GetUserId();
+               string client_code = getClient();
+               
+                    ApplicationUser user = await userManager.FindByIdAsync(updateModel.user_id);
+
+                    user.Email = updateModel.email;
+                    if (updateModel.password != null)
+                    {
+                        user.PasswordHash = userManager.PasswordHasher.HashPassword(user, updateModel.password);
+                    }
+         
+                    var result = await userManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        return Json(new { success = false, message = "Invalid Input!" });
+                    }
+
+                    User TUser = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == user.Id);
+                    TUser.first_name = updateModel.first_name.ToUpper();
+                    TUser.last_name = updateModel.last_name.ToUpper();
+                    TUser.status = updateModel.status;
+                    TUser.email = updateModel.email;
+                    TUser.status = updateModel.status;
+                    TUser.add_date = DateTime.Now;
+                    TUser.added_by = adminID;
+                _unitOfWork.User.Update(TUser);
+
+                var tradeRemove = _unitOfWork.UserTrade.GetAll(u => u.user_id == updateModel.user_id);
+                _unitOfWork.UserTrade.RemoveRange(tradeRemove);
+                foreach (Trade t in updateModel.trade_list)
+                {
+                    UserTrade ut = new UserTrade()
+                    {
+                        user_id = updateModel.user_id,
+                        trade_code = t.code,
+                        client_code =client_code
+                    };
+                    _unitOfWork.UserTrade.Add(ut);
+
+                }
+
+                _unitOfWork.Save();
+
+                return Json(new { success = true, message = updateModel });
+            }
+            catch
+            {
+                return Json(new { success = false, message = "This service has encountered an error!" });
+            }
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost]
         [Route("~/Pos/Login")]
@@ -421,6 +499,7 @@ namespace POS.Controllers
                     success = true,
                     role = userRole,
                     name = user.first_name + " " + user.last_name,
+                    user_id= user.user_id,
                     client_code = user.client_code,
                     trade_code = user.trade_code,
                     phone = user.phone
