@@ -142,24 +142,24 @@
                         <td><strong> Payment By : </strong></td>
                     </tr>
                     <tr>
-                        <td> User </td>
+                        <td> @Model.User.first_name  @Model.User.last_name </td>
 
                     </tr>
                     <tr>
 
-                        <td>User ID</td>
+                        <td>@Model.User.user_type</td>
 
 
                     </tr>
                     <tr>
 
-                        <td>User Phone</td>
+                        <td>@Model.User.phone</td>
 
                     </tr>
                     <tr>
 
                         <td><strong>Payment Method : </strong></td>
-                        <td> Bank or Cash </td>
+                        <td> @Model.Method</td>
                     </tr>
                 </table>
             </div>

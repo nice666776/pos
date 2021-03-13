@@ -11,5 +11,6 @@ namespace POS.DataAccess.Repository.IRepository
 
         public string setTransactionID(string client_code);
         public void Update(ProductStock productStock);
+        public string setInvoiceNo(string tradeCode);
     }
 }

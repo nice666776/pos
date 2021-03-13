@@ -484,7 +484,39 @@ namespace POS.Controllers
                     return Unauthorized();
                 }
                 //  var user = await userManager.FindByIdAsync(userID);
+                List<Trade> trades = new List<Trade>() ;
                 User user = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == userID);
+                List<UserTrade> userTrades = _unitOfWork.UserTrade.GetAll(u => u.user_id == userID && u.client_code ==  user.client_code).ToList();
+                List<Trade> tradeList = _unitOfWork.Trade.GetAll(u => u.client_code == user.client_code).ToList();
+               Client client = _unitOfWork.Client.GetFirstOrDefault(u => u.code == user.client_code);
+                if (user.user_type == "SYSADMIN")
+                {
+                    return Ok(new
+                    {
+                        success = true,
+                        role = userRole,
+                        name = user.first_name + " " + user.last_name,
+                        user_id = user.user_id,
+                        phone = user.phone
+
+
+
+                    });
+                }
+                if (user.user_type == "ADMIN")
+                {
+                    trades = tradeList;
+                }
+                else if (userTrades.Count != 0)
+                {
+                    trades = (from tl in tradeList
+                            join ut in userTrades
+                            on new { X1 = tl.code, X2 = userID } equals new { X1 = ut.trade_code, X2 = userID }
+                            select tl).ToList();
+                }
+               
+
+
                 if (user == null)
                 {
                     return Json(new
@@ -500,8 +532,9 @@ namespace POS.Controllers
                     role = userRole,
                     name = user.first_name + " " + user.last_name,
                     user_id= user.user_id,
-                    client_code = user.client_code,
-                    trade_code = user.trade_code,
+                    client = client,
+                    client_code = client.code,
+                    trade = trades,
                     phone = user.phone
 
 

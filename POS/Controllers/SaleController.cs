@@ -158,11 +158,14 @@ namespace POS.Controllers
                 //{
                 //    return Json(new { success = false, message = "Please Confirm A Payment Receive type!" });
                 //}
-                saleVM.invoice= DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + RandomString(7);
+            //    saleVM.invoice= DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + RandomString(7);
+         
                 saleVM.entry_date = DateTime.Now.Date;
                     string client_code = getClient();
                 string trade_code = getTrade();
+                string user_id = GetUserId();
                 //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
+                saleVM.invoice = _unitOfWork.ProductStock.setInvoiceNo(trade_code);
                 string TRX_ID = RandomString(12);
                     if (saleVM.sales_list == null)
                     {
@@ -212,10 +215,10 @@ namespace POS.Controllers
                         prodStockOut.expire_date = po.expire_date;
                         prodStockOut.entry_date = saleVM.entry_date;
                         prodStockOut.invoice = saleVM.invoice;
-                        prodStockOut.user_id = "ADMIN";
+                        prodStockOut.user_id = user_id;
                         prodStockOut.client_code = client_code;
                         prodStockOut.barcode = product.barcode;
-
+                    prodStockOut.trade_code = trade_code;
                         _unitOfWork.ProductStockOut.Add(prodStockOut);
 
 
@@ -252,9 +255,10 @@ namespace POS.Controllers
                             ps.mrp_price = po.mrp_price;
                             ps.expire_date = po.expire_date;
                             ps.entry_date = saleVM.entry_date;
-                            ps.user_id = "ADMIN";
+                            ps.user_id = user_id;
                             ps.barcode = product.barcode;
                             ps.client_code = client_code;
+                        ps.trade_code = trade_code;
                             _unitOfWork.ProductStock.Add(ps);
 
                         }
@@ -264,7 +268,7 @@ namespace POS.Controllers
                             ps.closing_stock = (ps.opening_stock + ps.quantity_in) - ps.quantity_out;
                             ps.unit_price = po.unit_price;
                             ps.mrp_price = po.mrp_price;
-                            ps.user_id = "ADMIN";
+                            ps.user_id = user_id;
                             ps.expire_date = po.expire_date;
                             _unitOfWork.ProductStock.Update(ps);
                         }
@@ -290,8 +294,9 @@ namespace POS.Controllers
 
                  
                 productEventInfo.dr_amount = productEventInfo.dr_discount = productEventInfo.dr_total = 0.0;
-                productEventInfo.user_id = "ADMIN";
+                productEventInfo.user_id = user_id;
                 productEventInfo.client_code = client_code;
+                productEventInfo.trade_code = trade_code;
                 ProductEventInfo productEventInfoEntry = productEventInfo.ShallowCopy();
                 _unitOfWork.ProductEventInfo.Add(productEventInfo);
 
@@ -302,6 +307,8 @@ namespace POS.Controllers
 
                 productEventInfoEntry.dr_total = productEventInfo.cr_total;
                 productEventInfoEntry.cr_amount = productEventInfoEntry.cr_discount = productEventInfoEntry.cr_discount_percent = productEventInfoEntry.cr_total = 0.0;
+                productEventInfoEntry.client_code = client_code;
+                productEventInfoEntry.trade_code = trade_code;
                 _unitOfWork.ProductEventInfo.Add(productEventInfoEntry);
                 _unitOfWork.Save();
 
@@ -412,6 +419,7 @@ namespace POS.Controllers
 
                 string client_code = getClient();
                 string trade_code = getTrade();
+               
                 List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(
                     u => u.invoice == invoice
                     && u.transaction_type == "SALE"

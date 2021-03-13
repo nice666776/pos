@@ -38,5 +38,8 @@ namespace POS.DataAccess.Data
         public DbSet<Trade> Trade { get; set; }
         public DbSet<Client> Client { get; set; }
         public DbSet<UserTrade> User_trade { get; set; }
+        public DbSet<AccountControl> z_control_type { get; set; }
+        public DbSet<AccountsGroup> Aaccounts_group { get; set; }
+        public DbSet<AccountsHead> Accounts_head { get; set; }
     }
 }

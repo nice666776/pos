@@ -42,6 +42,37 @@ namespace POS.DataAccess.Repository
             _db.SaveChanges();
             return trxID;
         }
+
+
+
+
+
+        public string setInvoiceNo(string tradeCode)
+        {
+            string invID;
+            POSLog objFromDb = _db.Pos_log.FirstOrDefault(u => u.trade_code == tradeCode);
+            if (objFromDb.invoice_no == null)
+            {
+                invID = tradeCode  + "000000001";
+            }
+            else
+            {
+                string sub = objFromDb.invoice_no.Substring(4, 9);
+                int c = Convert.ToInt32(sub);
+                c++;
+                string s = c.ToString("000000000");
+                invID = tradeCode + s;
+
+            }
+            objFromDb.invoice_no = invID;
+            _db.Pos_log.Update(objFromDb);
+            _db.SaveChanges();
+            return invID;
+        }
+
+
+
+
         public void Update(ProductStock productStock)
         {
             _db.Product_stock.Update(productStock);

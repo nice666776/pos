@@ -28,6 +28,7 @@ namespace POS.DataAccess.Repository
             User = new UserRepository(_db);
             Client = new ClientRepository(_db);
             UserTrade = new UserTradeRepository(_db);
+            AccountsGroup = new AccountsGroupRepository(_db);
         }
  
         public ISupplierRepository Supplier { get; private set; }
@@ -47,6 +48,9 @@ namespace POS.DataAccess.Repository
         public ITradeRepository Trade { get; private set; }
         public IClientRepository Client { get; private set; }
         public IUserTradeRepository UserTrade { get; private set; }
+        public IAccountControlRepository AccountControl { get; private set; }
+        public IAccountsGroupRepository AccountsGroup { get; private set; }
+        public IAccountsHeadRepository AccountsHead { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

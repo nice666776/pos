@@ -287,7 +287,6 @@ D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Text.Encoding.CodePages.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Text.Encoding.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Text.Encoding.Extensions.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Text.Encodings.Web.dll
-D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Text.Json.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Text.RegularExpressions.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Threading.Channels.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\refs\System.Threading.dll
@@ -374,3 +373,10 @@ D:\POS\POS\POS\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.csproj.CoreCompileInputs.cache
 D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.MvcApplicationPartsAssemblyInfo.cs
 D:\POS\POS\POS\obj\Debug\netcoreapp3.1\POS.MvcApplicationPartsAssemblyInfo.cache
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\BarcodeStandard.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\System.Text.Json.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\POS\POS\POS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll

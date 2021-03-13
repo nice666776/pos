@@ -21,7 +21,13 @@ namespace POS.Controllers
         }
         public string getTrade()
         {
-            return "0101";
+            string trade_code = null;
+            if (HttpContext.Request.Headers.TryGetValue("trade_code", out var traceValue))
+            {
+                if (traceValue == "undefined") return trade_code = null;
+                trade_code = traceValue;
+            }
+            return trade_code;
         }
 
 

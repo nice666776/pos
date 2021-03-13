@@ -146,11 +146,12 @@ namespace POS.Controllers
                     
                     string client_code = getClient();
                 string trade_code = getTrade();
+                string user_id = GetUserId();
                 //  string TRX_ID = _unitOfWork.ProductStock.setTransactionID(client_code);
                 string TRX_ID = RandomString(12);
                     if (purchaseVM.invoice == null)
                     {
-                        purchaseVM.invoice = DateTime.Now.ToString("yy")+ DateTime.Now.ToString("MM")  + RandomString(7);
+                        purchaseVM.invoice = _unitOfWork.ProductStock.setInvoiceNo(trade_code);
 
                     }
               
@@ -166,7 +167,8 @@ namespace POS.Controllers
                     ProductEventInfo productEventInfo = new ProductEventInfo();
                     productEventInfo.transaction_id = TRX_ID;
                     productEventInfo.transaction_type = "PURCHASE";
-                    
+                productEventInfo.client_code = client_code;
+                productEventInfo.trade_code = trade_code;
                     productEventInfo.invoice = purchaseVM.invoice;
                     productEventInfo.entry_date = purchaseVM.entry_date;
                    
@@ -195,10 +197,10 @@ namespace POS.Controllers
                         prodStockIn.expire_date = po.expire_date;
                         prodStockIn.entry_date = purchaseVM.entry_date;
                         prodStockIn.invoice = purchaseVM.invoice;
-                        prodStockIn.user_id = "ADMIN";
+                        prodStockIn.user_id = user_id;
                         prodStockIn.client_code = client_code;
                         prodStockIn.barcode = product.barcode;
-
+                    prodStockIn.trade_code = trade_code;
                         _unitOfWork.ProductStockIn.Add(prodStockIn);
 
 
@@ -236,9 +238,10 @@ namespace POS.Controllers
                             ps.mrp_price = po.mrp_price;
                             ps.expire_date = po.expire_date;
                             ps.entry_date = purchaseVM.entry_date;
-                            ps.user_id = "ADMIN";
+                            ps.user_id = user_id;
                             ps.barcode = product.barcode;
                             ps.client_code = client_code;
+                            ps.trade_code = trade_code;
                             _unitOfWork.ProductStock.Add(ps);
 
                         }
@@ -248,7 +251,7 @@ namespace POS.Controllers
                             ps.closing_stock = (ps.opening_stock + ps.quantity_in) - ps.quantity_out;
                             ps.unit_price = po.unit_price;
                             ps.mrp_price = po.mrp_price;
-                            ps.user_id = "ADMIN";
+                            ps.user_id = user_id;
                             ps.expire_date = po.expire_date;
                             _unitOfWork.ProductStock.Update(ps);
                         }
@@ -274,8 +277,9 @@ namespace POS.Controllers
 
 
                     productEventInfo.cr_amount = productEventInfo.cr_discount = productEventInfo.cr_total = 0.0;
-                    productEventInfo.user_id = "ADMIN";
+                    productEventInfo.user_id = user_id;
                     productEventInfo.client_code = client_code;
+                productEventInfo.trade_code = trade_code;
                 ProductEventInfo productEventInfoEntry = productEventInfo.ShallowCopy();
                 _unitOfWork.ProductEventInfo.Add(productEventInfo);
                 productEventInfoEntry.transaction_type = purchaseVM.payment_type.ToUpper();
@@ -284,6 +288,8 @@ namespace POS.Controllers
                 productEventInfoEntry.cr_discount_percent = productEventInfo.dr_discount_percent;
                 productEventInfoEntry.cr_total = productEventInfo.cr_total;
                 productEventInfoEntry.dr_amount = productEventInfoEntry.dr_discount = productEventInfoEntry.dr_total = 0.0;
+                productEventInfoEntry.client_code = client_code;
+                productEventInfoEntry.trade_code = trade_code;
                 _unitOfWork.ProductEventInfo.Add(productEventInfoEntry);
                 _unitOfWork.Save();
 

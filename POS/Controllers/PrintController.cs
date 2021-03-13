@@ -132,8 +132,10 @@ namespace POS.Controllers
         {
 
             string client_code = getClient();
-
+            string user_id = " ";
             string trade_code = getTrade();
+            
+
             List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(
                 u => u.invoice == invoice
                 && u.transaction_type == "SALE"
@@ -148,6 +150,7 @@ namespace POS.Controllers
            
             foreach (ProductEventInfo pe in peList)
             {
+                user_id = pe.user_id;
                 sv.transaction_id = pe.transaction_id;
                 sv.invoice = pe.invoice;
                 sv.payment = pe.cr_amount;
@@ -179,6 +182,11 @@ namespace POS.Controllers
                                  })).ToList();
 
             }
+            User user = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == user_id);
+
+           ProductEventInfo payment = _unitOfWork.ProductEventInfo.GetFirstOrDefault(
+                u => u.invoice == invoice
+                && u.transaction_type != "SALE");
             double ratio = 74;
             double page_height = 102+(sv.sales_list.Count()*(ratio));
             /////////////////////////////////
@@ -206,7 +214,7 @@ namespace POS.Controllers
 
             };
             _generatePdf.SetConvertOptions(options);
-            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), SaleList = sv, EntryTime = DateTime.SpecifyKind(sv.entry_time, DateTimeKind.Local).ToString("mm:ss tt") });
+            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), SaleList = sv, EntryTime = DateTime.SpecifyKind(sv.entry_time, DateTimeKind.Local).ToString("mm:ss tt"),User = user, Method = payment.transaction_type });
             string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/Receipt.cshtml");
             return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
 
@@ -220,6 +228,7 @@ namespace POS.Controllers
         {
             string client_code = getClient();
             string trade_code = getTrade();
+            string user_id = " ";
             ProductEventInfo pe = _unitOfWork.ProductEventInfo.GetFirstOrDefault(
                 u => u.invoice == invoice
                 && u.transaction_type == "PURCHASE"
@@ -230,10 +239,14 @@ namespace POS.Controllers
             {
                 return Json(new { success = false, message = "No PURCHASE found with this invoice no.!" });
             }
+            ProductEventInfo payment = _unitOfWork.ProductEventInfo.GetFirstOrDefault(
+                      u => u.invoice == invoice
+                      && u.transaction_type != "PURCHASE");
       
-           
-                PurchaseVM pv = new PurchaseVM();
-                pv.transaction_id = pe.transaction_id;
+
+                      PurchaseVM pv = new PurchaseVM();
+               user_id = pe.user_id;
+               pv.transaction_id = pe.transaction_id;
                 pv.invoice = pe.invoice;
                 pv.total = pe.dr_total;
                 pv.payment = pe.dr_amount;
@@ -264,10 +277,10 @@ namespace POS.Controllers
                                     })).ToList();
 
 
-                
+            User user = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == user_id);
 
 
-            
+
 
             var options = new ConvertOptions
             {
@@ -287,7 +300,7 @@ namespace POS.Controllers
 
 
 
-            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), Purchase = pv, Supplier =supl});
+            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), Purchase = pv, Supplier =supl, User = user, Method = payment.transaction_type});
             string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/PurchaseOrder.cshtml");
             return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
 
