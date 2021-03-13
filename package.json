@@ -22,6 +22,7 @@
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "cogo-toast": "^4.2.3",
+    "compress.js": "^1.1.2",
     "ka-table": "^6.1.0",
     "mui-datatables": "^3.4.1",
     "nprogress": "^0.2.0",

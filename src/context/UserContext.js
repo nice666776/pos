@@ -36,9 +36,10 @@ function UserProvider({ children }) {                       // startup user chec
       getUserInfo()
         .then((resp)=>{
           if(resp.success){
-            dispatch({ type: 'LOGIN_SUCCESS', user_info: resp })
+            loginSuccess(dispatch, resp)
           } else signOut(dispatch, history)
         })
+        .catch(()=>signOut(dispatch, history))
         .finally(()=>setLoading(false))
     } else setLoading(false)
   }, [history])
@@ -69,8 +70,8 @@ function useUserDispatch() {
   }
   return context;
 }
-
-export { UserProvider, useUserState, useUserDispatch, loginUser, signOut };
+// eslint-disable-next-line
+export { UserProvider, useUserState, useUserDispatch, loginUser, signOut, setTradeCode };
 
 // ###########################################################
 
@@ -88,7 +89,7 @@ function loginUser(dispatch, username, password, history, setIsLoading, setError
           getUserInfo()
             .then(user_resp => {
               if(user_resp.success){
-                dispatch({ type: 'LOGIN_SUCCESS', user_info: user_resp })
+                loginSuccess(dispatch, user_resp)
                 setError(false)
                 history.push('/')
               } else {
@@ -107,8 +108,20 @@ function loginUser(dispatch, username, password, history, setIsLoading, setError
   }
 }
 
+const loginSuccess = (dispatch, resp)=>{
+  axios.defaults.headers.common['client_code'] = resp.client_code
+  dispatch({ type: 'LOGIN_SUCCESS', user_info: resp })
+  setTradeCode(resp.trade && resp.trade.length!==0 && resp.trade[0].code)
+}
+const setTradeCode = (code)=>{
+  axios.defaults.headers.common['trade_code'] = code || 0
+}
+
 function signOut(dispatch, history) {
   sessionStorage.removeItem("user-token");
+  axios.defaults.headers.common['Authorization'] = ""
+  axios.defaults.headers.common['client_code'] = ""
+  axios.defaults.headers.common['trade_code'] = ""
   dispatch({ type: "SIGN_OUT_SUCCESS" });
-  history.push("/login");
+  history && history.push("/login");
 }

@@ -42,8 +42,11 @@ const structure = [
   },
   { label: "Configuration", link: "/configuration", icon: <Settings />, 
     children: [
-      { label: "Suppliers", link: "/configuration/supplier-entry"},
       { label: "Trade Management", link: "/configuration/trade" },
+      { label: "User Management", link: "/configuration/user" },
+      { label: "Suppliers", link: "/configuration/supplier-entry"},
+      { label: "Account Group", link: "/configuration/account-group"},
+      { label: "Account Head", link: "/configuration/account-head"},
     ],
   },
 ];

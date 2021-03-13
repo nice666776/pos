@@ -11,14 +11,14 @@ import {
   TableRow
 } from '@material-ui/core';
 import { ActionButton, AddButton } from 'components/table-component';
-import TradeForm from 'components/forms/configuration/trade-management';
+import AccountHeadForm from 'components/forms/configuration/account-head';
 import Empty from 'components/empty';
 import Loading from 'components/loading/DataLoading';
 import {tradeList} from '../server_action';
 
 
 
-const AddOrUpdate = React.memo(({open, handleClose, updateList, update, trade_info})=>{
+const AddOrUpdate = React.memo(({open, handleClose, updateList, update, head_info})=>{
   return(
     <Dialog
       open={open}
@@ -26,91 +26,88 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, trade_in
       aria-labelledby="dialog-title"
       scroll="body"
       disableBackdropClick={true}
+      fullWidth
     >
       <DialogTitle className="text-center text-secondary" id="dialog-title">
-        {update?'Update Trade':'Add Trade'}
+        {update?'Update Account Head':'New Account Head'}
       </DialogTitle>
       <DialogContent>
-        <TradeForm updateList={updateList} update={update} trade_info={trade_info} handleClose={handleClose}/>
+        <AccountHeadForm updateList={updateList} update={update} head_info={head_info} handleClose={handleClose}/>
       </DialogContent>
     </Dialog>
   )
 })
 
-const Trade = ()=>{
+const AccountHead = ()=>{
   const [open, setOpen] = React.useState(false)
   const [update, setUpdate] = React.useState(false)
-  const [trade_list, setTradeList] = React.useState([])
-  const [trade_info, setTradeInfo] = React.useState({})
+  const [head_list, setHeadList] = React.useState([])
+  const [head_info, setHeadInfo] = React.useState({})
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(()=>{
     tradeList()
-      .then(resp => resp.success && setTradeList(resp.message))
+      .then(resp => resp.success && setHeadList(resp.message))
       .finally(()=>setLoading(false))
   },[])
 
   const handleClose = React.useCallback(()=> setOpen(false), [setOpen])
 
 
-  const updateList = React.useCallback((trade, type)=> {
+  const updateList = React.useCallback((group, type)=> {
     let list = []
     if(type === 'ADD'){
-      list = [trade, ...trade_list]
+      list = [group, ...head_list]
     } else {
-      const index = trade_list.findIndex(val=>val.id===trade.id)
-      trade_list[index] = trade
-      list = [...trade_list]
+      const index = head_list.findIndex(val=>val.id===group.id)
+      head_list[index] = group
+      list = [...head_list]
     }
-    setTradeList(list)
+    setHeadList(list)
     setOpen(false)
-  }, [trade_list])
+  }, [head_list])
 
   
   const dispatch = React.useCallback((action) => {
     if(action.type === 'EDIT'){
       setUpdate(true)
-      setTradeInfo(action.rowData)
+      setHeadInfo(action.rowData)
       setOpen(true)
     } else if(action.type === 'ADD') {
       setUpdate(false)
-      setTradeInfo({})
+      setHeadInfo({})
       setOpen(true)
     }
   }, [setUpdate])
 
   return (
     <React.Fragment>
-      <h5 className="text-center font-weight-bold mb-3">Trade Management</h5>
+      <h5 className="text-center font-weight-bold mb-3">Account Head</h5>
       {!loading
-        ? trade_list.length>0
+        ? head_list.length>0
           ? <div className="card overflow-hidden">
               <TableContainer>
                 <Table>
                   <TableHead>
                     <TableRow>
                       <TableCell className="font-weight-bold">Name</TableCell>
-                      <TableCell className="font-weight-bold" width={150}>Phone Number</TableCell>
-                      <TableCell className="font-weight-bold">In Charge</TableCell>
-                      <TableCell className="font-weight-bold" width={100}>Floor</TableCell>
-                      <TableCell className="font-weight-bold" width={100}>Block</TableCell>
+                      <TableCell className="font-weight-bold">Account Group</TableCell>
+                      <TableCell className="font-weight-bold" width={120}>Status</TableCell>
                       <TableCell className="font-weight-bold">Description</TableCell>
                       <TableCell className="p-0" align="right" width={100}><AddButton dispatch={dispatch}/></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {trade_list.map((trade, i) => (
-                      <TableRow key={trade.name}>
+                    {head_list.map((group, i) => (
+                      <TableRow key={group.name}>
                         <TableCell component="th" scope="row">
-                          {trade.name}
+                          {group.name}
                         </TableCell>
-                        <TableCell>{trade.phone?trade.phone:'-'}</TableCell>
-                        <TableCell>{trade.in_charge?trade.in_charge:'-'}</TableCell>
-                        <TableCell>{trade.floor?trade.floor:'-'}</TableCell>
-                        <TableCell>{trade.block?trade.block:'-'}</TableCell>
-                        <TableCell>{trade.description?trade.description:'-'}</TableCell>
+                        <TableCell>{group.phone?group.phone:'-'}</TableCell>
+                        <TableCell>{group.in_charge?group.in_charge:'-'}</TableCell>
+                        <TableCell>{group.description?group.description:'-'}</TableCell>
                         <TableCell align="right">
-                          <ActionButton dispatch={dispatch} rowData={trade} rowKeyValue={i}/>
+                          <ActionButton dispatch={dispatch} rowData={group} rowKeyValue={i}/>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -118,18 +115,18 @@ const Trade = ()=>{
                 </Table>
               </TableContainer>
             </div>
-          : <Empty text="No Trade Found!" btn btn_text="Add new trade" btn_action={() => dispatch({type: 'ADD'})}/>
-        : <Loading text="Getting trade list..."/>
+          : <Empty text="No Account Head Found!" btn btn_text="Add Account Head" btn_action={() => dispatch({type: 'ADD'})}/>
+        : <Loading text="Getting Account Head list..."/>
       }
       <AddOrUpdate
         open={open}
         handleClose={handleClose}
         updateList={updateList}
         update={update}
-        trade_info={trade_info}
+        head_info={head_info}
       />
     </React.Fragment>
   );
 }
 
-export default React.memo(Trade);
+export default React.memo(AccountHead);

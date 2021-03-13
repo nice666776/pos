@@ -4,6 +4,7 @@ import Layout from "./Layout";
 import Login from "../pages/login";
 import { useUserState } from "../context/UserContext";
 import asyncComponent from 'util/asyncComponent';
+import user_type from 'util/user_type';
 
 
 const App = React.memo(()=>{
@@ -15,7 +16,7 @@ const App = React.memo(()=>{
         {...rest}
         render={props =>
           isAuthenticated
-            ? userInfo.role==="hLNKRZ0S2LVT+XIHhMz9FmFubj42XIVAU0x8zEVwJtY="
+            ? userInfo.role===user_type.SYSADMIN
               ? <Redirect to={{pathname: "/sysadmin", state: {from: props.location}}}/>
               : ( React.createElement(component, props) )
             : ( <Redirect to={{pathname: "/login", state: {from: props.location}}}/> )
@@ -29,7 +30,7 @@ const App = React.memo(()=>{
       <Route
         {...rest}
         render={props =>
-          isAuthenticated && userInfo.role==="hLNKRZ0S2LVT+XIHhMz9FmFubj42XIVAU0x8zEVwJtY="
+          isAuthenticated && userInfo.role===user_type.SYSADMIN
             ? ( React.createElement(component, props) )
             : ( <Redirect to={{pathname: "/", state: {from: props.location}}}/> )
         }

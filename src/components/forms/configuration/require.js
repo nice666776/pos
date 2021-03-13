@@ -12,3 +12,18 @@ export const supplier_require = {
 export const trade_require = {
   'name': false
 }
+
+export const user_require = {
+  'first_name': false,
+  'last_name': false,
+  'phone': false,
+  'email': false,
+  'trade_list': false,
+  'user_type': false,
+  'password': false,
+}
+
+export const group_require = {
+  'group_name': false,
+  'control_type': false
+}

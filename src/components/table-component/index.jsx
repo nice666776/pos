@@ -15,10 +15,10 @@ export const DataRow = React.memo(
 );
 
 export const ActionButton = React.memo((props) => {
-  const { dispatch, rowKeyValue, rowData, del } = props
+  const { dispatch, rowKeyValue, rowData, del, disabled } = props
   return (
     <div className="d-flex justify-content-center">
-      <IconButton className="p-1" onClick={() => dispatch({type: 'EDIT', rowData})}>
+      <IconButton className="p-1" onClick={() => dispatch({type: 'EDIT', rowData})} disabled={disabled}>
         <EditTwoTone color="primary"/>
       </IconButton>
       {del &&
