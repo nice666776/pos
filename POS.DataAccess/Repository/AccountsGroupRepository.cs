@@ -38,43 +38,34 @@ namespace POS.DataAccess.Repository
         //}
 
 
-        //public string _setAccountGroupID(string client_code)
-        //{
-        //    string accgID;
-        //    AccountsGroup objFromDb = _db.Aaccounts_group.FirstOrDefault(u => u.client_Code == client_code);
-        //    if(objFromDb == null)
-        //    {
-        //        return null;
-        //    }
-        //    if (objFromDb.co == null)
-        //    {
-        //        accgID = "01";
-        //    }
-        //    else
-        //    {
-        //        string sub = objFromDb.last_acg_id;
-        //        int c = Convert.ToInt32(sub);
-        //        c++;
-        //        string s = c.ToString("00");
-        //        accgID = s;
+        public string _setAccountGroupID(string client_code)
+        {
+            string accgID;
+            AccountsGroup objFromDb = _db.Accounts_group.OrderByDescending(u => u.id).FirstOrDefault(u => u.client_code == client_code);
+            if (objFromDb == null)
+            {
+                return "01";
+            }
+            if (objFromDb.ac_group_id == null)
+            {
+                accgID = "01";
+            }
+            else
+            {
+                string sub = objFromDb.ac_group_id;
+                int c = Convert.ToInt32(sub);
+                c++;
+                string s = c.ToString("00");
+                accgID = s;
 
-        //    }
-        //    return accgID;
-        //}
-     
-        //public void Update(AccountsGroup accountsGroup)
-        //{
-        //    var objFromDb = _db.Accounts_group.FirstOrDefault(s => s.id== accountsGroup.id);
-        //    if (objFromDb != null)
-        //    {
-        //        objFromDb.ac_group_id = accountsGroup.ac_group_id;
-        //        objFromDb.ac_group_name = accountsGroup.ac_group_name;
-        //        objFromDb.ac_type = accountsGroup.ac_type;
-        //        objFromDb.control_type = accountsGroup.control_type;
-        //        objFromDb.description = accountsGroup.description;
-        //        objFromDb.comments = accountsGroup.comments;
-        //    }
-        //}
+            }
+            return accgID;
+        }
+
+        public void Update(AccountsGroup accountsGroup)
+        {
+            _db.Accounts_group.Update(accountsGroup);
+        }
 
     }
 }

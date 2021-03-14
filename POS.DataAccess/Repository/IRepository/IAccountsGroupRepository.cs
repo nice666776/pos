@@ -8,7 +8,7 @@ namespace POS.DataAccess.Repository.IRepository
 {
     public interface IAccountsGroupRepository: IRepository<AccountsGroup>
     {
-        //public string _setAccountGroupID(int school_id);
-        //void Update(AccountsGroup accountsGroup);
+        public string _setAccountGroupID(string client_code);
+        void Update(AccountsGroup accountsGroup);
     }
 }

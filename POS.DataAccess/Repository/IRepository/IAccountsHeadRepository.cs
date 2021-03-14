@@ -5,8 +5,8 @@ namespace POS.DataAccess.Repository.IRepository
 {
     public interface IAccountsHeadRepository:IRepository<AccountsHead>
     {
-       // void Update(AccountsHead accountsHead);
-       //// string setAccountsHeadID();
-       // public string _setAccountsHeadID(string group_id,int school_id);
+       public void Update(AccountsHead accountsHead);
+ 
+      public string _setAccountsHeadID(string group_id ,string client_code);
     }
 }

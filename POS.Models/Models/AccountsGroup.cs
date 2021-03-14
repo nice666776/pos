@@ -13,6 +13,6 @@ namespace POS.Models.Models
         public string control_type { get; set; }
         public string description { get; set; }
         public string comments { get; set; }
-        public string client_Code { get; set; }
+        public string client_code { get; set; }
     }
 }

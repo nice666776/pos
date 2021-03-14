@@ -19,27 +19,7 @@ namespace POS.DataAccess.Repository
             _db = db;
         }
 
-        //public string setAccountsHeadID()
-        //{
-        //    string acchID;
-        //    AccountsHead objFromDb = _db.Accounts_head.OrderByDescending(u => u.id).FirstOrDefault();
-            
-        //    if (objFromDb == null)
-        //    {
-        //        acchID = "ACH001";
-        //    }
-        //    else
-        //    {
-        //        string sub = objFromDb.ac_head_id.Substring(3, 3);
-        //        int c = Convert.ToInt32(sub);
-        //        c++;
-        //        string s = c.ToString("000");
-        //        acchID = "ACH" + s;
-
-        //    }
-        //    return acchID;
-        //}
-
+     
 
         public string _setAccountsHeadID(string group_id,string client_code)
         {
@@ -67,17 +47,9 @@ namespace POS.DataAccess.Repository
         }
         public void Update(AccountsHead accountsHead)
         {
-            var objFromDb = _db.Accounts_head.FirstOrDefault(s => s.id == accountsHead.id);
-            if (objFromDb != null)
-            {
-                objFromDb.ac_head_id = accountsHead.ac_head_id;
-                objFromDb.ac_head_name = accountsHead.ac_head_name;
-                objFromDb.description = accountsHead.description;
-                objFromDb.ac_group_id = accountsHead.ac_group_id;
-                objFromDb.ac_type = accountsHead.ac_type;
-                objFromDb.ac_status = accountsHead.ac_status;
-            }
+            _db.Accounts_head.Update(accountsHead);
         }
+
     }
 
 

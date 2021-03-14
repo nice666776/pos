@@ -29,6 +29,8 @@ namespace POS.DataAccess.Repository
             Client = new ClientRepository(_db);
             UserTrade = new UserTradeRepository(_db);
             AccountsGroup = new AccountsGroupRepository(_db);
+            AccountsHead = new AccountsHeadRepository(_db);
+            AccountControl = new AccountControlRepository(_db);
         }
  
         public ISupplierRepository Supplier { get; private set; }
