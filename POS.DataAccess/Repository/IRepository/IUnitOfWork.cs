@@ -27,6 +27,7 @@ namespace POS.DataAccess.Repository.IRepository
         IAccountsHeadRepository AccountsHead { get; }
         IAccountsGroupRepository AccountsGroup { get; }
         IAccountControlRepository AccountControl { get; }
+        ILedgerRepository Ledger { get; }
         void Save();
     }
 

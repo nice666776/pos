@@ -31,6 +31,7 @@ namespace POS.DataAccess.Repository
             AccountsGroup = new AccountsGroupRepository(_db);
             AccountsHead = new AccountsHeadRepository(_db);
             AccountControl = new AccountControlRepository(_db);
+            Ledger = new LedgerRepository(_db);
         }
  
         public ISupplierRepository Supplier { get; private set; }
@@ -53,6 +54,7 @@ namespace POS.DataAccess.Repository
         public IAccountControlRepository AccountControl { get; private set; }
         public IAccountsGroupRepository AccountsGroup { get; private set; }
         public IAccountsHeadRepository AccountsHead { get; private set; }
+        public ILedgerRepository Ledger { get; private set; }
         public void Dispose()
         {
             _db.Dispose();

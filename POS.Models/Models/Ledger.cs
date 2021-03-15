@@ -5,11 +5,14 @@ using System.Text;
 
 namespace POS.Models.Models
 {
-    public class ProductEventInfo
+   public class Ledger
     {
+
         public int id { get; set; }
         public string transaction_id { get; set; }
         public string transaction_type { get; set; }
+        public string accounts_head_id { get; set; }
+        public string accounts_head_name { get; set; }
         public string invoice { get; set; }
         public DateTime entry_date { get; set; }
         public string supplier_code { get; set; }
@@ -17,7 +20,7 @@ namespace POS.Models.Models
         public string customer_code { get; set; }
         public string customer_name { get; set; }
         public double cr_amount { get; set; }
-        public double cr_discount{ get; set; }
+        public double cr_discount { get; set; }
         public double cr_discount_percent { get; set; }
         public double cr_total { get; set; }
         public double dr_amount { get; set; }
@@ -30,10 +33,6 @@ namespace POS.Models.Models
         public DateTime entry_time { get; set; }
         public string trade_code { get; set; }
         public string trx_info { get; set; }
-        public ProductEventInfo ShallowCopy()
-        {
-            return (ProductEventInfo)this.MemberwiseClone();
-        }
 
     }
 }

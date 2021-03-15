@@ -41,5 +41,6 @@ namespace POS.DataAccess.Data
         public DbSet<AccountControl> Account_control { get; set; }
         public DbSet<AccountsGroup> Accounts_group { get; set; }
         public DbSet<AccountsHead> Accounts_head { get; set; }
+        public DbSet<Ledger> Ledger_detail { get; set; }
     }
 }
