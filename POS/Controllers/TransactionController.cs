@@ -57,7 +57,7 @@ namespace POS.Controllers
         }
 
 
-        public class receiptProp
+        public class ReceiptProp
         {
             public string receipt_head { get; set; }
 
@@ -69,20 +69,20 @@ namespace POS.Controllers
             public DateTime receipt_date { get; set; }
             public string receipt_by { get; set; }
             public double total_payment { get; set; }
-            public List<receiptProp> pay_for { get; set; }
+            public List<ReceiptProp> pay_for { get; set; }
             public string voucher_id { get; set; }
         }
 
 
 
         [HttpGet]
-        [Route("~/~/Accounts/Payment/List")]
+        [Route("~/Accounts/Payment/List")]
         public IActionResult BillPayList()
         {
             string client_code = getClient();
             string trade_code = getTrade();
 
-            List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(u => u.transaction_type == "PAYMENT" && u.client_code == client_code && u.trade_code == trade_code).ToList();
+            List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(u => u.transaction_type == "PAYMENT" && u.client_code == client_code && u.trade_code == trade_code).OrderByDescending(u=>u.id).ToList();
 
             List<string> UniqueTransactions = peList.Select(x => x.transaction_id).Distinct().ToList();
 
@@ -90,17 +90,17 @@ namespace POS.Controllers
             foreach (string trx in UniqueTransactions)
             {
                 PayTrans pt = new PayTrans();
-                List<ProductEventInfo> pe_dr_list = peList.Where(u => u.transaction_id == trx && u.trx_info == "Dr.").ToList();
-                ProductEventInfo pe_cr = peList.FirstOrDefault(u => u.transaction_id == trx && u.trx_info == "Cr.");
+               
+                ProductEventInfo pe_dr = peList.FirstOrDefault(u => u.transaction_id == trx && u.trx_info == "Dr.");
+                ProductEventInfo pe_cr = _unitOfWork.ProductEventInfo.GetFirstOrDefault(u => u.transaction_id == trx && u.trx_info == "Cr." && u.client_code == client_code && u.trade_code == trade_code);
                 pt.payment_date = pe_cr.entry_date;
                 pt.voucher_id = pe_cr.transaction_id;
                 pt.payment_by = pe_cr.transaction_type;
                 pt.total_payment = pe_cr.cr_total;
                 pt.voucher_id = pe_cr.invoice;
                 pt.pay_for = new List<PayProp>();
-
-                List<Ledger> ledgerList = _unitOfWork.Ledger.GetAll(u => u.transaction_id == trx && u.trade_code == trade_code).ToList();
-                foreach (Ledger ldgr_Dr in ledgerList)
+                List<Ledger> Payment_list = _unitOfWork.Ledger.GetAll(u => u.transaction_id == trx && u.client_code == client_code && u.trade_code == trade_code).ToList();
+                foreach (Ledger ldgr_Dr in Payment_list)
                 {
                     PayProp pp = new PayProp();
                     pp.payment_head = ldgr_Dr.accounts_head_name;
@@ -115,6 +115,53 @@ namespace POS.Controllers
 
             return Json(new { success = true, list = payTransList });
         }
+
+
+        [HttpGet]
+        [Route("~/Accounts/Receipt/List")]
+        public IActionResult Receiptist()
+        {
+            string client_code = getClient();
+            string trade_code = getTrade();
+
+            List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(u => u.transaction_type == "INCOME" && u.client_code == client_code && u.trade_code == trade_code).OrderByDescending(u => u.id).ToList();
+
+            List<string> UniqueTransactions = peList.Select(x => x.transaction_id).Distinct().ToList();
+
+            List<ReceiptTrans> receiptTransList = new List<ReceiptTrans>();
+            foreach (string trx in UniqueTransactions)
+            {
+                ReceiptTrans rt = new ReceiptTrans();
+
+                ProductEventInfo pe_cr = peList.FirstOrDefault(u => u.transaction_id == trx && u.trx_info == "Cr.");
+                ProductEventInfo pe_dr = _unitOfWork.ProductEventInfo.GetFirstOrDefault(u => u.transaction_id == trx && u.trx_info == "Dr." && u.client_code == client_code && u.trade_code == trade_code);
+                rt.receipt_date = pe_dr.entry_date;
+                rt.voucher_id = pe_dr.transaction_id;
+                rt.receipt_by = pe_dr.transaction_type;
+                rt.total_payment = pe_dr.dr_total;
+                rt.voucher_id = pe_dr.invoice;
+                rt.pay_for = new List<ReceiptProp>();
+                List<Ledger> receipt_list = _unitOfWork.Ledger.GetAll(u => u.transaction_id == trx && u.client_code == client_code && u.trade_code == trade_code).ToList();
+                foreach (Ledger ldgr_Dr in receipt_list)
+                {
+                    ReceiptProp rp = new ReceiptProp();
+                    rp.receipt_head = ldgr_Dr.accounts_head_name;
+                    rp.amount = ldgr_Dr.cr_total;
+                    rt.pay_for.Add(rp);
+
+                }
+
+                receiptTransList.Add(rt);
+            }
+
+
+            return Json(new { success = true, list = receiptTransList });
+        }
+
+
+
+
+
 
 
 
@@ -143,7 +190,7 @@ namespace POS.Controllers
                     return Json(new { success = false, message = "Please set the Date!" });
                 }
 
-                string payTrx = RandomString(7);
+                string payTrx = RandomString(12);
                 double total_amount = 0.00;
                 //this part is for paid for (Debit)
                 string client_code = getClient();
@@ -210,7 +257,7 @@ namespace POS.Controllers
 
 
                 _unitOfWork.Save();
-               return Json(new { success = true, message = "Payment Entry Successful!", voucher_id = payTrx });
+               return Json(new { success = true, message = "Payment Entry Successful!", voucher_id = invoice });
 
             }
 
@@ -251,14 +298,14 @@ namespace POS.Controllers
                     return Json(new { success = false, message = "Please set the Date!" });
                 }
 
-                string payTrx = RandomString(7);
+                string payTrx = RandomString(12);
                 double total_amount = 0.00;
                 //this part is for paid for (Debit)
                 string client_code = getClient();
                 string trade_code = getTrade();
                 string user_id = GetUserId();
                 string invoice = _unitOfWork.ProductStock.setInvoiceNo(trade_code);
-                foreach (receiptProp rp in receiptTrans.pay_for)
+                foreach (ReceiptProp rp in receiptTrans.pay_for)
                 {
 
                     Ledger ledger = new Ledger();
@@ -314,12 +361,12 @@ namespace POS.Controllers
                 productEventDr.client_code = client_code;
                 productEventDr.entry_time = receiptTrans.receipt_date;
                 productEventDr.trade_code = trade_code;
-                productEventCr.trx_info = "Dr.";
+                productEventDr.trx_info = "Dr.";
                 _unitOfWork.ProductEventInfo.Add(productEventDr);
 
 
                 _unitOfWork.Save();
-                return Json(new { success = true, message = "Receipt Entry Successful!", voucher_id = payTrx });
+                return Json(new { success = true, message = "Receipt Entry Successful!", voucher_id = invoice });
 
             }
 

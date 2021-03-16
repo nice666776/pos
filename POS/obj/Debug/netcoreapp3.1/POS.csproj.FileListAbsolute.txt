@@ -380,3 +380,5 @@ D:\POS\POS\POS\bin\Debug\netcoreapp3.1\System.Text.Json.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
 D:\POS\POS\POS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\POS\POS\POS\obj\Debug\netcoreapp3.1\Razor\Reports\PaymentVoucher.cshtml.g.cs
+D:\POS\POS\POS\obj\Debug\netcoreapp3.1\Razor\Reports\ReceiptVoucher.cshtml.g.cs

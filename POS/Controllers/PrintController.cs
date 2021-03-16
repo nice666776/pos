@@ -126,6 +126,60 @@ namespace POS.Controllers
 
 
 
+
+
+        [HttpGet]
+        [Route("~/print/Ledger")]
+        public async Task<IActionResult> LedgerList()
+        {
+            string client_code = getClient();
+            string trade_code = getTrade();
+            List<Manufacturer> manufacturers = _unitOfWork.Manufacturer.GetAll(u => u.client_code == client_code && u.trade_code == trade_code).ToList();
+
+            /////////////////////////////////
+            var kv = new Dictionary<string, string>
+            {
+                { "username", "USER" },
+                { "age", "20" },
+                { "url", "google.com" }
+            };
+
+            var options = new ConvertOptions
+            {
+                HeaderHtml = "http://localhost:44317/header.html",
+                PageOrientation = Wkhtmltopdf.NetCore.Options.Orientation.Portrait,
+                FooterHtml = "http://localhost:44317/footerTwo.html",
+                Replacements = kv,
+                PageMargins = new Wkhtmltopdf.NetCore.Options.Margins()
+                {
+                    Top = 15,
+                    Left = 10,
+                    Right = 10,
+                    Bottom = 15
+                }
+
+            };
+            _generatePdf.SetConvertOptions(options);
+
+
+
+            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), ManufacturerList = manufacturers });
+            string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/ManufacturerList.cshtml");
+            return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         [HttpGet]
         [Route("~/print/Receipt")]
         public async Task<IActionResult> Reciept(string invoice)
@@ -219,6 +273,91 @@ namespace POS.Controllers
             return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
 
         }
+
+
+
+        [HttpGet]
+        [Route("~/print/PaymentVoucher")]
+        public async Task<IActionResult> PaymentVoucher(string voucher_id)
+        {
+            string client_code = getClient();
+            string trade_code =  getTrade();
+            
+
+            List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(u => u.invoice == voucher_id && u.client_code == client_code ).ToList();
+
+
+            ProductEventInfo pe_dr = peList.FirstOrDefault(u=>u.trx_info == "Dr.");
+            ProductEventInfo pe_cr = peList.FirstOrDefault(u => u.trx_info == "Cr.");
+            List<Ledger> LedgerList = _unitOfWork.Ledger.GetAll(u => u.invoice == voucher_id && u.transaction_type == "PAYMENT").ToList();
+            User user = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == pe_cr.user_id);
+
+            var options = new ConvertOptions
+            {
+
+                PageOrientation = Wkhtmltopdf.NetCore.Options.Orientation.Portrait,
+                HeaderHtml = "http://localhost:44317/header.html",
+                PageMargins = new Wkhtmltopdf.NetCore.Options.Margins()
+                {
+                    Top = 20,
+                    Left = 10,
+                    Right = 5,
+                    Bottom = 20
+                }
+
+            };
+            _generatePdf.SetConvertOptions(options);
+
+            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), User = user,Debit = pe_dr,Credit = pe_cr , Ledger = LedgerList });
+            string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/PaymentVoucher.cshtml");
+            return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
+
+        }
+
+        [HttpGet]
+        [Route("~/print/ReceiptVoucher")]
+        public async Task<IActionResult> ReceiptVoucher(string voucher_id)
+        {
+            string client_code = getClient();
+            string trade_code = getTrade();
+
+
+            List<ProductEventInfo> peList = _unitOfWork.ProductEventInfo.GetAll(u => u.invoice == voucher_id && u.client_code == client_code).ToList();
+
+
+          
+            ProductEventInfo pe_cr = peList.FirstOrDefault(u => u.trx_info == "Cr.");
+            ProductEventInfo pe_dr = peList.FirstOrDefault(u => u.trx_info == "Dr.");
+            List<Ledger> LedgerList = _unitOfWork.Ledger.GetAll(u => u.invoice == voucher_id && u.transaction_type == "INCOME").ToList();
+            User user = _unitOfWork.User.GetFirstOrDefault(u => u.user_id == pe_dr.user_id);
+
+            var options = new ConvertOptions
+            {
+
+                PageOrientation = Wkhtmltopdf.NetCore.Options.Orientation.Portrait,
+                HeaderHtml = "http://localhost:44317/header.html",
+                PageMargins = new Wkhtmltopdf.NetCore.Options.Margins()
+                {
+                    Top = 20,
+                    Left = 10,
+                    Right = 5,
+                    Bottom = 20
+                }
+
+            };
+            _generatePdf.SetConvertOptions(options);
+
+            var model = ToExpando(new { Date = DateTime.Now.ToString("dd/MM/yyyy"), User = user, Debit = pe_dr, Credit = pe_cr, Ledger = LedgerList });
+            string htmlViewX = await System.IO.File.ReadAllTextAsync("Reports/ReceiptVoucher.cshtml");
+            return await _generatePdf.GetPdfViewInHtml(htmlViewX, model);
+
+        }
+
+
+
+
+
+
 
 
 
