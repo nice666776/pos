@@ -3,20 +3,38 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
+  Chip
 } from '@material-ui/core';
+import { kaReducer, Table } from 'ka-table';
+import { FilteringMode } from 'ka-table/enums';
+import { updateData, hideLoading, showLoading } from 'ka-table/actionCreators';
 import { ActionButton, AddButton } from 'components/table-component';
 import AccountHeadForm from 'components/forms/configuration/account-head';
 import Empty from 'components/empty';
-import Loading from 'components/loading/DataLoading';
-import {tradeList} from '../server_action';
+import {accountHeadList} from '../server_action';
 
 
+const row = {paddingTop: 2, paddingBottom: 2}
+const columns = [
+  { key: 'ac_head_name', title: 'Head Name', isResizable: true, style:{...row}},
+  { key: 'ac_group_id', title: 'Group', style:{...row, width: 150, textAlign: 'center'}},
+  { key: 'ac_type', title: 'Account Type', style:{...row, width: 150, textAlign: 'center'}},
+  { key: 'ac_status', title: 'Status', isResizable: true, style:{...row, width: 150, textAlign: 'center'}},
+  { key: 'description', title: 'Description', style:{...row}},
+  { key: 'action', style:{...row, width: 80}},
+]
+
+const tablePropsInit = {
+  columns: columns,
+  data: [],
+  rowKeyField: 'id',
+  filteringMode: FilteringMode.FilterRow,
+  paging: {
+    enabled: true,
+    pageIndex: 0,
+    pageSize: 20,
+  }
+}
 
 const AddOrUpdate = React.memo(({open, handleClose, updateList, update, head_info})=>{
   return(
@@ -41,82 +59,95 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, head_inf
 const AccountHead = ()=>{
   const [open, setOpen] = React.useState(false)
   const [update, setUpdate] = React.useState(false)
-  const [head_list, setHeadList] = React.useState([])
+  const [tableProps, changeTableProps] = React.useState(tablePropsInit);
   const [head_info, setHeadInfo] = React.useState({})
-  const [loading, setLoading] = React.useState(true)
-
-  React.useEffect(()=>{
-    tradeList()
-      .then(resp => resp.success && setHeadList(resp.message))
-      .finally(()=>setLoading(false))
-  },[])
-
-  const handleClose = React.useCallback(()=> setOpen(false), [setOpen])
-
-
-  const updateList = React.useCallback((group, type)=> {
-    let list = []
-    if(type === 'ADD'){
-      list = [group, ...head_list]
-    } else {
-      const index = head_list.findIndex(val=>val.id===group.id)
-      head_list[index] = group
-      list = [...head_list]
-    }
-    setHeadList(list)
-    setOpen(false)
-  }, [head_list])
+  const [is_empty, setIsEmpty] = React.useState(false)
 
   
+  const handleClose = React.useCallback(()=> setOpen(false), [setOpen])
+
   const dispatch = React.useCallback((action) => {
     if(action.type === 'EDIT'){
-      setUpdate(true)
+      setOpen(true)
       setHeadInfo(action.rowData)
-      setOpen(true)
+      setUpdate(true)
     } else if(action.type === 'ADD') {
-      setUpdate(false)
-      setHeadInfo({})
       setOpen(true)
+      setHeadInfo({})
+      setUpdate(false)
     }
-  }, [setUpdate])
+    changeTableProps((prevState) => kaReducer(prevState, action));
+  }, [changeTableProps, setOpen])
+
+  const updateList = React.useCallback((data, type="ADD")=>{
+    const new_list = [...tableProps.data]
+    if(type === "ADD"){
+      new_list.push(data)
+    } else if(type === "UPDATE") {
+      const index = new_list.findIndex(val => val.id === data.id)
+      new_list[index] = data
+    }
+    dispatch(updateData(new_list))
+    handleClose()
+  }, [tableProps, dispatch, handleClose])
+
+  React.useEffect(()=>{
+    dispatch(showLoading('Getting Accounts Head list...'))
+    accountHeadList()
+      .then(resp => {
+        if(resp.success){
+          dispatch(updateData(resp.message)) 
+          setIsEmpty(resp.message.length===0)
+        }})
+      .finally(()=>dispatch(hideLoading()))
+  }, [dispatch])
 
   return (
     <React.Fragment>
-      <h5 className="text-center font-weight-bold mb-3">Account Head</h5>
-      {!loading
-        ? head_list.length>0
-          ? <div className="card overflow-hidden">
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="font-weight-bold">Name</TableCell>
-                      <TableCell className="font-weight-bold">Account Group</TableCell>
-                      <TableCell className="font-weight-bold" width={120}>Status</TableCell>
-                      <TableCell className="font-weight-bold">Description</TableCell>
-                      <TableCell className="p-0" align="right" width={100}><AddButton dispatch={dispatch}/></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {head_list.map((group, i) => (
-                      <TableRow key={group.name}>
-                        <TableCell component="th" scope="row">
-                          {group.name}
-                        </TableCell>
-                        <TableCell>{group.phone?group.phone:'-'}</TableCell>
-                        <TableCell>{group.in_charge?group.in_charge:'-'}</TableCell>
-                        <TableCell>{group.description?group.description:'-'}</TableCell>
-                        <TableCell align="right">
-                          <ActionButton dispatch={dispatch} rowData={group} rowKeyValue={i}/>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-          : <Empty text="No Account Head Found!" btn btn_text="Add Account Head" btn_action={() => dispatch({type: 'ADD'})}/>
-        : <Loading text="Getting Account Head list..."/>
+      <h5 className="text-center font-weight-bold mb-3">Accounts Head</h5>
+      {!is_empty
+        ? <div className="card overflow-hidden">
+            <Table
+              {...tableProps}
+              dispatch={dispatch}
+              childComponents={{
+                filterRowCell: {
+                  content: (props) => {
+                    switch(props.column.key){
+                      case 'ac_status': return <React.Fragment/>
+                      case 'description': return <React.Fragment/>
+                      case 'action': return <React.Fragment/>
+                      default: return
+                    }
+                  }
+                },
+                cellText: {
+                  content: props => {
+                    switch(props.column.key){
+                      case 'ac_status': return <Chip label={props.value?'Active':'Inactive'} color={props.value?'primary':'secondary'} size="small" />
+                      case 'action': return <ActionButton {...props} />
+                      default: return <p className="text-truncate m-0">{props.value}</p>
+                    }
+                  }
+                },
+                headCell: {
+                  content: props => {
+                    switch(props.column.key){
+                      case 'action': return <AddButton {...props} />
+                      default: return <div className="pt-2 text-primary">{props.column.title}</div>
+                    }
+                  },
+                },
+                pagingIndex: {
+                  elementAttributes: ({ isActive }) => ({
+                    className: `page-item ${(isActive ? 'active' : '')}`
+                  }),
+                  content: ({ text }) => <div className='page-link p-2'>{text}</div>
+                },
+              }}
+            />
+          </div>
+        : <Empty text="No Account Head Found!" btn btn_text="Add Account Head" btn_action={() => dispatch({type: 'ADD'})}/>
       }
       <AddOrUpdate
         open={open}

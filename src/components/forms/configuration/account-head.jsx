@@ -1,36 +1,45 @@
 import React from 'react';
 import {TextField, Button, FormControl, InputLabel, Select, MenuItem} from '@material-ui/core';
 import cogoToast from 'cogo-toast';
-import {group_require} from './require';
+import {head_require} from './require';
 import checkValidation from 'util/checkValidation';
 import { DataSaving } from '../../loading/DataSaving';
-import { postTrade } from 'pages/configuration/server_action';
+import { acGroupDropdown, postAccountHead } from 'pages/configuration/server_action';
 
 
 // eslint-disable-next-line
 export default React.memo(({updateList, update, head_info, handleClose})=>{
-  const [form_inputs, setFormInputs] = React.useState(update?{...head_info}:{})
+  const [form_inputs, setFormInputs] = React.useState(update?{...head_info}:{ac_status: true})
   const [group_list, setGroupList] = React.useState([])
-  const [requires, setRequireFields] = React.useState(group_require)
+  const [requires, setRequireFields] = React.useState(head_require)
   const [saving, setSaving] = React.useState(false)
+
+  React.useEffect(()=>{
+    acGroupDropdown()
+      .then(resp => resp.success && setGroupList(resp.message))
+  }, [])
 
   
   const handleChange = React.useCallback((e)=>{
-    setFormInputs({...form_inputs, [e.target.name]: e.target.value})
-  }, [form_inputs])
+    let inputs = form_inputs
+    if(e.target.name === 'ac_group_id')
+      inputs['ac_type'] = group_list.find(val=>val.ac_group_id===e.target.value)['ac_type']
+    inputs[e.target.name] = e.target.value
+    setFormInputs({...inputs})
+  }, [form_inputs, group_list])
 
   const handleSave = React.useCallback(()=>{
     const {isFormValid, require_fields} = checkValidation(form_inputs, requires)
     if(isFormValid){
-      // setSaving(true)
-      // postTrade(form_inputs)
-      //   .then(resp => {
-      //     if(resp.success){
-      //       cogoToast.success(`Account Group ${update?'Updated':'Added'} Successfully`)
-      //       updateList(resp.message, `${update?'UPDATE':'ADD'}`)
-      //     } else cogoToast.error(resp.message)
-      //   })
-      //   .finally(() => setSaving(false))
+      setSaving(true)
+      postAccountHead(form_inputs)
+        .then(resp => {
+          if(resp.success){
+            cogoToast.success(`Account Head ${update?'Updated':'Added'} Successfully`)
+            updateList(resp.message, `${update?'UPDATE':'ADD'}`)
+          } else cogoToast.error(resp.message)
+        })
+        .finally(() => setSaving(false))
     } else cogoToast.error('Please, fill up all required fields!')
     setRequireFields({...require_fields})
   }, [form_inputs, requires, update, updateList])
@@ -46,10 +55,10 @@ export default React.memo(({updateList, update, head_info, handleClose})=>{
             variant="outlined"
             margin="dense"
             fullWidth
-            name="head_name"
+            name="ac_head_name"
             required
-            error={requires.head_name}
-            value={form_inputs.head_name}
+            error={requires.ac_head_name}
+            value={form_inputs.ac_head_name}
             onChange={handleChange}
           />
         </div>
@@ -57,17 +66,17 @@ export default React.memo(({updateList, update, head_info, handleClose})=>{
 
       <div className="form-row">
         <div className="col-md-8">
-          <FormControl fullWidth size="small" margin="dense" variant="outlined" required error={requires.account_group}>
+          <FormControl fullWidth size="small" margin="dense" variant="outlined" required error={requires.ac_group_id}>
             <InputLabel id="account_group-label">Account Group</InputLabel>
             <Select
               labelId="account_group-label"
-              name="account_group"
+              name="ac_group_id"
               label="Account Group"
-              value={form_inputs.account_group}
+              value={form_inputs.ac_group_id}
               onChange={handleChange}
             >
               {group_list.map(val=>(
-                <MenuItem key={val.id} value={val.name}>{val.name}</MenuItem>
+                <MenuItem key={val.ac_group_id} value={val.ac_group_id}>{val.ac_group_name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -93,9 +102,9 @@ export default React.memo(({updateList, update, head_info, handleClose})=>{
             <InputLabel id="status-label">Status</InputLabel>
             <Select
               labelId="status-label"
-              name="status"
+              name="ac_status"
               label="Status"
-              value={form_inputs.status}
+              value={form_inputs.ac_status}
               onChange={handleChange}
             >
               <MenuItem value={true}>Active</MenuItem>

@@ -2,6 +2,7 @@ import React from 'react';
 import SupplierForm from 'components/forms/purchase/Supplier';
 import AmountForm from 'components/forms/purchase/Amount';
 import ProductTable from './ProductTable';
+import { AnimateOnChange } from 'react-animation';
 import checkValidation from 'util/checkValidation';
 import cogoToast from 'cogo-toast';
 import {purchaseConfirm} from './server_action';
@@ -11,7 +12,11 @@ const Total = React.memo(({total})=>{
   return(
     <div className="text-center">
       <h5 className="text-primary font-italic">Total Price</h5>
-      <h2 className="text-monospace text-secondary">{total?total.toLocaleString():0}</h2>
+      <h2 className="text-monospace text-secondary">
+        <AnimateOnChange animationIn="bounceIn" animationOut="bounceOut" durationOut={300}>
+          {total?total.toLocaleString():0}
+        </AnimateOnChange>  
+      </h2>
     </div>
   )
 })

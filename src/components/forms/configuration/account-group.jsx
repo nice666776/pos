@@ -4,7 +4,7 @@ import cogoToast from 'cogo-toast';
 import {group_require} from './require';
 import checkValidation from 'util/checkValidation';
 import { DataSaving } from '../../loading/DataSaving';
-import { postTrade } from 'pages/configuration/server_action';
+import { controlTypes, postAccountGroup } from 'pages/configuration/server_action';
 
 
 // eslint-disable-next-line
@@ -14,23 +14,31 @@ export default React.memo(({updateList, update, group_info, handleClose})=>{
   const [requires, setRequireFields] = React.useState(group_require)
   const [saving, setSaving] = React.useState(false)
 
+  React.useEffect(()=>{
+    controlTypes()
+      .then(resp => resp.success && setControlTypes(resp.message))
+  }, [])
   
   const handleChange = React.useCallback((e)=>{
-    setFormInputs({...form_inputs, [e.target.name]: e.target.value})
-  }, [form_inputs])
+    let inputs = form_inputs
+    if(e.target.name === 'control_type')
+      inputs['ac_type'] = control_types.find(val=>val.key===e.target.value)['ac_type']
+    inputs[e.target.name] = e.target.value
+    setFormInputs({...inputs})
+  }, [form_inputs, control_types])
 
   const handleSave = React.useCallback(()=>{
     const {isFormValid, require_fields} = checkValidation(form_inputs, requires)
     if(isFormValid){
-      // setSaving(true)
-      // postTrade(form_inputs)
-      //   .then(resp => {
-      //     if(resp.success){
-      //       cogoToast.success(`Account Group ${update?'Updated':'Added'} Successfully`)
-      //       updateList(resp.message, `${update?'UPDATE':'ADD'}`)
-      //     } else cogoToast.error(resp.message)
-      //   })
-      //   .finally(() => setSaving(false))
+      setSaving(true)
+      postAccountGroup(form_inputs)
+        .then(resp => {
+          if(resp.success){
+            cogoToast.success(`Account Group ${update?'Updated':'Added'} Successfully`)
+            updateList(resp.message, `${update?'UPDATE':'ADD'}`)
+          } else cogoToast.error(resp.message)
+        })
+        .finally(() => setSaving(false))
     } else cogoToast.error('Please, fill up all required fields!')
     setRequireFields({...require_fields})
   }, [form_inputs, requires, update, updateList])
@@ -46,10 +54,10 @@ export default React.memo(({updateList, update, group_info, handleClose})=>{
             variant="outlined"
             margin="dense"
             fullWidth
-            name="group_name"
+            name="ac_group_name"
             required
-            error={requires.group_name}
-            value={form_inputs.group_name}
+            error={requires.ac_group_name}
+            value={form_inputs.ac_group_name}
             onChange={handleChange}
           />
         </div>
@@ -58,13 +66,13 @@ export default React.memo(({updateList, update, group_info, handleClose})=>{
             <InputLabel id="control-label">Control Type</InputLabel>
             <Select
               labelId="control-label"
-              name="control"
+              name="control_type"
               label="Control Type"
               value={form_inputs.control_type}
               onChange={handleChange}
             >
               {control_types.map(val=>(
-                <MenuItem key={val.id} value={val.name}>{val.name}</MenuItem>
+                <MenuItem key={val.id} value={val.key}>{val.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -79,6 +87,7 @@ export default React.memo(({updateList, update, group_info, handleClose})=>{
             variant="outlined"
             margin="dense"
             fullWidth
+            multiline
             name="comments"
             value={form_inputs.comments}
             onChange={handleChange}
@@ -90,6 +99,7 @@ export default React.memo(({updateList, update, group_info, handleClose})=>{
             variant="outlined"
             margin="dense"
             fullWidth
+            multiline
             placeholder="Description"
             name="description"
             value={form_inputs.description}

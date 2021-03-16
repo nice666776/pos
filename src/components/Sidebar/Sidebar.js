@@ -7,7 +7,8 @@ import {
   Build,
   AddShoppingCart,
   LocalMallTwoTone,
-  HistoryRounded
+  HistoryRounded,
+  SwapVerticalCircleTwoTone
 } from "@material-ui/icons";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
@@ -31,6 +32,12 @@ const structure = [
     children: [
       { label: "Purchase", link: "/history/purchase" },
       { label: "Sales", link: "/history/sales" }
+    ],
+  },
+  { label: "Transaction", link: "/transaction", icon: <SwapVerticalCircleTwoTone/>,
+    children: [
+      { label: "Receipts Entry", link: "/transaction/receipts-entry" },
+      { label: "Payment Entry", link: "/transaction/payment-entry" }
     ],
   },
   { label: "Product Configuration", link: "/product-configuration", icon: <Build />,

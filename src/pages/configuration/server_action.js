@@ -68,3 +68,69 @@ export const userList = ()=>{                                        // user lis
     })
   })
 }
+
+export const controlTypes = ()=>{                                        // user list
+  return new Promise((resolve, reject)=>{
+    axios.get('/controltype')
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
+
+export const postAccountGroup = (form_inputs)=>{                // account group add or update
+  return new Promise((resolve, reject)=>{
+    axios.post('/accountsgroup/add', form_inputs)
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
+
+export const accountGroupList = ()=>{                                 // account group list
+  return new Promise((resolve, reject)=>{
+    axios.get('/accountsgroup/list')
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
+
+export const acGroupDropdown = ()=>{                                  // account group dropdown
+  return new Promise((resolve, reject)=>{
+    axios.get('/accountsgroup/dropdown')
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
+
+export const postAccountHead = (form_inputs)=>{                // account head add or update
+  return new Promise((resolve, reject)=>{
+    axios.post('/accountshead/add', form_inputs)
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}
+
+export const accountHeadList = ()=>{                               // account head list
+  return new Promise((resolve, reject)=>{
+    axios.get('/accountshead/list')
+    .then(resp => resolve(resp.data))
+    .catch(err=>{
+			showError(err)
+      reject()
+    })
+  })
+}

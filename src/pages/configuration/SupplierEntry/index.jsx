@@ -54,8 +54,6 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, supplier
 
 
 const SupplierEntry = ()=>{
-  // eslint-disable-next-line
-  const [supplier_list, setSupplierList] = React.useState([])
   const [open, setOpen] = React.useState(false)
   const [tableProps, changeTableProps] = React.useState(tablePropsInit);
   const [supplier_info, setSupplierInfo] = React.useState({})
@@ -80,7 +78,6 @@ const SupplierEntry = ()=>{
       .then(resp => {
         if(resp.success){
           dispatch(updateData(resp.message))
-          setSupplierList(resp.message)
         }
       })
       .finally(()=>dispatch(hideLoading()))
@@ -97,9 +94,8 @@ const SupplierEntry = ()=>{
       new_list[index] = data
     }
     dispatch(updateData(new_list))
-    setSupplierList(new_list)
     handleClose()
-  }, [tableProps, dispatch, setSupplierList, handleClose])
+  }, [tableProps, dispatch, handleClose])
 
 
 

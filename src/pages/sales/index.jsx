@@ -1,6 +1,7 @@
 import React from 'react';
 import SalesTable from 'components/table/SalesTable';
 import Amount from 'components/forms/sales/Amount';
+import { AnimateOnChange } from 'react-animation';
 import {saleSubmit} from './server_action';
 import cogoToast from 'cogo-toast';
 
@@ -8,7 +9,11 @@ import cogoToast from 'cogo-toast';
 const Total = React.memo(({total})=>
   <div className="text-center">
     <h5 className="text-primary font-italic">Total Price</h5>
-    <h2 className="text-monospace text-secondary">{total?total.toLocaleString():0}</h2>
+    <h2 className="text-monospace text-secondary">
+      <AnimateOnChange animationIn="bounceIn" animationOut="bounceOut" durationOut={300}>
+        {total?total.toLocaleString():0}
+      </AnimateOnChange>
+    </h2>
   </div>
 )
 

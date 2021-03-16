@@ -2,21 +2,38 @@ import React from 'react';
 import {
   Dialog,
   DialogTitle,
-  DialogContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
+  DialogContent
 } from '@material-ui/core';
+import { kaReducer, Table } from 'ka-table';
+import { FilteringMode } from 'ka-table/enums';
+import { updateData, hideLoading, showLoading } from 'ka-table/actionCreators';
 import { ActionButton, AddButton } from 'components/table-component';
 import AccountGroupForm from 'components/forms/configuration/account-group';
 import Empty from 'components/empty';
-import Loading from 'components/loading/DataLoading';
-import {tradeList} from '../server_action';
+import {accountGroupList} from '../server_action';
 
 
+const row = {paddingTop: 2, paddingBottom: 2}
+const columns = [
+  { key: 'ac_group_name', title: 'Group Name', isResizable: true, style:{...row}},
+  { key: 'control_type', title: 'Control Type', style:{...row, width: 150, textAlign: 'center'}},
+  { key: 'ac_type', title: 'Account Type', style:{...row, width: 150, textAlign: 'center'}},
+  { key: 'comments', title: 'Comments', isResizable: true, style:{...row}},
+  { key: 'description', title: 'Description', style:{...row}},
+  { key: 'action', style:{...row, width: 80}},
+]
+
+const tablePropsInit = {
+  columns: columns,
+  data: [],
+  rowKeyField: 'id',
+  filteringMode: FilteringMode.FilterRow,
+  paging: {
+    enabled: true,
+    pageIndex: 0,
+    pageSize: 20,
+  }
+}
 
 const AddOrUpdate = React.memo(({open, handleClose, updateList, update, group_info})=>{
   return(
@@ -40,82 +57,93 @@ const AddOrUpdate = React.memo(({open, handleClose, updateList, update, group_in
 const AccountGroup = ()=>{
   const [open, setOpen] = React.useState(false)
   const [update, setUpdate] = React.useState(false)
-  const [group_list, setGroupList] = React.useState([])
+  const [tableProps, changeTableProps] = React.useState(tablePropsInit);
   const [group_info, setGroupInfo] = React.useState({})
-  const [loading, setLoading] = React.useState(true)
-
-  React.useEffect(()=>{
-    tradeList()
-      .then(resp => resp.success && setGroupList(resp.message))
-      .finally(()=>setLoading(false))
-  },[])
-
-  const handleClose = React.useCallback(()=> setOpen(false), [setOpen])
-
-
-  const updateList = React.useCallback((group, type)=> {
-    let list = []
-    if(type === 'ADD'){
-      list = [group, ...group_list]
-    } else {
-      const index = group_list.findIndex(val=>val.id===group.id)
-      group_list[index] = group
-      list = [...group_list]
-    }
-    setGroupList(list)
-    setOpen(false)
-  }, [group_list])
+  const [is_empty, setIsEmpty] = React.useState(false)
 
   
+  const handleClose = React.useCallback(()=> setOpen(false), [setOpen])
+
   const dispatch = React.useCallback((action) => {
     if(action.type === 'EDIT'){
-      setUpdate(true)
+      setOpen(true)
       setGroupInfo(action.rowData)
-      setOpen(true)
+      setUpdate(true)
     } else if(action.type === 'ADD') {
-      setUpdate(false)
-      setGroupInfo({})
       setOpen(true)
+      setGroupInfo({})
+      setUpdate(false)
     }
-  }, [setUpdate])
+    changeTableProps((prevState) => kaReducer(prevState, action));
+  }, [changeTableProps, setOpen])
+
+  const updateList = React.useCallback((data, type="ADD")=>{
+    const new_list = [...tableProps.data]
+    if(type === "ADD"){
+      new_list.push(data)
+    } else if(type === "UPDATE") {
+      const index = new_list.findIndex(val => val.id === data.id)
+      new_list[index] = data
+    }
+    dispatch(updateData(new_list))
+    handleClose()
+  }, [tableProps, dispatch, handleClose])
+
+  React.useEffect(()=>{
+    dispatch(showLoading('Getting Account Group list...'))
+    accountGroupList()
+      .then(resp => {
+        if(resp.success){
+          dispatch(updateData(resp.message)) 
+          setIsEmpty(resp.message.length===0)
+        }})
+      .finally(()=>dispatch(hideLoading()))
+  }, [dispatch])
 
   return (
     <React.Fragment>
       <h5 className="text-center font-weight-bold mb-3">Account Group</h5>
-      {!loading
-        ? group_list.length>0
-          ? <div className="card overflow-hidden">
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="font-weight-bold">Name</TableCell>
-                      <TableCell className="font-weight-bold">Control Type</TableCell>
-                      <TableCell className="font-weight-bold">Comments</TableCell>
-                      <TableCell className="font-weight-bold">Description</TableCell>
-                      <TableCell className="p-0" align="right" width={100}><AddButton dispatch={dispatch}/></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {group_list.map((group, i) => (
-                      <TableRow key={group.name}>
-                        <TableCell component="th" scope="row">
-                          {group.name}
-                        </TableCell>
-                        <TableCell>{group.phone?group.phone:'-'}</TableCell>
-                        <TableCell>{group.in_charge?group.in_charge:'-'}</TableCell>
-                        <TableCell>{group.description?group.description:'-'}</TableCell>
-                        <TableCell align="right">
-                          <ActionButton dispatch={dispatch} rowData={group} rowKeyValue={i}/>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-          : <Empty text="No Account Group Found!" btn btn_text="Add Account Group" btn_action={() => dispatch({type: 'ADD'})}/>
-        : <Loading text="Getting Account Group list..."/>
+      {!is_empty
+        ? <div className="card overflow-hidden">
+            <Table
+              {...tableProps}
+              dispatch={dispatch}
+              childComponents={{
+                filterRowCell: {
+                  content: (props) => {
+                    switch(props.column.key){
+                      case 'description': return <React.Fragment/>
+                      case 'action': return <React.Fragment/>
+                      default: return
+                    }
+                  }
+                },
+                cellText: {
+                  content: props => {
+                    switch(props.column.key){
+                      case 'action': return <ActionButton {...props} />
+                      default: return <p className="text-truncate m-0">{props.value}</p>
+                    }
+                  }
+                },
+                headCell: {
+                  content: props => {
+                    switch(props.column.key){
+                      case 'action': return <AddButton {...props} />
+                      default: return <div className="pt-2 text-primary">{props.column.title}</div>
+                    }
+                  },
+                },
+                pagingIndex: {
+                  elementAttributes: ({ isActive }) => ({
+                    className: `page-item ${(isActive ? 'active' : '')}`
+                  }),
+                  content: ({ text }) => <div className='page-link p-2'>{text}</div>
+                },
+              }}
+            />
+          </div>
+        : <Empty text="No Account Group Found!" btn btn_text="Add Account Group" btn_action={() => dispatch({type: 'ADD'})}/>
       }
       <AddOrUpdate
         open={open}

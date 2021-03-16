@@ -24,6 +24,11 @@ export const user_require = {
 }
 
 export const group_require = {
-  'group_name': false,
+  'ac_group_name': false,
   'control_type': false
+}
+
+export const head_require = {
+  'ac_head_name': false,
+  'ac_group_id': false
 }

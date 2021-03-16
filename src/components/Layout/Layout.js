@@ -12,11 +12,12 @@ import Sidebar from "../Sidebar";
 import Configuration from "../../pages/configuration";
 import ProductConfiguration from "../../pages/product-configuration";
 import History from "../../pages/history";
+import Transaction from "../../pages/transaction";
 import { useLayoutState } from "../../context/LayoutContext";
 import asyncComponent from '../../util/asyncComponent';
 
 
-const Routes = React.memo(({path, reset})=>{
+const Routes = React.memo(({path})=>{
   return(
     <Switch>
       <Redirect exact from={path} to="/dashboard" />
@@ -24,8 +25,10 @@ const Routes = React.memo(({path, reset})=>{
       <Route path="/sales" component={asyncComponent(() => import('pages/sales'))} />
       <Route path="/purchase" component={asyncComponent(() => import('pages/purchase'))} />
       <Route path="/history" component={History}/>
+      <Route path="/transaction" component={Transaction}/>
       <Route path="/product-configuration" component={ProductConfiguration}/>
       <Route path="/configuration" component={Configuration}/>
+      <Route path="/reset-password" component={asyncComponent(() => import('pages/ChangePassword'))}/>
       <Route component={asyncComponent(() => import('../../pages/error/Error'))} />
     </Switch>
   )

@@ -17,7 +17,8 @@ import {
   Person as AccountIcon,
   MenuOpen,
   VpnKey,
-  AccountCircle
+  AccountCircle,
+  KeyboardArrowDownRounded
 } from "@material-ui/icons";
 import classNames from "classnames";
 
@@ -48,7 +49,7 @@ const TradeManu = ({trade_list})=>{
     <div>
       <List>
         <ListItem className="p-0" button onClick={(event)=>setAnchorEl(event.currentTarget)}>
-          <ListItemText primary={`{ ${trade_list[selectedIndex].name} }`}/>
+          <ListItemText className="m-0" primary={<span>{'{ '}{trade_list[selectedIndex].name} <KeyboardArrowDownRounded fontSize="small"/>{' }'}</span>}/>
         </ListItem>
       </List>
       <Menu
@@ -80,6 +81,10 @@ export default function Header(props) {
   const history = useHistory();
   const user_role = Object.keys(user_type).find(val=>user_type[val]===userInfo.role)
 
+  const handleResetPassword = ()=>{
+    setProfileMenu(null)
+    history.push('/reset-password')
+  }
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
@@ -143,7 +148,7 @@ export default function Header(props) {
           <MenuItem className={classNames(classes.profileMenuItem, classes.headerMenuItem)}>
             <AccountIcon className={classes.profileMenuIcon} /> Profile
           </MenuItem>
-          <MenuItem className={classNames(classes.profileMenuItem, classes.headerMenuItem)}>
+          <MenuItem className={classNames(classes.profileMenuItem, classes.headerMenuItem)} onClick={handleResetPassword}>
             <VpnKey className={classes.profileMenuIcon} /> Change password
           </MenuItem>
           <div className={`${classes.profileMenuUser} text-center`}>
